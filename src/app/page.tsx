@@ -1,9 +1,8 @@
-import Navbar from "@/components/navbar";
+import Chat from "@/components/chat";
 export default function IndexPage() {
   return (
-    <div>
-      <Navbar />
-      <p>hello</p>
+    <div className="w-full h-screen">
+      <Chat />
     </div>
   );
 }

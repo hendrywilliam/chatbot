@@ -1,19 +1,28 @@
 import Link, { type LinkProps } from "next/link";
 import { IconLink } from "@/components/icons/icon-link";
+import { cn } from "@/lib/utils";
 
 type ExternalLink = LinkProps & {
   children?: React.ReactNode;
+  target?: "_blank" | "_self" | "_parent" | "_top" | "framename";
+  className?: string;
 };
 
 export default function ExternalLink({
   href,
   children,
+  target = "_blank",
+  className,
   ...props
 }: ExternalLink) {
   return (
-    <Link className="flex" href={href}>
+    <Link
+      className={cn("flex hover:underline", className)}
+      href={href}
+      target={target}
+    >
       {children}
-      <IconLink className="flex self-center" />
+      <IconLink width="0.75em" />
     </Link>
   );
 }
