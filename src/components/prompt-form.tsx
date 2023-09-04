@@ -4,26 +4,40 @@ import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { IconEnter } from "@/components/icons/icon-enter";
 import { IconAdd } from "./icons/icon-add";
+import type { UseChatHelpers } from "@/types";
 
-interface PromptForm {
-  onSubmit: (value: string) => void;
-}
+interface PromptForm
+  extends Pick<
+    UseChatHelpers,
+    "triggerRequest" | "setInput" | "handleSubmit" | "input"
+  > {}
 
-export default function PromptForm() {
+export default function PromptForm({
+  triggerRequest,
+  setInput,
+  handleSubmit,
+  input,
+}: PromptForm) {
   return (
-    <form>
-      <div className="flex border rounded-md h-16 w-full gap-2">
+    <form onSubmit={(e) => handleSubmit(e, input)}>
+      <div className="flex border rounded-md h-16 w-full gap-2 bg-white">
         <div className="pl-2 pt-2">
           <Button
             type="button"
             className="rounded-full"
             variant="outline"
             size="icon"
+            // onClick={triggerRequest}
           >
             <IconAdd />
           </Button>
         </div>
-        <textarea className="w-full h-full px-4 py-5 text-sm resize-none focus:outline-none rounded-md"></textarea>
+        <textarea
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+            setInput(e.target.value)
+          }
+          className="w-full h-full px-4 py-5 text-sm resize-none focus:outline-none rounded-md"
+        />
         <div className="pr-2 pt-2">
           <Button type="submit" size="icon">
             <IconEnter />

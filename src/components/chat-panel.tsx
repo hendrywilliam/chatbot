@@ -1,13 +1,29 @@
 "use client";
 
-import * as React from "react";
 import PromptForm from "@/components/prompt-form";
 import ExternalLink from "@/components/external-link";
+import { UseChatHelpers } from "@/types";
 
-export default function ChatPanel() {
+interface ChatPanelProps
+  extends Pick<
+    UseChatHelpers,
+    "triggerRequest" | "setInput" | "input" | "handleSubmit"
+  > {}
+
+export default function ChatPanel({
+  triggerRequest,
+  setInput,
+  input,
+  handleSubmit,
+}: ChatPanelProps) {
   return (
     <div className="absolute bottom-0 left-1/4 w-1/2 mx-auto border rounded-t-md p-4">
-      <PromptForm />
+      <PromptForm
+        triggerRequest={triggerRequest}
+        setInput={setInput}
+        input={input}
+        handleSubmit={handleSubmit}
+      />
       <div className="flex w-full justify-center mt-4" id="author">
         <p className="flex text-xs gap-1 text-muted-foreground">
           Powered by{" "}
@@ -15,7 +31,7 @@ export default function ChatPanel() {
           <ExternalLink href="https://nextjs.org/">OpenAI.</ExternalLink>
           Created by
           <ExternalLink href={"https://github.com/hendrywilliam"}>
-            Yrdneh
+            hendry
           </ExternalLink>
         </p>
       </div>
