@@ -25,7 +25,7 @@ export function useChat(): UseChatHelpers {
     async (requestMessage: Message) => {
       //concat latest request into messages[]
       setMessages([...messages, { ...requestMessage }]);
-
+      setInput("");
       //we need this to mutate the message content later.
       const responseId = nanoid();
       //every day above ground is a great day, remember that :)

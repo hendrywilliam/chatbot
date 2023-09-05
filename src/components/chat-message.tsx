@@ -18,12 +18,12 @@ export function ChatMessage({ messages }: ChatMessageProps) {
           >
             <div id="chat-role">
               {item.role === "user" ? (
-                <div className="inline-flex justify-center items-center w-8 h-8 border rounded-md">
+                <div className="inline-flex justify-center items-center w-8 h-8 border rounded-md shadow">
                   <IconUser />
                 </div>
               ) : (
-                <div className="inline-flex justify-center items-center w-8 h-8 border rounded-md">
-                  <IconAssistant />
+                <div className="inline-flex justify-center items-center w-8 h-8 border rounded-md shadow bg-black">
+                  <IconAssistant fill="white" />
                 </div>
               )}
             </div>

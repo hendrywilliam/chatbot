@@ -1,7 +1,7 @@
 import Chat from "@/components/chat";
 export default function IndexPage() {
   return (
-    <div className="w-full h-screen">
+    <div className="w-full h-screen antialiased">
       <Chat />
     </div>
   );

@@ -24,10 +24,9 @@ export default function PromptForm({
         <div className="pl-2 pt-2">
           <Button
             type="button"
-            className="rounded-full"
+            className="rounded-full bg-white"
             variant="outline"
             size="icon"
-            // onClick={triggerRequest}
           >
             <IconAdd />
           </Button>
@@ -37,6 +36,7 @@ export default function PromptForm({
             setInput(e.target.value)
           }
           className="w-full h-full px-4 py-5 text-sm resize-none focus:outline-none rounded-md"
+          value={input}
         />
         <div className="pr-2 pt-2">
           <Button type="submit" size="icon">

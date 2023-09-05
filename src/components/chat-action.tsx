@@ -16,7 +16,7 @@ export function ChatAction({ message }: ChatActionProps) {
 
   return (
     <div id="chat-action" className="">
-      <div className="inline-flex justify-center items-center border rounded-md">
+      <div className="inline-flex justify-center items-center border rounded-md shadow">
         <Button onClick={addToClipboard} size={"xs"} variant={"ghost"}>
           <IconCopy />
         </Button>

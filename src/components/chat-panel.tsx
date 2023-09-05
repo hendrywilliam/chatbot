@@ -17,7 +17,7 @@ export default function ChatPanel({
   handleSubmit,
 }: ChatPanelProps) {
   return (
-    <div className="absolute bottom-0 left-1/4 w-1/2 mx-auto border rounded-t-md p-4">
+    <div className="fixed inset-x-0 bottom-0 w-[95%] lg:w-[40%] mx-auto border rounded-t-md p-4 z-20 bg-white drop-shadow-lg">
       <PromptForm
         triggerRequest={triggerRequest}
         setInput={setInput}
@@ -26,9 +26,9 @@ export default function ChatPanel({
       />
       <div className="flex w-full justify-center mt-4" id="author">
         <p className="flex text-xs gap-1 text-muted-foreground">
-          Powered by{" "}
+          Powered by
           <ExternalLink href="https://nextjs.org/">Next.js</ExternalLink>and
-          <ExternalLink href="https://openai.com/">OpenAI.</ExternalLink>
+          <ExternalLink href="https://openai.com/">OpenAI</ExternalLink>
           Created by
           <ExternalLink href={"https://github.com/hendrywilliam"}>
             hendry

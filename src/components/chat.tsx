@@ -9,7 +9,7 @@ export default function Chat() {
   const { triggerRequest, messages, setInput, input, handleSubmit } = useChat();
 
   return (
-    <div className="relative pt-20 w-3/4 h-full mx-auto">
+    <div className="relative pt-24 pb-36 w-full h-full mx-auto overflow-auto">
       <ChatList messages={messages} input={input} />
       <ChatPanel
         triggerRequest={triggerRequest}
