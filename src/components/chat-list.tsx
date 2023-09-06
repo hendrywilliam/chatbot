@@ -3,13 +3,18 @@
 import { UseChatHelpers } from "@/types";
 import * as React from "react";
 import { ChatMessage } from "@/components/chat-message";
+import { EmptyScreen } from "@/components/empty-screen";
 
-interface ChatListProps extends Pick<UseChatHelpers, "messages" | "input"> {}
+interface ChatListProps extends Pick<UseChatHelpers, "messages" | "setInput"> {}
 
-export default function ChatList({ messages, input }: ChatListProps) {
+export default function ChatList({ messages, setInput }: ChatListProps) {
   return (
-    <div className="text-sm w-full xl:w-[45%] xl:mx-auto p-4 flex flex-col overflow-y-auto">
-      <ChatMessage messages={messages} />
+    <div className="text-sm w-full xl:w-[40%] xl:mx-auto p-4 flex flex-col overflow-y-auto">
+      {messages.length > 0 ? (
+        <ChatMessage messages={messages} />
+      ) : (
+        <EmptyScreen setInput={setInput} />
+      )}
     </div>
   );
 }

@@ -9,14 +9,15 @@ import type { UseChatHelpers } from "@/types";
 interface PromptForm
   extends Pick<
     UseChatHelpers,
-    "triggerRequest" | "setInput" | "handleSubmit" | "input"
+    "setInput" | "handleSubmit" | "input" | "isLoading" | "triggerStop"
   > {}
 
 export default function PromptForm({
-  triggerRequest,
   setInput,
   handleSubmit,
   input,
+  isLoading,
+  triggerStop,
 }: PromptForm) {
   return (
     <form onSubmit={(e) => handleSubmit(e, input)}>
