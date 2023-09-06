@@ -12,7 +12,7 @@ const examples = [
   },
   {
     title: "Summarize an article",
-    value: "Summarize this following artile for 2nd grader",
+    value: "Summarize this following article for 2nd grader",
   },
   {
     title: "Draft an email",
