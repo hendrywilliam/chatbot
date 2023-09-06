@@ -4,7 +4,7 @@ import { nanoid } from "nanoid";
 import { decode } from "@/lib/utils";
 
 export function useChat(): UseChatHelpers {
-  // const abortControllerRef = React.useRef<AbortController | null>(null);
+  const abortControllerRef = React.useRef<AbortController | null>(null);
   const [isPending, startTransition] = React.useTransition();
 
   const [messages, setMessages] = React.useState<Message[]>([]);
@@ -43,65 +43,80 @@ export function useChat(): UseChatHelpers {
 
       setIsLoading(true);
 
+      //attach controller
+      abortControllerRef.current = new AbortController();
+
       startTransition(async () => {
-        const request = await fetch(
-          "https://api.openai.com/v1/chat/completions",
-          {
-            method: "POST",
-            body: JSON.stringify({
-              model: "gpt-3.5-turbo",
-              messages: [
-                {
-                  role: "user",
-                  content: requestMessage.content,
-                },
-              ],
-              max_tokens: 100,
-              temperature: 0,
-              stream: true,
-            }),
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`,
-            },
-          }
-        );
-        const decoder = decode();
-
-        const response = request.body as ReadableStream;
-
-        const reader = response.getReader();
-
-        let responseText = "";
-
-        while (true) {
-          if (reader) {
-            const { done, value } = await reader?.read();
-            if (done) {
-              setIsLoading(false);
-              break;
+        try {
+          const request = await fetch(
+            "https://api.openai.com/v1/chat/completions",
+            {
+              method: "POST",
+              body: JSON.stringify({
+                model: "gpt-3.5-turbo",
+                messages: [
+                  {
+                    role: "user",
+                    content: requestMessage.content,
+                  },
+                ],
+                temperature: 0,
+                stream: true,
+              }),
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`,
+              },
+              signal: abortControllerRef.current?.signal,
             }
-            const decodedValue = decoder(value) as string;
-            const transformedValue = decodedValue
-              .replace(/^data: /gm, "")
-              .split("\n\n")
-              .filter((item) => item !== "" && item !== "[DONE]")
-              .map((item) => JSON.parse(item))
-              .forEach((item) => {
-                if ("content" in item.choices[0].delta) {
-                  responseText += item.choices[0].delta?.content as string;
-                }
-                return;
-              });
-            setMessages(
-              messagesRef.current.map((item) => {
-                if (item.id == responseId) {
-                  item.content = responseText;
+          );
+          const decoder = decode();
+
+          const response = request.body as ReadableStream;
+
+          const reader = response.getReader();
+
+          let responseText = "";
+
+          while (true) {
+            if (reader) {
+              const { done, value } = await reader?.read();
+              if (done) {
+                setIsLoading(false);
+                break;
+              }
+
+              const decodedValue = decoder(value) as string;
+              decodedValue
+                .replace(/^data: /gm, "")
+                .split("\n\n")
+                .filter((item) => item !== "" && item !== "[DONE]")
+                .map((item) => JSON.parse(item))
+                .forEach((item) => {
+                  if ("content" in item.choices[0].delta) {
+                    responseText += item.choices[0].delta?.content as string;
+                  }
+                  return;
+                });
+              setMessages(
+                messagesRef.current.map((item) => {
+                  if (item.id == responseId) {
+                    item.content = responseText;
+                    return item;
+                  }
                   return item;
-                }
-                return item;
-              })
-            );
+                })
+              );
+            }
+          }
+        } catch (err) {
+          if (err instanceof Error) {
+            if (err.name === "AbortError") {
+              //abort a signal will cause an error.
+              //not necessary to show it in client
+              //since it doesnt give an impact to any aspect.
+              setIsLoading(false);
+            }
           }
         }
       });
@@ -141,6 +156,14 @@ export function useChat(): UseChatHelpers {
     [input, setInput, append]
   );
 
+  //trigger stop
+  const triggerStop = React.useCallback(() => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    return;
+  }, []);
+
   return {
     triggerRequest,
     messages,
@@ -149,5 +172,6 @@ export function useChat(): UseChatHelpers {
     handleSubmit,
     input,
     setInput,
+    triggerStop,
   };
 }

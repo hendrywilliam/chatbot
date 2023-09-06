@@ -40,4 +40,7 @@ export interface UseChatHelpers {
 
   //setter function for input
   setInput: React.Dispatch<React.SetStateAction<string>>;
+
+  //this is a handler to stop current connection
+  triggerStop: () => void;
 }
