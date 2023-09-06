@@ -3,6 +3,8 @@ import { UseChatHelpers } from "@/types";
 import { IconUser } from "@/components/icons/icon-user";
 import { IconAssistant } from "@/components/icons/icon-assistant";
 import { ChatAction } from "@/components/chat-action";
+import ReactMarkdown from "react-markdown";
+import { Code } from "@/components/code";
 
 interface ChatMessageProps extends Pick<UseChatHelpers, "messages"> {}
 
@@ -13,7 +15,7 @@ export function ChatMessage({ messages }: ChatMessageProps) {
         return (
           <div
             id="chat-wrapper"
-            className="flex w-full h-max py-6 gap-6"
+            className="flex w-full h-max py-6 gap-2 xl:gap-6"
             key={item.id}
           >
             <div id="chat-role">
@@ -28,7 +30,16 @@ export function ChatMessage({ messages }: ChatMessageProps) {
               )}
             </div>
             <div id="chat-content" className="w-full">
-              <p>{item.content}</p>
+              {/* eslint-disable */}
+              <ReactMarkdown
+                children={item.content}
+                components={{
+                  code({ node, inline, className, children, ...props }) {
+                    const match = /language-(\w+)/.exec(className || "");
+                    return match && <Code {...props}>{children}</Code>;
+                  },
+                }}
+              />
             </div>
             <ChatAction message={item.content} />
           </div>
