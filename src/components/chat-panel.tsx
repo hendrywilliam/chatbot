@@ -15,6 +15,7 @@ interface ChatPanelProps
     | "handleSubmit"
     | "isLoading"
     | "triggerStop"
+    | "clearChats"
   > {}
 
 export default function ChatPanel({
@@ -23,6 +24,7 @@ export default function ChatPanel({
   handleSubmit,
   isLoading,
   triggerStop,
+  clearChats,
 }: ChatPanelProps) {
   return (
     <div className="fixed inset-x-0 bottom-0 w-[95%] lg:w-[35%] mx-auto border rounded-t-md p-4 z-20 bg-white drop-shadow-lg">
@@ -42,6 +44,7 @@ export default function ChatPanel({
         handleSubmit={handleSubmit}
         isLoading={isLoading}
         triggerStop={triggerStop}
+        clearChats={clearChats}
       />
       <div className="flex w-full justify-center mt-4" id="author">
         <p className="flex text-xs gap-1 text-muted-foreground">

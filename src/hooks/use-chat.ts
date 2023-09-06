@@ -164,6 +164,14 @@ export function useChat(): UseChatHelpers {
     return;
   }, []);
 
+  const clearChats = React.useCallback(() => {
+    if (isLoading) {
+      triggerStop();
+    }
+    setMessages([]);
+    return;
+  }, []);
+
   return {
     triggerRequest,
     messages,
@@ -173,5 +181,6 @@ export function useChat(): UseChatHelpers {
     input,
     setInput,
     triggerStop,
+    clearChats,
   };
 }

@@ -43,4 +43,7 @@ export interface UseChatHelpers {
 
   //this is a handler to stop current connection
   triggerStop: () => void;
+
+  //clear recents chats
+  clearChats: () => void;
 }

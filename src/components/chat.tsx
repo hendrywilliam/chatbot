@@ -14,6 +14,7 @@ export default function Chat() {
     handleSubmit,
     isLoading,
     triggerStop,
+    clearChats,
   } = useChat();
 
   return (
@@ -26,6 +27,7 @@ export default function Chat() {
         input={input}
         isLoading={isLoading}
         triggerStop={triggerStop}
+        clearChats={clearChats}
       />
     </div>
   );

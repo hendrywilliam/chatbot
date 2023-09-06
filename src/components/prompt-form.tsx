@@ -9,15 +9,19 @@ import type { UseChatHelpers } from "@/types";
 interface PromptForm
   extends Pick<
     UseChatHelpers,
-    "setInput" | "handleSubmit" | "input" | "isLoading" | "triggerStop"
+    | "setInput"
+    | "handleSubmit"
+    | "input"
+    | "isLoading"
+    | "triggerStop"
+    | "clearChats"
   > {}
 
 export default function PromptForm({
   setInput,
   handleSubmit,
   input,
-  isLoading,
-  triggerStop,
+  clearChats,
 }: PromptForm) {
   return (
     <form onSubmit={(e) => handleSubmit(e, input)}>
@@ -28,6 +32,7 @@ export default function PromptForm({
             className="rounded-full bg-white"
             variant="outline"
             size="icon"
+            onClick={clearChats}
           >
             <IconAdd />
           </Button>
