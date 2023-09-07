@@ -15,6 +15,7 @@ export default function Chat() {
     isLoading,
     triggerStop,
     clearChats,
+    regenerateResponse,
   } = useChat();
 
   return (
@@ -28,6 +29,8 @@ export default function Chat() {
         isLoading={isLoading}
         triggerStop={triggerStop}
         clearChats={clearChats}
+        regenerateResponse={regenerateResponse}
+        messages={messages}
       />
     </div>
   );

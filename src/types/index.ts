@@ -46,4 +46,7 @@ export interface UseChatHelpers {
 
   //clear recents chats
   clearChats: () => void;
+
+  //this will re-generate response from last request message.
+  regenerateResponse: () => void;
 }

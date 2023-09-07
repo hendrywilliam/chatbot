@@ -25,7 +25,7 @@ export function useChat(): UseChatHelpers {
     async (requestMessage: Message) => {
       //concat latest request into messages[]
       setMessages([...messages, { ...requestMessage }]);
-      setInput("");
+
       //we need this to mutate the message content later.
       const responseId = nanoid();
       //every day above ground is a great day, remember that :)
@@ -71,6 +71,10 @@ export function useChat(): UseChatHelpers {
             }
           );
           const decoder = decode();
+
+          if (!request.ok) {
+            setIsLoading(false);
+          }
 
           const response = request.body as ReadableStream;
 
@@ -151,6 +155,8 @@ export function useChat(): UseChatHelpers {
       } satisfies Message;
 
       append(requestMessage);
+
+      setInput("");
     },
     //eslint-disable-next-line
     [input, setInput, append]
@@ -170,7 +176,35 @@ export function useChat(): UseChatHelpers {
     }
     setMessages([]);
     return;
-  }, []);
+  }, [isLoading, triggerStop]);
+
+  const regenerateResponse = React.useCallback(() => {
+    if (messagesRef.current.length < 0) return;
+
+    const lmAssistant = messagesRef.current[messagesRef.current.length - 1];
+
+    if (lmAssistant.role === "assistant") {
+      messagesRef.current = messagesRef.current.slice(0, -1);
+    }
+
+    const lmUser = messagesRef.current[messagesRef.current.length - 1];
+    if (lmUser.role === "user") {
+      //create a new request with different id
+      //no need to duplicate
+      const now = new Date();
+      const id = nanoid();
+
+      const requestMessage = {
+        id,
+        role: "user",
+        content: lmUser.content,
+        createdAt: now,
+      } satisfies Message;
+
+      triggerRequest(requestMessage);
+    }
+    return;
+  }, [triggerRequest]);
 
   return {
     triggerRequest,
@@ -182,5 +216,6 @@ export function useChat(): UseChatHelpers {
     setInput,
     triggerStop,
     clearChats,
+    regenerateResponse,
   };
 }

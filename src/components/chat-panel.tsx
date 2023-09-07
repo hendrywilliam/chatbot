@@ -5,6 +5,7 @@ import ExternalLink from "@/components/external-link";
 import { UseChatHelpers } from "@/types";
 import { Button } from "@/components/ui/button";
 import { IconStop } from "@/components/icons/icon-stop";
+import { IconReset } from "@/components/icons/icon-reset";
 
 interface ChatPanelProps
   extends Pick<
@@ -16,6 +17,8 @@ interface ChatPanelProps
     | "isLoading"
     | "triggerStop"
     | "clearChats"
+    | "regenerateResponse"
+    | "messages"
   > {}
 
 export default function ChatPanel({
@@ -25,10 +28,22 @@ export default function ChatPanel({
   isLoading,
   triggerStop,
   clearChats,
+  regenerateResponse,
+  messages,
 }: ChatPanelProps) {
   return (
     <div className="fixed inset-x-0 bottom-0 w-[95%] lg:w-[35%] mx-auto border rounded-t-md p-4 z-20 bg-white drop-shadow-lg">
-      {isLoading ? (
+      {messages.length > 0 && !isLoading && (
+        <Button
+          variant={"outline"}
+          className="absolute -top-12 inset-x-0 w-max mx-auto text-xs text-muted-foreground gap-1 drop-shadow-none"
+          onClick={regenerateResponse}
+        >
+          <IconReset />
+          Regenerate Response
+        </Button>
+      )}
+      {isLoading && (
         <Button
           variant={"outline"}
           className="absolute -top-12 inset-x-0 w-max mx-auto text-xs text-muted-foreground gap-1 drop-shadow-none"
@@ -37,7 +52,7 @@ export default function ChatPanel({
           <IconStop />
           Stop Generating
         </Button>
-      ) : null}
+      )}
       <PromptForm
         setInput={setInput}
         input={input}
