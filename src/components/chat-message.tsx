@@ -29,7 +29,10 @@ export function ChatMessage({ messages }: ChatMessageProps) {
                 </div>
               )}
             </div>
-            <div id="chat-content" className="w-full">
+            <div
+              id="chat-content"
+              className="w-full first:mb-2 last:mt-2 leading-relaxed"
+            >
               {/* eslint-disable */}
               <ReactMarkdown
                 children={item.content}
