@@ -49,7 +49,6 @@ export function useChat(): UseChatHelpers {
       abortControllerRef.current = new AbortController();
 
       startTransition(async () => {
-        console.log(messagesRef.current);
         try {
           const request = await fetch(
             "https://api.openai.com/v1/chat/completions",
