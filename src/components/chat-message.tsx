@@ -31,12 +31,15 @@ export function ChatMessage({ messages }: ChatMessageProps) {
             </div>
             <div
               id="chat-content"
-              className="w-full first:mb-2 last:mt-2 leading-relaxed"
+              className="w-full first:mb-2 last:mt-2 leading-relaxed box-border"
             >
               {/* eslint-disable */}
               <ReactMarkdown
                 children={item.content}
                 components={{
+                  pre({ children }) {
+                    return <pre className="w-full">{children}</pre>;
+                  },
                   code({ node, inline, className, children, ...props }) {
                     const match = /language-(\w+)/.exec(className || "");
                     return match && <Code {...props}>{children}</Code>;
