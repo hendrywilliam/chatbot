@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { IconCopy } from "@/components/icons/icon-copy";
 import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 import { fira_code } from "@/lib/fonts";
+import { IconSuccess } from "@/components/icons/icon-success";
 
 interface CodeProps
   extends React.DetailedHTMLProps<
@@ -12,17 +13,20 @@ interface CodeProps
     HTMLElement
   > {}
 
-export function Code({ children, ...props }: CodeProps) {
-  const copy = useCopyToClipboard();
+export const Code = React.memo(function Code({
+  children,
+  ...props
+}: CodeProps) {
+  const [isCopy, copy] = useCopyToClipboard();
 
   return (
     <div className="w-full my-2 outline-none">
       <div
         id="code-action"
-        className="flex justify-end items-center py-2 px-4 bg-code rounded-t-md outline-none"
+        className="flex justify-end items-center py-2 px-4 bg-code rounded-t-md outline-none w-full"
       >
         <Button size={"xs"} onClick={() => copy(children as string)}>
-          <IconCopy />
+          {isCopy ? <IconSuccess /> : <IconCopy />}
         </Button>
       </div>
       <div
@@ -30,7 +34,7 @@ export function Code({ children, ...props }: CodeProps) {
         className="w-full h-full p-4 bg-code-preview text-white rounded-b-md outline-none break-words overflow-x-auto"
       >
         <code
-          className={`${fira_code.className} box-border break-words`}
+          className={`${fira_code.className} box-border break-words overflow-x-auto w-full`}
           {...props}
         >
           {children}
@@ -38,4 +42,4 @@ export function Code({ children, ...props }: CodeProps) {
       </div>
     </div>
   );
-}
+});
