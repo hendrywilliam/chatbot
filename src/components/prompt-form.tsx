@@ -22,6 +22,7 @@ export default function PromptForm({
   handleSubmit,
   input,
   clearChats,
+  isLoading,
 }: PromptForm) {
   return (
     <form onSubmit={(e) => handleSubmit(e, input)}>
@@ -45,7 +46,7 @@ export default function PromptForm({
           value={input}
         />
         <div className="pr-2 pt-2">
-          <Button type="submit" size="icon">
+          <Button type="submit" size="icon" disabled={isLoading}>
             <IconEnter />
           </Button>
         </div>

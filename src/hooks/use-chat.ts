@@ -28,7 +28,7 @@ export function useChat(): UseChatHelpers {
 
       //we need this to mutate the message content later.
       const responseId = nanoid();
-      //every day above ground is a great day, remember that :)
+
       const now = new Date();
 
       //create response
@@ -39,6 +39,8 @@ export function useChat(): UseChatHelpers {
         createdAt: now,
       } satisfies Message;
 
+      messagesRef.current = [...messagesRef.current, requestMessage];
+
       setMessages((messages) => [...messages, { ...responseMessage }]);
 
       setIsLoading(true);
@@ -47,6 +49,7 @@ export function useChat(): UseChatHelpers {
       abortControllerRef.current = new AbortController();
 
       startTransition(async () => {
+        console.log(messagesRef.current);
         try {
           const request = await fetch(
             "https://api.openai.com/v1/chat/completions",
@@ -57,7 +60,15 @@ export function useChat(): UseChatHelpers {
                 messages: [
                   {
                     role: "user",
-                    content: requestMessage.content,
+                    //provide context for request message that refer to prior messages.
+                    content: JSON.stringify(
+                      messagesRef.current.map((item) => {
+                        return {
+                          role: item.role,
+                          content: item.content,
+                        };
+                      })
+                    ),
                   },
                 ],
                 temperature: 0,

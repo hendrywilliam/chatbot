@@ -37,7 +37,7 @@ export default function Chat() {
     if (!inView && isLoading) {
       //scroll to the observed element.
       entry?.target.scrollIntoView({
-        behavior: "auto",
+        behavior: "instant",
         block: "end",
       });
     }

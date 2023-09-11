@@ -14,7 +14,7 @@ const ChatList = React.forwardRef<HTMLDivElement, ChatListProps>(
     return (
       <div
         ref={ref}
-        className="text-sm w-full xl:w-[40%] xl:mx-auto p-4 flex flex-col self-center overflow-y-auto mb-36"
+        className="text-sm w-full lg:w-[50%] xl:w-[40%] lg:mx-auto p-4 flex flex-col self-center overflow-y-auto mb-36"
       >
         {messages.length > 0 ? (
           <ChatMessage messages={messages} />
@@ -28,17 +28,3 @@ const ChatList = React.forwardRef<HTMLDivElement, ChatListProps>(
 
 ChatList.displayName = "ChatList";
 export default ChatList;
-
-// interface ChatListProps extends Pick<UseChatHelpers, "messages" | "setInput"> {}
-
-// export default function ChatList({ messages, setInput }: ChatListProps) {
-//   return (
-//     <div className="text-sm w-full xl:w-[40%] xl:mx-auto p-4 flex flex-col self-center overflow-y-auto">
-//       {messages.length > 0 ? (
-//         <ChatMessage messages={messages} />
-//       ) : (
-//         <EmptyScreen setInput={setInput} />
-//       )}
-//     </div>
-//   );
-// }

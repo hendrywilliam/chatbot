@@ -40,6 +40,9 @@ export function ChatMessage({ messages }: ChatMessageProps) {
                   pre({ children }) {
                     return <pre className="w-full">{children}</pre>;
                   },
+                  p({ children }) {
+                    return <p className="my-4">{children}</p>;
+                  },
                   code({ node, inline, className, children, ...props }) {
                     const match = /language-(\w+)/.exec(className || "");
                     return match && <Code {...props}>{children}</Code>;
