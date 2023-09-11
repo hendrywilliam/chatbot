@@ -50,3 +50,10 @@ export interface UseChatHelpers {
   //this will re-generate response from last request message.
   regenerateResponse: () => void;
 }
+
+export interface UseIntersectionObserverHelper {
+  //this is the target we want to observe, not the ancestor or root element
+  //we watch for intersection relative to device viewport
+  target: React.RefObject<Element>;
+  options?: IntersectionObserverInit;
+}

@@ -16,7 +16,7 @@ export function Code({ children, ...props }: CodeProps) {
   const copy = useCopyToClipboard();
 
   return (
-    <div className="my-2 outline-none w-full">
+    <div className="w-full my-2 outline-none">
       <div
         id="code-action"
         className="flex justify-end items-center py-2 px-4 bg-code rounded-t-md outline-none"
@@ -27,9 +27,12 @@ export function Code({ children, ...props }: CodeProps) {
       </div>
       <div
         id="code-preview"
-        className="w-full h-full p-4 bg-code-preview text-white rounded-b-md outline-none break-words"
+        className="w-full h-full p-4 bg-code-preview text-white rounded-b-md outline-none break-words overflow-x-auto"
       >
-        <code className={`${fira_code.className}`} {...props}>
+        <code
+          className={`${fira_code.className} box-border break-words`}
+          {...props}
+        >
           {children}
         </code>
       </div>
