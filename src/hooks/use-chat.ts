@@ -56,20 +56,12 @@ export function useChat(): UseChatHelpers {
               method: "POST",
               body: JSON.stringify({
                 model: "gpt-3.5-turbo",
-                messages: [
-                  {
-                    role: "user",
-                    //provide context for request message that refer to prior messages.
-                    content: JSON.stringify(
-                      messagesRef.current.map((item) => {
-                        return {
-                          role: item.role,
-                          content: item.content,
-                        };
-                      })
-                    ),
-                  },
-                ],
+                messages: messagesRef.current.map((item) => {
+                  return {
+                    role: item.role,
+                    content: item.content,
+                  };
+                }),
                 temperature: 0,
                 stream: true,
               }),
