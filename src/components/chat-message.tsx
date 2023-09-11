@@ -41,7 +41,7 @@ export function ChatMessage({ messages }: ChatMessageProps) {
                     return <pre className="w-full">{children}</pre>;
                   },
                   p({ children }) {
-                    return <p className="my-4">{children}</p>;
+                    return <p className="mb-4">{children}</p>;
                   },
                   code({ node, inline, className, children, ...props }) {
                     const match = /language-(\w+)/.exec(className || "");
