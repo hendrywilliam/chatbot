@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { IconEnter } from "@/components/icons/icon-enter";
 import { IconAdd } from "./icons/icon-add";
 import type { UseChatHelpers } from "@/types";
+import { useEnterToSubmit } from "@/hooks/use-enter-to-submit";
 
 interface PromptForm
   extends Pick<
@@ -24,8 +25,15 @@ export default function PromptForm({
   clearChats,
   isLoading,
 }: PromptForm) {
+  const promptFormRef = React.useRef<React.ElementRef<"form">>(null);
+  const enterToSubmit = useEnterToSubmit(promptFormRef);
+
   return (
-    <form onSubmit={(e) => handleSubmit(e, input)}>
+    <form
+      ref={promptFormRef}
+      onSubmit={(e) => handleSubmit(e, input)}
+      onKeyDown={enterToSubmit}
+    >
       <div className="flex border rounded-md h-16 w-full gap-2 bg-white">
         <div className="pl-2 pt-2">
           <Button
@@ -42,6 +50,8 @@ export default function PromptForm({
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
             setInput(e.target.value)
           }
+          rows={1}
+          cols={1}
           className="w-full h-full px-4 py-5 text-sm resize-none focus:outline-none rounded-md"
           value={input}
         />

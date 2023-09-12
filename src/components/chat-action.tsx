@@ -14,7 +14,7 @@ export function ChatAction({ message }: ChatActionProps) {
   const [isCopy, copy] = useCopyToClipboard();
 
   return (
-    <div id="chat-action" className="w-[5%]">
+    <div id="chat-action">
       <div className="inline-flex justify-center items-center border rounded-md shadow">
         <Button onClick={() => copy(message)} size={"xs"} variant={"ghost"}>
           {isCopy ? <IconSuccess /> : <IconCopy />}

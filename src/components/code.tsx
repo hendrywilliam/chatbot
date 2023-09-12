@@ -11,10 +11,13 @@ interface CodeProps
   extends React.DetailedHTMLProps<
     React.HTMLAttributes<HTMLElement>,
     HTMLElement
-  > {}
+  > {
+  language: string;
+}
 
 export const Code = React.memo(function Code({
   children,
+  language,
   ...props
 }: CodeProps) {
   const [isCopy, copy] = useCopyToClipboard();
@@ -23,18 +26,19 @@ export const Code = React.memo(function Code({
     <div className="w-full my-2 outline-none">
       <div
         id="code-action"
-        className="flex justify-end items-center py-2 px-4 bg-code rounded-t-md outline-none w-full"
+        className="flex justify-between items-center py-2 px-4 bg-code rounded-t-md outline-none w-full"
       >
+        <p className="text-white text-xs">{language}</p>
         <Button size={"xs"} onClick={() => copy(children as string)}>
           {isCopy ? <IconSuccess /> : <IconCopy />}
         </Button>
       </div>
       <div
         id="code-preview"
-        className="w-full h-full p-4 bg-code-preview text-white rounded-b-md outline-none break-words overflow-x-auto"
+        className="w-full h-full p-4 bg-code-preview text-white rounded-b-md outline-none break-words overflow-x"
       >
         <code
-          className={`${fira_code.className} box-border break-words overflow-x-auto w-full`}
+          className={`${fira_code.className} box-border break-words overflow-x-auto w-full break-words`}
           {...props}
         >
           {children}

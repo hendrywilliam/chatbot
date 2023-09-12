@@ -14,7 +14,7 @@ const ChatList = React.forwardRef<HTMLDivElement, ChatListProps>(
     return (
       <div
         ref={ref}
-        className="text-sm w-full lg:w-[50%] xl:w-[40%] lg:mx-auto p-4 flex flex-col self-center overflow-y-auto mb-36"
+        className="w-full lg:w-[50%] xl:w-[40%] lg:mx-auto p-4 flex flex-col overflow-x-hidden overflow-y-auto mb-36 text-sm"
       >
         {messages.length > 0 ? (
           <ChatMessage messages={messages} />
