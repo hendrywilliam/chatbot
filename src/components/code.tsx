@@ -38,7 +38,7 @@ export const Code = React.memo(function Code({
         className="w-full h-full p-4 bg-code-preview text-white rounded-b-md outline-none break-words overflow-x"
       >
         <code
-          className={`${fira_code.className} box-border break-words overflow-x-auto w-full break-words`}
+          className={`${fira_code.className} box-border overflow-x-auto w-full break-words`}
           {...props}
         >
           {children}
