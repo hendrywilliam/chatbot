@@ -46,12 +46,12 @@ export function ChatMessage({ messages }: ChatMessageProps) {
                   },
                   code({ node, inline, className, children, ...props }) {
                     const match = /language-(\w+)/.exec(className || "");
-                    return (
-                      match && (
-                        <Code language={match[0].split("-")[1]} {...props}>
-                          {children}
-                        </Code>
-                      )
+                    return !inline && match ? (
+                      <Code language={match[0].split("-")[1]} {...props}>
+                        {children}
+                      </Code>
+                    ) : (
+                      <code className="font-extrabold">`{children}`</code>
                     );
                   },
                 }}
