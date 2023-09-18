@@ -26,7 +26,7 @@ export const Code = React.memo(function Code({
     <div className="w-full my-2 outline-none">
       <div
         id="code-action"
-        className="flex justify-between items-center py-2 px-4 bg-code rounded-t-md outline-none w-full"
+        className="flex justify-between items-center py-2 px-4 bg-code rounded-t-md outline-none min-w-full w-full"
       >
         <p className="text-white text-xs">{language}</p>
         <Button size={"xs"} onClick={() => copy(children as string)}>
@@ -35,7 +35,7 @@ export const Code = React.memo(function Code({
       </div>
       <div
         id="code-preview"
-        className="w-full h-full p-4 bg-code-preview text-white rounded-b-md outline-none break-words overflow-x"
+        className="w-full h-full p-4 bg-code-preview text-white rounded-b-md outline-none break-words overflow-x-auto box-border"
       >
         <code
           className={`${fira_code.className} box-border overflow-x-auto w-full break-words`}

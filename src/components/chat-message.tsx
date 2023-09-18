@@ -31,7 +31,7 @@ export function ChatMessage({ messages }: ChatMessageProps) {
             </div>
             <div
               id="chat-content"
-              className="w-full first:mb-2 last:mt-2 leading-relaxed box-border"
+              className="w-[75%] lg:w-[85%] first:mb-2 last:mt-2 leading-relaxed box-border"
             >
               {/* eslint-disable */}
               <ReactMarkdown
@@ -39,10 +39,13 @@ export function ChatMessage({ messages }: ChatMessageProps) {
                 className="w-full break-words"
                 components={{
                   pre({ children }) {
-                    return <pre className="w-full">{children}</pre>;
+                    return <pre className="w-[85%]">{children}</pre>;
                   },
                   p({ children }) {
-                    return <p className="mb-4">{children}</p>;
+                    return <p className="w-full mb-4">{children}</p>;
+                  },
+                  li({ children }) {
+                    return <li className="mb-1">{children}</li>;
                   },
                   code({ node, inline, className, children, ...props }) {
                     const match = /language-(\w+)/.exec(className || "");
@@ -51,7 +54,7 @@ export function ChatMessage({ messages }: ChatMessageProps) {
                         {children}
                       </Code>
                     ) : (
-                      <code className="font-extrabold">`{children}`</code>
+                      <code className="font-extrabold">"{children}"</code>
                     );
                   },
                 }}
