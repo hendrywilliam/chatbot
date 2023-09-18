@@ -6,6 +6,7 @@ import ChatList from "@/components/chat-list";
 import { useChat } from "@/hooks/use-chat";
 import { ChatAnchor } from "@/components/chat-anchor";
 import { useInView } from "react-intersection-observer";
+import { useScrollWheel } from "@/hooks/use-scroll-wheel";
 
 export default function Chat() {
   const chatListRef = React.useRef<React.ElementRef<"div">>(null);
@@ -17,6 +18,8 @@ export default function Chat() {
     root: chatListRef.current, //this act as the ancestor
     threshold: 1, //100% visible then callback invoked
   });
+
+  const [counter, escapeAnchor, triggerWheel] = useScrollWheel(chatListRef);
 
   const {
     triggerRequest,
@@ -34,18 +37,19 @@ export default function Chat() {
     //this will detect if the anchor is not in viewport
     //and the loading is still processing (streaming or
     //sumthing else)
-    if (!inView && isLoading) {
+    if (!inView && isLoading && counter < 2 && !escapeAnchor) {
       //scroll to the observed element.
       entry?.target.scrollIntoView({
         behavior: "instant",
         block: "end",
       });
     }
-  }, [inView, isLoading, entry, messages]);
+  }, [inView, isLoading, entry, messages, counter, escapeAnchor]);
 
   return (
     <div
       ref={chatListRef}
+      onWheel={triggerWheel}
       className="relative pt-24 w-full h-full mx-auto overflow-y-auto"
     >
       <ChatList messages={messages} setInput={setInput} />
