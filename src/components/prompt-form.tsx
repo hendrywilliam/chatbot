@@ -26,7 +26,8 @@ export default function PromptForm({
   isLoading,
 }: PromptForm) {
   const promptFormRef = React.useRef<React.ElementRef<"form">>(null);
-  const enterToSubmit = useEnterToSubmit(promptFormRef);
+  const submitterButton = React.useRef<React.ElementRef<"button">>(null);
+  const enterToSubmit = useEnterToSubmit(promptFormRef, submitterButton);
 
   return (
     <form
@@ -56,7 +57,12 @@ export default function PromptForm({
           value={input}
         />
         <div className="pr-2 pt-2">
-          <Button type="submit" size="icon" disabled={isLoading}>
+          <Button
+            ref={submitterButton}
+            type="submit"
+            size="icon"
+            disabled={isLoading}
+          >
             <IconEnter />
           </Button>
         </div>

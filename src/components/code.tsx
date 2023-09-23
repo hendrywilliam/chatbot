@@ -23,7 +23,7 @@ export const Code = React.memo(function Code({
   const [isCopy, copy] = useCopyToClipboard();
 
   return (
-    <div className="w-full my-2 outline-none">
+    <div className="w-full my-2 outline-none -z-10">
       <div
         id="code-action"
         className="flex justify-between items-center py-2 px-4 bg-code rounded-t-md outline-none min-w-full w-full"
