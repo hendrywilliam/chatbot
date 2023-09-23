@@ -15,10 +15,10 @@ export function ChatMessage({ messages }: ChatMessageProps) {
         return (
           <div
             id="chat-wrapper"
-            className="flex w-full h-max py-6 gap-2 xl:gap-6"
+            className="relative flex w-full h-max py-6 gap-2 xl:gap-6"
             key={item.id}
           >
-            <div id="chat-role">
+            <div id="chat-role" className="w-8">
               {item.role === "user" ? (
                 <div className="inline-flex justify-center items-center w-8 h-8 border rounded-md shadow">
                   <IconUser />
@@ -31,7 +31,7 @@ export function ChatMessage({ messages }: ChatMessageProps) {
             </div>
             <div
               id="chat-content"
-              className="w-[75%] lg:w-[85%] first:mb-2 last:mt-2 leading-relaxed box-border"
+              className="w-[80%] first:mb-2 last:mt-2 leading-relaxed box-border"
             >
               {/* eslint-disable */}
               <ReactMarkdown
@@ -39,7 +39,7 @@ export function ChatMessage({ messages }: ChatMessageProps) {
                 className="w-full break-words"
                 components={{
                   pre({ children }) {
-                    return <pre className="w-[85%]">{children}</pre>;
+                    return <pre className="w-full">{children}</pre>;
                   },
                   p({ children }) {
                     return <p className="w-full mb-4">{children}</p>;
