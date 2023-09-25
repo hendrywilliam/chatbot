@@ -13,11 +13,9 @@ export function useScrollWheel(
 
   const triggerWheel = function (event: React.WheelEvent<HTMLElement>) {
     if (!target.current) return;
-    //scroll up consider as negative int, vice versa.
     if (event.deltaY < 0 && counter !== threshold) {
       setCounter((counter) => counter + 1);
     }
-
     if (
       target.current.scrollHeight - target.current.scrollTop ===
         target.current.clientHeight &&
