@@ -11,7 +11,6 @@ export function useEnterToSubmit(
     if (submitter.current?.disabled) {
       return;
     }
-
     if (event.key === key && event.ctrlKey) {
       event.preventDefault();
       target?.current?.requestSubmit(submitter.current);
