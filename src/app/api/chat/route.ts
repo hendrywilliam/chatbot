@@ -1,12 +1,29 @@
 import "dotenv/config";
 import { openai } from "@/lib/open-ai";
 import { ChatRequestBody } from "@/types/open-ai";
+import { chatCompletionSnapshots } from "@/lib/snapshots/chat-completion";
+import { createFakeStream, chatCompletionGenerator } from "@/lib/stream";
 
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
   try {
     const body = (await request.json()) as ChatRequestBody;
+    const isProduction = process.env.NODE_ENV === "production";
+
+    /** A fake stream while working in development environment, you dont need to call the API everytime. */
+    if (!isProduction) {
+      const stream = chatCompletionGenerator(chatCompletionSnapshots);
+
+      return new Response(createFakeStream(stream), {
+        headers: {
+          "Content-Type": "text/event-stream",
+          Connection: "keep-alive",
+          "Cache-Control": "no-cache",
+        },
+        status: 200,
+      });
+    }
 
     const chatCompletion = await openai.chat.completions.create({
       messages: [
