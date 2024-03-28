@@ -5,8 +5,8 @@ import { Analytics } from "@vercel/analytics/react";
 import { inter } from "@/lib/fonts";
 
 export const metadata: Metadata = {
-  title: "DictationAI by yrdneh",
-  description: "Minimal way on how to communicate with OpenAI.",
+  title: "AI by hendryw",
+  description: "A simple application powered by OpenAI.",
 };
 
 export default function RootLayout({

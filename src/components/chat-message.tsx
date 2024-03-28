@@ -1,7 +1,7 @@
 import * as React from "react";
 import { UseChatHelpers } from "@/types";
 import { IconUser } from "@/components/icons/icon-user";
-import { IconAssistant } from "@/components/icons/icon-assistant";
+import { OpenAIIcon } from "@/components/ui/icons";
 import { ChatAction } from "@/components/chat-action";
 import ReactMarkdown from "react-markdown";
 import { Code } from "@/components/code";
@@ -25,7 +25,7 @@ export function ChatMessage({ messages }: ChatMessageProps) {
                 </div>
               ) : (
                 <div className="inline-flex justify-center items-center w-8 h-8 border rounded-md shadow bg-black">
-                  <IconAssistant fill="white" />
+                  <OpenAIIcon fill="white" />
                 </div>
               )}
             </div>

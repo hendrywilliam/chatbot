@@ -6,11 +6,11 @@ import { ChatMessage } from "@/components/chat-message";
 import { EmptyScreen } from "@/components/empty-screen";
 
 interface ChatListProps
-  extends Pick<UseChatHelpers, "messages" | "setInput">,
+  extends Pick<UseChatHelpers, "messages" | "setInput" | "isLoading">,
     React.HTMLAttributes<HTMLDivElement> {}
 
 const ChatList = React.forwardRef<HTMLDivElement, ChatListProps>(
-  ({ messages, setInput, ...props }, ref) => {
+  ({ messages, setInput, isLoading, ...props }, ref) => {
     return (
       <div
         ref={ref}

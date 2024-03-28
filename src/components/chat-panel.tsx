@@ -63,13 +63,7 @@ export default function ChatPanel({
       />
       <div className="flex w-full justify-center mt-4" id="author">
         <p className="flex text-xs gap-1 text-muted-foreground">
-          Powered by
-          <ExternalLink href="https://nextjs.org/">Next.js</ExternalLink>and
-          <ExternalLink href="https://openai.com/">OpenAI</ExternalLink>
-          Created by
-          <ExternalLink href={"https://github.com/hendrywilliam"}>
-            hendry
-          </ExternalLink>
+          Created and open-sourced by hendry
         </p>
       </div>
     </div>

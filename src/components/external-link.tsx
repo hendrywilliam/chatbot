@@ -1,5 +1,4 @@
 import Link, { type LinkProps } from "next/link";
-import { IconLink } from "@/components/icons/icon-link";
 import { cn } from "@/lib/utils";
 
 type ExternalLink = LinkProps & {
@@ -22,7 +21,6 @@ export default function ExternalLink({
       target={target}
     >
       {children}
-      <IconLink width="0.75em" />
     </Link>
   );
 }

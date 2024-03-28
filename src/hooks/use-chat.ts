@@ -2,6 +2,7 @@ import * as React from "react";
 import type { Message, UseChatHelpers } from "@/types";
 import { nanoid } from "nanoid";
 import { decode } from "@/lib/utils";
+import { OpenAIStreamOutput } from "@/types/open-ai";
 
 export function useChat(): UseChatHelpers {
   const abortControllerRef = React.useRef<AbortController | null>(null);
@@ -50,57 +51,53 @@ export function useChat(): UseChatHelpers {
 
       startTransition(async () => {
         try {
-          const request = await fetch(
-            "https://api.openai.com/v1/chat/completions",
-            {
-              method: "POST",
-              body: JSON.stringify({
-                model: "gpt-3.5-turbo",
-                messages: messagesRef.current.map((item) => {
-                  return {
-                    role: item.role,
-                    content: item.content,
-                  };
-                }),
-                temperature: 0,
-                stream: true,
+          const response = await fetch("/api/chat", {
+            method: "POST",
+            body: JSON.stringify({
+              model: "gpt-3.5-turbo",
+              messages: messagesRef.current.map((item) => {
+                return {
+                  role: item.role,
+                  content: item.content,
+                };
               }),
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`,
-              },
-              signal: abortControllerRef.current?.signal,
-            }
-          );
+              temperature: 0,
+              stream: true,
+            }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+            signal: abortControllerRef.current?.signal,
+          });
+
           const decoder = decode();
 
-          if (!request.ok) {
+          if (!response.ok) {
             setIsLoading(false);
           }
 
-          const response = request.body as ReadableStream;
-
-          const reader = response.getReader();
-
+          const body = response.body as ReadableStream;
+          const reader = body.getReader();
           let responseText = "";
 
           while (true) {
             if (reader) {
-              const { done, value } = await reader?.read();
+              const { done, value } = await reader.read();
               if (done) {
                 setIsLoading(false);
                 break;
               }
 
               const decodedValue = decoder(value) as string;
+
               decodedValue
-                .replace(/^data: /gm, "")
-                .split("\n\n")
-                .filter((item) => item !== "" && item !== "[DONE]")
+                .split("\n")
+                /** There is an empty string appended after splitting. Need to get rid of it.*/
+                .filter((value) => Boolean(value))
                 .map((item) => JSON.parse(item))
-                .forEach((item) => {
+                .forEach((item: OpenAIStreamOutput) => {
                   if ("content" in item.choices[0].delta) {
-                    responseText += item.choices[0].delta?.content as string;
+                    responseText += item.choices[0].delta.content;
                   }
                   return;
                 });
@@ -116,11 +113,8 @@ export function useChat(): UseChatHelpers {
             }
           }
         } catch (err) {
-          if (err instanceof Error) {
-            if (err.name === "AbortError") {
-              //abort a signal will cause an error.
-              //not necessary to show it in client
-              //since it doesnt give an impact to any aspect.
+          switch (err) {
+            case err instanceof Error && err.name === "AbortError": {
               setIsLoading(false);
             }
           }
@@ -181,7 +175,7 @@ export function useChat(): UseChatHelpers {
   }, [isLoading, triggerStop]);
 
   const regenerateResponse = React.useCallback(() => {
-    if (messagesRef.current.length < 0) return;
+    if (messagesRef.current.length === 0) return;
 
     const lmAssistant = messagesRef.current[messagesRef.current.length - 1];
 
