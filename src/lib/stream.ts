@@ -1,11 +1,19 @@
 import type { ChatCompletionChunk } from "openai/resources/index.mjs";
 
 /** Generate artificial stream */
-export function createFakeStream(iterator: AsyncGenerator): ReadableStream {
+export function createFakeStream(
+  iterator: AsyncGenerator,
+  signal?: AbortSignal
+): ReadableStream {
   return new ReadableStream({
     async start(controller) {},
     async pull(controller) {
       while (true) {
+        /** Close fake stream when the signal return true.s */
+        if (signal && signal?.aborted) {
+          controller.close();
+        }
+
         const { value, done } = await iterator.next();
         if (done) {
           controller.close();

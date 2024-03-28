@@ -1,38 +1,37 @@
-import * as React from "react";
+import { useRef, useTransition, useState, useEffect, useCallback } from "react";
 import type { Message, UseChatHelpers } from "@/types";
 import { nanoid } from "nanoid";
 import { decode } from "@/lib/utils";
 import { OpenAIStreamOutput } from "@/types/open-ai";
 
 export function useChat(): UseChatHelpers {
-  const abortControllerRef = React.useRef<AbortController | null>(null);
-  const [isPending, startTransition] = React.useTransition();
+  const abortControllerRef = useRef<AbortController | null>(null);
+  const [isPending, startTransition] = useTransition();
 
-  const [messages, setMessages] = React.useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
 
-  //this contains messages that are persist between render
-  const messagesRef = React.useRef<Message[]>([]);
+  /** Contains messages that are persist between render snapshots. */
+  const messagesRef = useRef<Message[]>([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     messagesRef.current = messages;
   }, [messages]);
 
-  const [input, setInput] = React.useState("");
+  const [input, setInput] = useState("");
 
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  //trigger request
-  const triggerRequest = React.useCallback(
+  const triggerRequest = useCallback(
     async (requestMessage: Message) => {
-      //concat latest request into messages[]
+      /** Append new messages into message[]. */
       setMessages([...messages, { ...requestMessage }]);
 
-      //we need this to mutate the message content later.
+      /** Response identifier for mutation. */
       const responseId = nanoid();
 
       const now = new Date();
 
-      //create response
+      /** Construct response message object. */
       const responseMessage = {
         id: responseId,
         role: "assistant",
@@ -46,7 +45,7 @@ export function useChat(): UseChatHelpers {
 
       setIsLoading(true);
 
-      //attach controller
+      /** Attach controller to control the fetching process. */
       abortControllerRef.current = new AbortController();
 
       startTransition(async () => {
@@ -113,10 +112,14 @@ export function useChat(): UseChatHelpers {
             }
           }
         } catch (err) {
+          /** @todo this error handling need an adjustment between server and client. */
           switch (err) {
-            case err instanceof Error && err.name === "AbortError": {
+            /** Somehow this code is not being executed when the error occurs. */
+            case err instanceof DOMException && err.name === "AbortError":
               setIsLoading(false);
-            }
+              break;
+            default:
+              setIsLoading(false);
           }
         }
       });
@@ -126,7 +129,7 @@ export function useChat(): UseChatHelpers {
   );
 
   //append
-  const append = React.useCallback(
+  const append = useCallback(
     (requestMessage: Message) => {
       if (!requestMessage.id) {
         requestMessage.id = nanoid();
@@ -138,7 +141,7 @@ export function useChat(): UseChatHelpers {
     [messages, triggerRequest]
   );
 
-  const handleSubmit = React.useCallback(
+  const handleSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>, input: string) => {
       e.preventDefault();
       const id = nanoid();
@@ -159,14 +162,14 @@ export function useChat(): UseChatHelpers {
   );
 
   //trigger stop
-  const triggerStop = React.useCallback(() => {
+  const triggerStop = useCallback(() => {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
     return;
   }, []);
 
-  const clearChats = React.useCallback(() => {
+  const clearChats = useCallback(() => {
     if (isLoading) {
       triggerStop();
     }
@@ -174,7 +177,7 @@ export function useChat(): UseChatHelpers {
     return;
   }, [isLoading, triggerStop]);
 
-  const regenerateResponse = React.useCallback(() => {
+  const regenerateResponse = useCallback(() => {
     if (messagesRef.current.length === 0) return;
 
     const lmAssistant = messagesRef.current[messagesRef.current.length - 1];
@@ -185,8 +188,7 @@ export function useChat(): UseChatHelpers {
 
     const lmUser = messagesRef.current[messagesRef.current.length - 1];
     if (lmUser.role === "user") {
-      //create a new request with different id
-      //no need to duplicate
+      /** Create a new request message and append. */
       const now = new Date();
       const id = nanoid();
 
