@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { IconEnter } from "@/components/icons/icon-enter";
 import { IconAdd } from "./icons/icon-add";
@@ -25,8 +25,8 @@ export default function PromptForm({
   clearChats,
   isLoading,
 }: PromptForm) {
-  const promptFormRef = React.useRef<React.ElementRef<"form">>(null);
-  const submitterButton = React.useRef<React.ElementRef<"button">>(null);
+  const promptFormRef = useRef<React.ElementRef<"form">>(null);
+  const submitterButton = useRef<React.ElementRef<"button">>(null);
   const enterToSubmit = useEnterToSubmit(promptFormRef, submitterButton);
 
   return (
@@ -61,7 +61,7 @@ export default function PromptForm({
             ref={submitterButton}
             type="submit"
             size="icon"
-            disabled={isLoading}
+            disabled={isLoading || input.length === 0}
           >
             <IconEnter />
           </Button>

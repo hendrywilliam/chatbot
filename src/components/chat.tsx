@@ -1,25 +1,32 @@
 "use client";
 
-import * as React from "react";
+import { useRef, useEffect } from "react";
 import ChatPanel from "@/components/chat-panel";
 import ChatList from "@/components/chat-list";
 import { useChat } from "@/hooks/use-chat";
 import { ChatAnchor } from "@/components/chat-anchor";
 import { useInView } from "react-intersection-observer";
-import { useScrollWheel } from "@/hooks/use-scroll-wheel";
 
 export default function Chat() {
-  const chatListRef = React.useRef<React.ElementRef<"div">>(null);
+  const chatListRef = useRef<React.ElementRef<"div">>(null);
   const {
     ref: chatAnchorRef,
-    inView,
     entry,
+    inView,
   } = useInView({
-    root: chatListRef.current, //this act as the ancestor
-    threshold: 1, //100% visible then callback invoked
+    root: chatListRef.current,
+    /** Execute the callback immediately. No need to wait till it visiblein viewport. */
+    threshold: 0,
+    onChange(inView, entry) {
+      /** Once the anchor is not in viewport and its still loading, scroll to element. */
+      if (!inView && isLoading) {
+        entry?.target.scrollIntoView({
+          behavior: "smooth",
+          block: "end",
+        });
+      }
+    },
   });
-
-  const [counter, escapeAnchor, triggerWheel] = useScrollWheel(chatListRef);
 
   const {
     triggerRequest,
@@ -33,23 +40,19 @@ export default function Chat() {
     regenerateResponse,
   } = useChat();
 
-  React.useEffect(() => {
-    //this will detect if the anchor is not in viewport
-    //and the loading is still processing (streaming or
-    //sumthing else)
-    if (!inView && isLoading && counter < 2 && !escapeAnchor) {
-      //scroll to the observed element.
+  useEffect(() => {
+    if (isLoading && !inView) {
       entry?.target.scrollIntoView({
-        behavior: "instant",
+        behavior: "smooth",
         block: "end",
       });
     }
-  }, [inView, isLoading, entry, messages, counter, escapeAnchor]);
+    return () => {};
+  }, [isLoading, inView, entry]);
 
   return (
     <div
       ref={chatListRef}
-      onWheel={triggerWheel}
       className="relative pt-24 w-full h-full mx-auto overflow-y-auto"
     >
       <ChatList messages={messages} setInput={setInput} />
