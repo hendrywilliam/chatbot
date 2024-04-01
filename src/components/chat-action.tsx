@@ -15,7 +15,7 @@ export function ChatAction({ message }: ChatActionProps) {
 
   return (
     <div id="chat-action" className="absolute w-8 right-0">
-      <div className="inline-flex justify-center items-center border rounded-md shadow">
+      <div className="inline-flex justify-center items-center border rounded-md shadow bg-white">
         <Button onClick={() => copy(message)} size={"xs"} variant={"ghost"}>
           {isCopy ? <IconSuccess /> : <IconCopy />}
         </Button>

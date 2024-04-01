@@ -20,7 +20,7 @@ export function ChatMessage({ messages }: ChatMessageProps) {
           >
             <div id="chat-role" className="w-8">
               {item.role === "user" ? (
-                <div className="inline-flex justify-center items-center w-8 h-8 border rounded-md shadow">
+                <div className="inline-flex justify-center items-center w-8 h-8 border rounded-md shadow bg-white">
                   <IconUser />
                 </div>
               ) : (

@@ -95,7 +95,7 @@ export const chatCompletionSnapshots = [
         index: 0,
         delta: {
           role: "assistant",
-          content: " patotie.",
+          content: " patootie.",
         },
         finish_reason: null,
       },

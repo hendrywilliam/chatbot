@@ -111,11 +111,9 @@ export function useChat(): UseChatHelpers {
               );
             }
           }
-        } catch (err) {
-          /** @todo this error handling need an adjustment between server and client. */
-          switch (err) {
-            /** Somehow this code is not being executed when the error occurs. */
-            case err instanceof DOMException && err.name === "AbortError":
+        } catch (error) {
+          switch (error) {
+            case error instanceof DOMException && error.name === "AbortError":
               setIsLoading(false);
               break;
             default:
@@ -128,7 +126,7 @@ export function useChat(): UseChatHelpers {
     [input, messages]
   );
 
-  //append
+  /** Trigger Fetch and append a message to Message[] */
   const append = useCallback(
     (requestMessage: Message) => {
       if (!requestMessage.id) {
@@ -137,7 +135,7 @@ export function useChat(): UseChatHelpers {
 
       triggerRequest(requestMessage);
     },
-    //eslint-disable-next-line
+    // eslint-disable-next-line
     [messages, triggerRequest]
   );
 
@@ -164,7 +162,7 @@ export function useChat(): UseChatHelpers {
   //trigger stop
   const triggerStop = useCallback(() => {
     if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
+      abortControllerRef.current.abort("Stream request aborted by user.");
     }
     return;
   }, []);

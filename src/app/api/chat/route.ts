@@ -10,14 +10,14 @@ export async function POST(request: Request) {
   try {
     const body = (await request.json()) as ChatRequestBody;
     /** Abort controller coming from the client. */
-    const controller = request.signal;
+    const signal = request.signal;
     const isDevelopment = process.env.NODE_ENV === "development";
 
     /** A fake stream while working in development environment, you dont need to call the actual API. */
     if (isDevelopment) {
       const stream = chatCompletionGenerator(chatCompletionSnapshots);
 
-      return new Response(createFakeStream(stream), {
+      return new Response(createFakeStream(stream, signal), {
         headers: {
           "Content-Type": "text/event-stream",
           Connection: "keep-alive",
@@ -31,12 +31,12 @@ export async function POST(request: Request) {
       {
         messages: [
           { role: "system", content: "You are a helpful assistant" },
-          ...body.messages,
+          ...(body.messages ?? []),
         ],
         model: body.model,
         stream: true,
       },
-      { signal: controller }
+      { signal: signal }
     );
 
     return new Response(chatCompletion.toReadableStream(), {
@@ -48,18 +48,9 @@ export async function POST(request: Request) {
       status: 200,
     });
   } catch (error) {
-    switch (error) {
-      /** @todo need to improve this error handling. */
-      case error instanceof Error && error.name === "AbortError":
-        return Response.json(
-          { message: "Request aborted by user." },
-          { status: 400 }
-        );
-      default:
-        return Response.json(
-          { message: "Internal server error." },
-          { status: 500 }
-        );
-    }
+    return Response.json(
+      { message: (error as Error).message || "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }

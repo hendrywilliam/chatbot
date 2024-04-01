@@ -3,19 +3,19 @@ import type { ChatCompletionChunk } from "openai/resources/index.mjs";
 /** Generate artificial stream */
 export function createFakeStream(
   iterator: AsyncGenerator,
-  signal?: AbortSignal
+  signal: AbortSignal
 ): ReadableStream {
   return new ReadableStream({
     async start(controller) {},
     async pull(controller) {
       while (true) {
-        /** Close fake stream when the signal return true.s */
-        if (signal && signal?.aborted) {
-          controller.close();
-        }
+        /** Server should respect aborts from client. It changes signal.aborted state to true. */
+        signal.addEventListener("abort", () => {
+          console.log("Request aborted.");
+        });
 
         const { value, done } = await iterator.next();
-        if (done) {
+        if (done || signal.aborted) {
           controller.close();
           break;
         } else {
