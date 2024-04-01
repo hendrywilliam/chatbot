@@ -1,5 +1,5 @@
 import type { ChatCompletionCreateParams } from "openai/resources/index.mjs";
-import type { Dispatch, FormEvent, SetStateAction } from "react";
+import type { Dispatch, FormEvent, SVGProps, SetStateAction } from "react";
 
 export type Message = {
   id: string;
@@ -16,6 +16,15 @@ export interface ChatRequest {
   messages: Message[];
   body: object;
   headers: Record<string, string>;
+}
+
+export interface Models {
+  label: string;
+  value: string;
+  author: string;
+  description: string;
+  href: string[];
+  icon: (props: SVGProps<SVGSVGElement>) => JSX.Element;
 }
 
 export interface ChatCompletionModelSettings

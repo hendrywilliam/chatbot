@@ -57,6 +57,7 @@ module.exports = {
           foreground: "hsl(var(--card-foreground))",
         },
         "bg-ui-bg-component": "hsl(var(--bg-ui-bg-component))",
+        "bg-ui-bg-base-pressed": "hsl(var(--bg-ui-bg-base-pressed))",
       },
       borderRadius: {
         lg: "var(--radius)",

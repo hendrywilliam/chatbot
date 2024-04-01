@@ -36,6 +36,7 @@ export async function POST(request: Request) {
         model: body.model,
         stream: true,
         temperature: body.temperature,
+        max_tokens: body.max_tokens,
       },
       { signal: signal },
     );

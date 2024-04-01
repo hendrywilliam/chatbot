@@ -1,47 +1,61 @@
 "use client";
 
 import * as React from "react";
-import { UseChatHelpers } from "@/types";
+import { Models, UseChatHelpers } from "@/types";
 import { IconArrowRight } from "@/components/icons/icon-arrow-right";
+import { chatCompletionExamples as examples } from "@/config/chat-examples";
+import { models } from "@/config/models";
+import ExternalLink from "@/components/external-link";
+import { ExternalLinkIcon } from "@/components/ui/icons";
 
-const examples = [
-  {
-    title: "Explain technical concepts",
-    value: "What is ollie in terms of skateboarding",
-  },
-  {
-    title: "Summarize an article",
-    value: "Summarize this following article for 2nd grader",
-  },
-  {
-    title: "Draft an email",
-    value: "Draft an email about the following: \n",
-  },
-];
+interface EmptyScreenProps
+  extends Pick<UseChatHelpers, "setInput" | "modelSettings"> {}
 
-interface EmptyScreenProps extends Pick<UseChatHelpers, "setInput"> {}
+export function EmptyScreen({ setInput, modelSettings }: EmptyScreenProps) {
+  const selectedModels = models.find(
+    (model) => model.value === modelSettings.model,
+  ) as Models;
 
-export function EmptyScreen({ setInput }: EmptyScreenProps) {
   return (
-    <div className="w-full rounded-md border bg-white p-6 leading-loose">
-      <p className="text-muted-foreground">
-        You can start a conversation by sending your own prompt or try these
-        examples:
-      </p>
-      <ul>
-        {examples.map((item, i) => {
-          return (
-            <li
-              className="flex cursor-pointer gap-2"
-              key={i}
-              onClick={() => setInput(item.value)}
-            >
-              <IconArrowRight className="flex self-center" />
-              {item.title}
-            </li>
-          );
-        })}
-      </ul>
+    <div className="flex w-full flex-col space-y-4 rounded-md border bg-white">
+      <div className="inline-flex gap-4 border-b px-6 py-4">
+        <div className="flex items-center">
+          <selectedModels.icon className="h-6 w-6" />
+        </div>
+        <p className="text-muted-foreground">{selectedModels.description}</p>
+      </div>
+      <div className="px-6 py-4 leading-loose">
+        <p className="text-muted-foreground">
+          You can start a conversation by sending your own prompt or try these
+          examples:
+        </p>
+        <ul>
+          {examples.map((item, i) => {
+            return (
+              <li
+                className="flex cursor-pointer gap-2"
+                key={i}
+                onClick={() => setInput(item.value)}
+              >
+                <IconArrowRight className="flex self-center" />
+                {item.title}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+      <div className="bg-bg-ui-bg-base-pressed border-t px-6 py-4">
+        {selectedModels.href.map((item, i) => (
+          <ExternalLink
+            key={i}
+            href={item}
+            className="inline-flex items-center gap-1"
+          >
+            Documentation
+            <ExternalLinkIcon />
+          </ExternalLink>
+        ))}
+      </div>
     </div>
   );
 }

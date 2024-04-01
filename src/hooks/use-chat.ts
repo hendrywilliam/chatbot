@@ -16,6 +16,9 @@ export function useChat(): UseChatHelpers {
     useState<ChatCompletionModelSettings>({
       model: "gpt-3.5-turbo",
       temperature: 1,
+      max_tokens: 500,
+      top_p: 1,
+      presence_penalty: 0,
     });
 
   const [messages, setMessages] = useState<Message[]>([]);
@@ -72,6 +75,7 @@ export function useChat(): UseChatHelpers {
               }),
               temperature: modelSettings.temperature ?? 1,
               stream: true,
+              max_tokens: modelSettings.max_tokens ?? 500,
             }),
             headers: {
               "Content-Type": "application/json",

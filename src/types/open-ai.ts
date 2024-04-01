@@ -47,5 +47,5 @@ export interface ChatRequestBody {
   messages: ChatCompletionMessageParam[];
   temperature: number;
   stream: boolean;
-  /** More properties incoming my g */
+  max_tokens: number;
 }

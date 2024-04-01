@@ -63,7 +63,11 @@ export default function Chat() {
         ref={chatListRef}
         className="relative mx-auto w-full flex-1 overflow-y-auto bg-bg-ui-bg-component pt-16"
       >
-        <ChatList messages={messages} setInput={setInput} />
+        <ChatList
+          messages={messages}
+          setInput={setInput}
+          modelSettings={modelSettings}
+        />
         <ChatAnchor ref={chatAnchorRef} className="h-10" />
         <ChatPanel
           triggerRequest={triggerRequest}

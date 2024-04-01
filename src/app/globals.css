@@ -37,6 +37,7 @@
 
     --code-preview: 240, 10%, 4%;
     --bg-ui-bg-component: 210, 20%, 98%;
+    --bg-ui-bg-base-pressed: 220, 14%, 96%;
   }
 
   .dark {
