@@ -1,5 +1,9 @@
 import { useRef, useTransition, useState, useEffect, useCallback } from "react";
-import type { Message, UseChatHelpers } from "@/types";
+import type {
+  ChatCompletionModelSettings,
+  Message,
+  UseChatHelpers,
+} from "@/types";
 import { nanoid } from "nanoid";
 import { decode } from "@/lib/utils";
 import { OpenAIStreamOutput } from "@/types/open-ai";
@@ -7,6 +11,12 @@ import { OpenAIStreamOutput } from "@/types/open-ai";
 export function useChat(): UseChatHelpers {
   const abortControllerRef = useRef<AbortController | null>(null);
   const [isPending, startTransition] = useTransition();
+
+  const [modelSettings, setModelSettings] =
+    useState<ChatCompletionModelSettings>({
+      model: "gpt-3.5-turbo",
+      temperature: 1,
+    });
 
   const [messages, setMessages] = useState<Message[]>([]);
 
@@ -53,14 +63,14 @@ export function useChat(): UseChatHelpers {
           const response = await fetch("/api/chat", {
             method: "POST",
             body: JSON.stringify({
-              model: "gpt-3.5-turbo",
+              model: modelSettings.model ?? "gpt-3.5-turbo",
               messages: messagesRef.current.map((item) => {
                 return {
                   role: item.role,
                   content: item.content,
                 };
               }),
-              temperature: 0,
+              temperature: modelSettings.temperature ?? 1,
               stream: true,
             }),
             headers: {
@@ -107,7 +117,7 @@ export function useChat(): UseChatHelpers {
                     return item;
                   }
                   return item;
-                })
+                }),
               );
             }
           }
@@ -123,7 +133,7 @@ export function useChat(): UseChatHelpers {
       });
     },
     //eslint-disable-next-line
-    [input, messages]
+    [input, messages],
   );
 
   /** Trigger Fetch and append a message to Message[] */
@@ -136,7 +146,7 @@ export function useChat(): UseChatHelpers {
       triggerRequest(requestMessage);
     },
     // eslint-disable-next-line
-    [messages, triggerRequest]
+    [messages, triggerRequest],
   );
 
   const handleSubmit = useCallback(
@@ -156,7 +166,7 @@ export function useChat(): UseChatHelpers {
       setInput("");
     },
     //eslint-disable-next-line
-    [input, setInput, append]
+    [input, setInput, append],
   );
 
   //trigger stop
@@ -213,5 +223,7 @@ export function useChat(): UseChatHelpers {
     triggerStop,
     clearChats,
     regenerateResponse,
+    modelSettings,
+    setModelSettings,
   };
 }

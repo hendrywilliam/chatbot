@@ -15,11 +15,7 @@ export default function ExternalLink({
   ...props
 }: ExternalLink) {
   return (
-    <Link
-      className={cn("flex hover:underline", className)}
-      href={href}
-      target={target}
-    >
+    <Link className={cn("flex", className)} href={href} target={target}>
       {children}
     </Link>
   );

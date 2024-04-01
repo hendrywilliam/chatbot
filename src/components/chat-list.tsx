@@ -14,7 +14,7 @@ const ChatList = React.forwardRef<HTMLDivElement, ChatListProps>(
     return (
       <div
         ref={ref}
-        className="w-full lg:w-[50%] xl:w-[40%] lg:mx-auto p-4 flex flex-col overflow-x-hidden overflow-y-auto mb-36 text-sm"
+        className="mb-36 flex w-full flex-col overflow-y-auto overflow-x-hidden p-4 lg:mx-auto lg:w-[50%] xl:w-[40%]"
       >
         {messages.length > 0 ? (
           <ChatMessage messages={messages} />
@@ -23,7 +23,7 @@ const ChatList = React.forwardRef<HTMLDivElement, ChatListProps>(
         )}
       </div>
     );
-  }
+  },
 );
 
 ChatList.displayName = "ChatList";

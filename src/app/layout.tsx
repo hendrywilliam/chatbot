@@ -16,7 +16,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className}`}>
+      <body
+        className={`${inter.className} font-base flex h-screen w-full flex-col font-inter text-sm antialiased`}
+      >
         <Navbar />
         {children}
         <Analytics />

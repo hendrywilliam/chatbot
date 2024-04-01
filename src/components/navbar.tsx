@@ -4,11 +4,11 @@ import { GithubIcon } from "@/components/ui/icons";
 
 export default function Navbar() {
   return (
-    <nav className="fixed top-0 z-50 bg-white w-full h-16 border-b">
-      <div className="container flex w-full h-full items-center justify-between">
+    <nav className="z-50 h-14 w-full border-b bg-background">
+      <div className="flex h-full w-full items-center justify-between px-6">
         <p className="text-sm font-semibold">AI</p>
         <ExternalLink
-          className={buttonVariants({ size: "icon", variant: "outline" })}
+          className={buttonVariants({ variant: "outline", size: "xs" })}
           href="https://github.com/hendrywilliam/ai"
         >
           <GithubIcon />

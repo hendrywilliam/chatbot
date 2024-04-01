@@ -1,7 +1,6 @@
 "use client";
 
 import PromptForm from "@/components/prompt-form";
-import ExternalLink from "@/components/external-link";
 import { UseChatHelpers } from "@/types";
 import { Button } from "@/components/ui/button";
 import { IconStop } from "@/components/icons/icon-stop";
@@ -32,11 +31,11 @@ export default function ChatPanel({
   messages,
 }: ChatPanelProps) {
   return (
-    <div className="fixed inset-x-0 bottom-0 w-[95%] lg:w-[35%] mx-auto border rounded-t-md p-4 z-20 bg-white drop-shadow-lg">
+    <div className="fixed inset-x-0 bottom-0 z-20 mx-auto w-[95%] rounded-t-md border bg-background p-4 drop-shadow-lg lg:w-[35%]">
       {messages.length > 0 && !isLoading && (
         <Button
           variant={"outline"}
-          className="absolute -top-12 inset-x-0 w-max mx-auto text-xs text-muted-foreground gap-1 drop-shadow-none"
+          className="absolute inset-x-0 -top-12 mx-auto w-max gap-1 text-xs text-muted-foreground drop-shadow-none"
           onClick={regenerateResponse}
         >
           <IconReset />
@@ -46,7 +45,7 @@ export default function ChatPanel({
       {isLoading && (
         <Button
           variant={"outline"}
-          className="absolute -top-12 inset-x-0 w-max mx-auto text-xs text-muted-foreground gap-1 drop-shadow-none"
+          className="absolute inset-x-0 -top-12 mx-auto w-max gap-1 text-xs text-muted-foreground drop-shadow-none"
           onClick={triggerStop}
         >
           <IconStop />
@@ -61,8 +60,8 @@ export default function ChatPanel({
         triggerStop={triggerStop}
         clearChats={clearChats}
       />
-      <div className="flex w-full justify-center mt-4" id="author">
-        <p className="flex text-xs gap-1 text-muted-foreground">
+      <div className="mt-4 flex w-full justify-center" id="author">
+        <p className="flex gap-1 text-xs text-muted-foreground">
           Created and open-sourced by hendry
         </p>
       </div>

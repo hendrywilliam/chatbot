@@ -35,8 +35,9 @@ export async function POST(request: Request) {
         ],
         model: body.model,
         stream: true,
+        temperature: body.temperature,
       },
-      { signal: signal }
+      { signal: signal },
     );
 
     return new Response(chatCompletion.toReadableStream(), {
@@ -50,7 +51,7 @@ export async function POST(request: Request) {
   } catch (error) {
     return Response.json(
       { message: (error as Error).message || "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

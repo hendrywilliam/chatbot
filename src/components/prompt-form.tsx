@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { IconEnter } from "@/components/icons/icon-enter";
-import { IconAdd } from "./icons/icon-add";
+import { IconAdd } from "@/components/icons/icon-add";
 import type { UseChatHelpers } from "@/types";
 import { useEnterToSubmit } from "@/hooks/use-enter-to-submit";
 
@@ -35,25 +35,14 @@ export default function PromptForm({
       onSubmit={(e) => handleSubmit(e, input)}
       onKeyDown={enterToSubmit}
     >
-      <div className="flex border rounded-md h-16 w-full gap-2 bg-white">
-        <div className="pl-2 pt-2">
-          <Button
-            type="button"
-            className="rounded-full bg-white"
-            variant="outline"
-            size="icon"
-            onClick={clearChats}
-          >
-            <IconAdd />
-          </Button>
-        </div>
+      <div className="flex h-16 w-full gap-2 rounded-md border bg-background text-sm">
         <textarea
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
             setInput(e.target.value)
           }
           rows={1}
           cols={1}
-          className="w-full h-full px-4 py-5 text-sm resize-none focus:outline-none rounded-md"
+          className="h-full w-full resize-none rounded-md px-4 py-5 focus:outline-none"
           value={input}
         />
         <div className="pr-2 pt-2">

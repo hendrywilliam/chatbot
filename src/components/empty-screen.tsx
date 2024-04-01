@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import ExternalLink from "@/components/external-link";
 import { UseChatHelpers } from "@/types";
 import { IconArrowRight } from "@/components/icons/icon-arrow-right";
 
@@ -24,16 +23,7 @@ interface EmptyScreenProps extends Pick<UseChatHelpers, "setInput"> {}
 
 export function EmptyScreen({ setInput }: EmptyScreenProps) {
   return (
-    <div className="w-full border rounded-md p-6 bg-white text-sm leading-loose">
-      <p className="text-xl font-bold">Glad you made it!</p>
-      <p className="inline-flex gap-1 text-muted-foreground">
-        Welcome to DictationAI by
-        <span>
-          <ExternalLink href={"https://github.com/hendrywilliam"}>
-            yrdneh
-          </ExternalLink>
-        </span>
-      </p>
+    <div className="w-full rounded-md border bg-white p-6 leading-loose">
       <p className="text-muted-foreground">
         You can start a conversation by sending your own prompt or try these
         examples:
@@ -42,7 +32,7 @@ export function EmptyScreen({ setInput }: EmptyScreenProps) {
         {examples.map((item, i) => {
           return (
             <li
-              className="cursor-pointer flex gap-2"
+              className="flex cursor-pointer gap-2"
               key={i}
               onClick={() => setInput(item.value)}
             >

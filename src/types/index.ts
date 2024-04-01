@@ -1,3 +1,6 @@
+import type { ChatCompletionCreateParams } from "openai/resources/index.mjs";
+import type { Dispatch, FormEvent, SetStateAction } from "react";
+
 export type Message = {
   id: string;
   createdAt?: Date;
@@ -15,36 +18,43 @@ export interface ChatRequest {
   headers: Record<string, string>;
 }
 
+export interface ChatCompletionModelSettings
+  extends Omit<ChatCompletionCreateParams, "messages"> {}
+
 export interface UseChatHelpers {
-  //use this to trigger request (fetch)
+  /** Is basically a fetch. */
   triggerRequest: (requestMessage: Message) => Promise<void>;
 
-  //messages is a list of message, each of it contains role, id, content, and the time
-  //that it was created.
+  /** Array of objects, each message contain role, content, date, and its id. */
   messages: Message[];
 
-  //setter function for isLoading
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  /** Setter function for isLoading. */
+  setIsLoading: Dispatch<React.SetStateAction<boolean>>;
 
-  //this indicates whether the fetching or streaming is processing or not.
-  //this also an indicator to show regenerate button and stop button in chat panel.
+  /** This is indicates whether the fetching/streaming is processing or not. */
   isLoading: boolean;
 
-  //handler for submit
-  handleSubmit: (e: React.FormEvent<HTMLFormElement>, input: string) => void;
+  /** Handler for trigger fetching from network. */
+  handleSubmit: (e: FormEvent<HTMLFormElement>, input: string) => void;
 
-  //user prompt
+  /** Value from prompt form. */
   input: string;
 
-  //setter function for input
-  setInput: React.Dispatch<React.SetStateAction<string>>;
+  /** Setter function for form input. */
+  setInput: Dispatch<SetStateAction<string>>;
 
-  //this is a handler to stop current connection
+  /** Handler to stop asynchronous process (fetching data from network and stop the stream). */
   triggerStop: () => void;
 
-  //clear recents chats
+  /** Clear recent chats. */
   clearChats: () => void;
 
-  //this will re-generate response from last request message.
+  /** Re-generate last response, including the request message. */
   regenerateResponse: () => void;
+
+  /** Setter function for llm settings. */
+  setModelSettings: Dispatch<SetStateAction<ChatCompletionModelSettings>>;
+
+  /** Value for llm settings. */
+  modelSettings: ChatCompletionModelSettings;
 }
