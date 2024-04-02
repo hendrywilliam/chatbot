@@ -76,6 +76,8 @@ export function useChat(): UseChatHelpers {
               temperature: modelSettings.temperature ?? 1,
               stream: true,
               max_tokens: modelSettings.max_tokens ?? 500,
+              top_p: modelSettings.top_p ?? 1,
+              presence_penaly: modelSettings.presence_penalty ?? 0,
             }),
             headers: {
               "Content-Type": "application/json",
@@ -173,7 +175,7 @@ export function useChat(): UseChatHelpers {
     [input, setInput, append],
   );
 
-  //trigger stop
+  /** A trigger to stop stream. It will gives a signal to server, then stop streaming. */
   const triggerStop = useCallback(() => {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort("Stream request aborted by user.");

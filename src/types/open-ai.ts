@@ -48,4 +48,6 @@ export interface ChatRequestBody {
   temperature: number;
   stream: boolean;
   max_tokens: number;
+  top_p: number;
+  presence_penalty: number;
 }
