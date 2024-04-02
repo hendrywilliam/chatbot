@@ -126,7 +126,7 @@ export function useChat(): UseChatHelpers {
             }
           }
         } catch (error) {
-          switch (error) {
+          switch (true) {
             case error instanceof DOMException && error.name === "AbortError":
               setIsLoading(false);
               break;
