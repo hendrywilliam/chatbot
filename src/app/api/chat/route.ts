@@ -2,7 +2,12 @@ import "dotenv/config";
 import { openai } from "@/lib/open-ai";
 import { ChatRequestBody } from "@/types/open-ai";
 import { chatCompletionSnapshots } from "@/lib/snapshots/chat-completion";
-import { createFakeStream, chatCompletionGenerator } from "@/lib/stream";
+import {
+  createFakeStream,
+  chatCompletionGenerator,
+  experimental_chatCompletionGenerator,
+  experimental_compositeStream,
+} from "@/lib/stream";
 
 export const runtime = "nodejs";
 
@@ -15,9 +20,21 @@ export async function POST(request: Request) {
 
     /** A fake stream while working in development environment, you dont need to call the actual API. */
     if (isDevelopment) {
-      const stream = chatCompletionGenerator(chatCompletionSnapshots);
+      // const stream = chatCompletionGenerator(chatCompletionSnapshots);
 
-      return new Response(createFakeStream(stream, signal), {
+      // return new Response(createFakeStream(stream, signal), {
+      // headers: {
+      //   "Content-Type": "text/event-stream",
+      //   Connection: "keep-alive",
+      //   "Cache-Control": "no-cache",
+      // },
+      // status: 200,
+      // });
+
+      const experimental_Stream = experimental_chatCompletionGenerator(
+        chatCompletionSnapshots,
+      );
+      return new Response(experimental_compositeStream(experimental_Stream), {
         headers: {
           "Content-Type": "text/event-stream",
           Connection: "keep-alive",
