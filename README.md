@@ -2,18 +2,21 @@
 
 https://ai.hendryw.com/
 
-A simple AI powered application, Build with Next.js.
+A collection of AI-powered-utilities application, build with Next.js.
 
-Key features: 
+Key features:
 
-- [x] Text Generation/Chat Completions
+- [x] Text Generation/Chat Completions.
+- [x] Contextful Chat with AI and PDF.
 
 # Setup
-* Run `pnpm install`
-* Add .env file
-  
+
+- Run `pnpm install`
+- Add .env file
+
   ```
   NODE_ENV=
   OPENAI_API_KEY=
   ```
-* Run `pnpm run dev` for development build / `pnpm run build` then `pnpm run start` for production build.
+
+- Run `pnpm run dev` for development build / `pnpm run build` then `pnpm run start` for production build.
