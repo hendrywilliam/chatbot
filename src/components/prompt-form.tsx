@@ -1,22 +1,24 @@
 "use client";
 
-import { useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { IconEnter } from "@/components/icons/icon-enter";
-import { IconAdd } from "@/components/icons/icon-add";
-import type { UseChatHelpers } from "@/types";
+import {
+  Dispatch,
+  FormEvent,
+  SetStateAction,
+  useRef,
+  useState,
+  useEffect,
+} from "react";
 import { useEnterToSubmit } from "@/hooks/use-enter-to-submit";
 
-interface PromptForm
-  extends Pick<
-    UseChatHelpers,
-    | "setInput"
-    | "handleSubmit"
-    | "input"
-    | "isLoading"
-    | "triggerStop"
-    | "clearChats"
-  > {}
+interface PromptForm {
+  setInput: Dispatch<SetStateAction<string>>;
+  handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
+  input: string;
+  clearChats: () => void;
+  triggerStop: () => void;
+  isLoading: boolean;
+}
 
 export default function PromptForm({
   setInput,
@@ -25,36 +27,50 @@ export default function PromptForm({
   clearChats,
   isLoading,
 }: PromptForm) {
+  const inputFormRef = useRef<React.ElementRef<"textarea">>(null);
   const promptFormRef = useRef<React.ElementRef<"form">>(null);
   const submitterButton = useRef<React.ElementRef<"button">>(null);
   const enterToSubmit = useEnterToSubmit(promptFormRef, submitterButton);
+  /** Max auto resize, add overflow if exceeds this value. */
+  const maxAutoResize = useRef(152);
+
+  useEffect(() => {
+    inputFormRef.current?.focus();
+    return () => {};
+  }, []);
 
   return (
     <form
+      className="relative h-max"
       ref={promptFormRef}
-      onSubmit={(e) => handleSubmit(e, input)}
+      onSubmit={handleSubmit}
       onKeyDown={enterToSubmit}
     >
-      <div className="flex h-16 w-full gap-2 rounded-md border bg-background text-sm">
-        <textarea
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-            setInput(e.target.value)
-          }
-          rows={1}
-          cols={1}
-          className="h-full w-full resize-none rounded-md px-4 py-5 focus:outline-none"
-          value={input}
-        />
-        <div className="pr-2 pt-2">
-          <Button
-            ref={submitterButton}
-            type="submit"
-            size="icon"
-            disabled={isLoading || input.length === 0}
-          >
-            <IconEnter />
-          </Button>
-        </div>
+      <textarea
+        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+          setInput(e.target.value)
+        }
+        rows={1}
+        cols={1}
+        className="w-full resize-none rounded-md border p-2 pb-12 focus:outline-none"
+        value={input}
+        ref={inputFormRef}
+        onInput={(event) => {
+          event.currentTarget.setAttribute(
+            "style",
+            `height: ${event.currentTarget.scrollHeight}px !important;overflow-y:hidden`,
+          );
+        }}
+      />
+      <div className="absolute bottom-3 right-2">
+        <Button
+          ref={submitterButton}
+          type="submit"
+          size="sm"
+          disabled={isLoading || input.length === 0}
+        >
+          Send
+        </Button>
       </div>
     </form>
   );

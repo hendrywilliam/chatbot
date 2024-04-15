@@ -156,7 +156,7 @@ export function useChat(): UseChatHelpers {
   );
 
   const handleSubmit = useCallback(
-    (e: React.FormEvent<HTMLFormElement>, input: string) => {
+    (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       const id = nanoid();
       const now = new Date();

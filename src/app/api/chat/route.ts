@@ -20,17 +20,6 @@ export async function POST(request: Request) {
 
     /** A fake stream while working in development environment, you dont need to call the actual API. */
     if (isDevelopment) {
-      // const stream = chatCompletionGenerator(chatCompletionSnapshots);
-
-      // return new Response(createFakeStream(stream, signal), {
-      // headers: {
-      //   "Content-Type": "text/event-stream",
-      //   Connection: "keep-alive",
-      //   "Cache-Control": "no-cache",
-      // },
-      // status: 200,
-      // });
-
       const experimental_Stream = experimental_chatCompletionGenerator(
         chatCompletionSnapshots,
       );

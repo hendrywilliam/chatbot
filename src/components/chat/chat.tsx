@@ -68,7 +68,7 @@ export default function Chat() {
           setInput={setInput}
           modelSettings={modelSettings}
         />
-        <ChatAnchor ref={chatAnchorRef} className="h-10" />
+        <ChatAnchor ref={chatAnchorRef} className="h-32" />
         <ChatPanel
           triggerRequest={triggerRequest}
           setInput={setInput}

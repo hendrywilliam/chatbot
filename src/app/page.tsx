@@ -1,4 +1,7 @@
-import Chat from "@/components/chat/chat";
 export default function IndexPage() {
-  return <Chat />;
+  return (
+    <main className="h-screen w-full">
+      <p>ai</p>
+    </main>
+  );
 }

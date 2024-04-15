@@ -31,10 +31,10 @@ export default function ChatPanel({
   messages,
 }: ChatPanelProps) {
   return (
-    <div className="fixed inset-x-0 bottom-0 z-20 mx-auto w-[95%] rounded-t-md border bg-background p-4 drop-shadow-lg lg:w-[35%]">
+    <div className="fixed inset-x-0 bottom-0 mx-auto w-[95%] pb-2 lg:w-[35%]">
       {messages.length > 0 && !isLoading && (
         <Button
-          variant={"outline"}
+          variant="outline"
           className="absolute inset-x-0 -top-12 mx-auto w-max gap-1 text-xs text-muted-foreground drop-shadow-none"
           onClick={regenerateResponse}
         >
@@ -44,7 +44,7 @@ export default function ChatPanel({
       )}
       {isLoading && (
         <Button
-          variant={"outline"}
+          variant="outline"
           className="absolute inset-x-0 -top-12 mx-auto w-max gap-1 text-xs text-muted-foreground drop-shadow-none"
           onClick={triggerStop}
         >
@@ -60,11 +60,6 @@ export default function ChatPanel({
         triggerStop={triggerStop}
         clearChats={clearChats}
       />
-      <div className="mt-4 flex w-full justify-center" id="author">
-        <p className="flex gap-1 text-xs text-muted-foreground">
-          Created and open-sourced by hendry
-        </p>
-      </div>
     </div>
   );
 }

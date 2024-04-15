@@ -44,7 +44,7 @@ export interface UseChatHelpers {
   isLoading: boolean;
 
   /** Handler for trigger fetching from network. */
-  handleSubmit: (e: FormEvent<HTMLFormElement>, input: string) => void;
+  handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
 
   /** Value from prompt form. */
   input: string;

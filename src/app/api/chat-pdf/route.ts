@@ -1,8 +1,7 @@
 import { PDFLoader } from "langchain/document_loaders/fs/pdf";
-import { NextResponse } from "next/server";
+import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
-import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { embeddings } from "@/lib/open-ai";
 import { chatModel as OpenAIModel } from "@/lib/open-ai";
 import { createRetrievalChain } from "langchain/chains/retrieval";
