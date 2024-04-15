@@ -94,3 +94,40 @@ export const experimental_compositeStream = function (
 
   return readableStream.pipeThrough(transformStream);
 };
+
+/** @param generator is an object that applies iterator protocol. */
+export const experimental_StreamingResponse = function (
+  generator: AsyncGenerator,
+) {
+  return new Response(
+    new ReadableStream({
+      async start() {},
+      async pull(controller) {
+        while (true) {
+          const { value, done } = await generator.next();
+
+          if (done) {
+            controller.close();
+            break;
+          }
+          /**
+           * @todo We should get the answer only, not including the context and history.
+           * In this workaround we are accessing answer property, which only exist in answer response.
+           * Accessing "answer" property in an object that has no corresponding property will return undefined.
+           */
+          const answer = (value as any).answer ?? "";
+          controller.enqueue(`{ "answer":${JSON.stringify(answer)} }\n`);
+        }
+      },
+    }),
+    {
+      headers: {
+        "Content-Type": "text/event-stream",
+        Connection: "keep-alive",
+        "Cache-Control": "no-cache",
+      },
+      status: 200,
+      statusText: "Streaming data in chunks.",
+    },
+  );
+};

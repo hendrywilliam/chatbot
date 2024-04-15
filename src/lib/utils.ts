@@ -13,3 +13,13 @@ export function decode() {
     return decoder.decode(chunk);
   };
 }
+
+export function getEntriesFormData<T = Record<string, any>>(
+  formData: FormData,
+): T {
+  const keyValuePair: Record<string, any> = {};
+  for (const pair of formData.entries()) {
+    keyValuePair[pair[0]] = pair[1];
+  }
+  return keyValuePair as T;
+}

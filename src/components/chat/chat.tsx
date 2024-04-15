@@ -1,10 +1,10 @@
 "use client";
 
 import { useRef, useEffect } from "react";
-import ChatPanel from "@/components/chat-panel";
-import ChatList from "@/components/chat-list";
+import ChatPanel from "@/components/chat/chat-panel";
+import ChatList from "@/components/chat/chat-list";
 import { useChat } from "@/hooks/use-chat";
-import { ChatAnchor } from "@/components/chat-anchor";
+import { ChatAnchor } from "@/components/chat/chat-anchor";
 import { useInView } from "react-intersection-observer";
 import ChatSettings from "./chat-settings";
 

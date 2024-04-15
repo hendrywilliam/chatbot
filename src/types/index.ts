@@ -67,3 +67,35 @@ export interface UseChatHelpers {
   /** Value for llm settings. */
   modelSettings: ChatCompletionModelSettings;
 }
+
+export interface UsePdfChatHelpers {
+  /** Setter function for pdf file input. */
+  setFile: Dispatch<SetStateAction<File | null>>;
+
+  /** Corresponding pdf file. */
+  file: File | null;
+
+  /** Setter function for prompt value. */
+  setPrompt: Dispatch<SetStateAction<string>>;
+
+  /** Value for prompt form. */
+  prompt: string;
+
+  /** Submit form data handler. */
+  triggerRequest: ({
+    requestMessage,
+  }: {
+    requestMessage: Message;
+  }) => Promise<void>;
+
+  /** A setter function to clear prompt input value. */
+  clearPromptInput: () => void;
+
+  /** A trigger to handle submit, this will trigger sequence functions call. */
+  handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
+
+  /** Collection of message from user or assistant. */
+  messages: Message[];
+
+  setMessages: Dispatch<SetStateAction<Message[]>>;
+}

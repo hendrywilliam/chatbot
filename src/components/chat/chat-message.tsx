@@ -2,7 +2,7 @@ import * as React from "react";
 import { UseChatHelpers } from "@/types";
 import { IconUser } from "@/components/icons/icon-user";
 import { OpenAIIcon } from "@/components/ui/icons";
-import { ChatAction } from "@/components/chat-action";
+import { ChatAction } from "@/components/chat/chat-action";
 import ReactMarkdown from "react-markdown";
 import { Code } from "@/components/code";
 
@@ -15,23 +15,23 @@ export function ChatMessage({ messages }: ChatMessageProps) {
         return (
           <div
             id="chat-wrapper"
-            className="relative flex w-full h-max py-6 gap-2 xl:gap-6"
+            className="relative flex h-max w-full gap-2 py-6 xl:gap-6"
             key={item.id}
           >
             <div id="chat-role" className="w-8">
               {item.role === "user" ? (
-                <div className="inline-flex justify-center items-center w-8 h-8 border rounded-md shadow bg-white">
+                <div className="inline-flex h-8 w-8 items-center justify-center rounded-md border bg-white shadow">
                   <IconUser />
                 </div>
               ) : (
-                <div className="inline-flex justify-center items-center w-8 h-8 border rounded-md shadow bg-black">
+                <div className="inline-flex h-8 w-8 items-center justify-center rounded-md border bg-black shadow">
                   <OpenAIIcon fill="white" />
                 </div>
               )}
             </div>
             <div
               id="chat-content"
-              className="w-[80%] first:mb-2 last:mt-2 leading-relaxed box-border"
+              className="box-border w-[80%] leading-relaxed first:mb-2 last:mt-2"
             >
               {/* eslint-disable */}
               <ReactMarkdown
@@ -42,7 +42,7 @@ export function ChatMessage({ messages }: ChatMessageProps) {
                     return <pre className="w-full">{children}</pre>;
                   },
                   p({ children }) {
-                    return <p className="w-full mb-4">{children}</p>;
+                    return <p className="mb-4 w-full">{children}</p>;
                   },
                   li({ children }) {
                     return <li className="mb-1">{children}</li>;
