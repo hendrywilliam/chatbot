@@ -9,7 +9,9 @@ export default function Navbar() {
     <nav className="z-50 h-14 w-full border-b bg-background">
       <div className="flex h-full w-full items-center justify-between px-6">
         <div className="flex items-center">
-          <p className="mr-5 text-sm font-semibold">AI</p>
+          <Link href="/" className="mr-5 text-sm font-semibold">
+            AI
+          </Link>
           <ul className="flex space-x-4">
             {siteNavigation.map((navigation) => (
               <li key={navigation.title}>
