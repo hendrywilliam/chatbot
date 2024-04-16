@@ -2,7 +2,7 @@
 
 import { Message, UsePdfChatHelpers } from "@/types";
 import { nanoid } from "nanoid";
-import { FormEvent, useCallback, useRef, useState } from "react";
+import { FormEvent, useCallback, useRef, useState, useEffect } from "react";
 import { decode } from "@/lib/utils";
 
 export function usePdfChat(): UsePdfChatHelpers {
@@ -13,6 +13,12 @@ export function usePdfChat(): UsePdfChatHelpers {
   const abortControllerRef = useRef<AbortController | null>(null);
 
   const messagesRef = useRef<Message[]>([]);
+
+  useEffect(() => {
+    messagesRef.current = messages;
+
+    return () => {};
+  }, [messages]);
 
   const triggerRequest = async function () {
     const formData = constructFormData();
@@ -93,6 +99,8 @@ export function usePdfChat(): UsePdfChatHelpers {
       throw new Error("Prompt is not provided.");
     }
     formData.append("prompt", prompt);
+    formData.append("messages", JSON.stringify(messagesRef.current ?? []));
+
     return formData;
   }, [prompt, file]);
 
