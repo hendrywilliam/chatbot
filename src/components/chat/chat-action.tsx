@@ -2,9 +2,8 @@
 
 import * as React from "react";
 import { Button } from "@/components/ui/button";
-import { IconCopy } from "@/components/icons/icon-copy";
+import { CopyIcon, CheckMarkIcon } from "@/components/ui/icons";
 import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
-import { IconSuccess } from "@/components/icons/icon-success";
 
 interface ChatActionProps {
   message: string;
@@ -14,10 +13,10 @@ export function ChatAction({ message }: ChatActionProps) {
   const [isCopy, copy] = useCopyToClipboard();
 
   return (
-    <div id="chat-action" className="absolute w-8 right-0">
-      <div className="inline-flex justify-center items-center border rounded-md shadow bg-white">
+    <div id="chat-action" className="absolute right-0 w-8">
+      <div className="inline-flex items-center justify-center rounded-md border bg-white shadow">
         <Button onClick={() => copy(message)} size={"xs"} variant={"ghost"}>
-          {isCopy ? <IconSuccess /> : <IconCopy />}
+          {isCopy ? <CheckMarkIcon /> : <CopyIcon />}
         </Button>
       </div>
     </div>

@@ -4,13 +4,12 @@ import { Message, UsePdfChatHelpers } from "@/types";
 import { nanoid } from "nanoid";
 import { FormEvent, useCallback, useRef, useState } from "react";
 import { decode } from "@/lib/utils";
-import { fakeChats } from "@/lib/snapshots/fake-chats";
 
 export function usePdfChat(): UsePdfChatHelpers {
   const [file, setFile] = useState<File | null>(null);
   const [prompt, setPrompt] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([...fakeChats]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const abortControllerRef = useRef<AbortController | null>(null);
 
   const messagesRef = useRef<Message[]>([]);

@@ -3,8 +3,7 @@
 import PromptForm from "@/components/prompt-form";
 import { UseChatHelpers } from "@/types";
 import { Button } from "@/components/ui/button";
-import { IconStop } from "@/components/icons/icon-stop";
-import { IconReset } from "@/components/icons/icon-reset";
+import { StopIcon, ResetIcon } from "@/components/ui/icons";
 
 interface ChatPanelProps
   extends Pick<
@@ -40,7 +39,7 @@ export default function ChatPanel({
           className="absolute inset-x-0 -top-12 mx-auto w-max gap-1 text-xs text-muted-foreground drop-shadow-none"
           onClick={regenerateResponse}
         >
-          <IconReset />
+          <ResetIcon />
           Regenerate Response
         </Button>
       )}
@@ -50,7 +49,7 @@ export default function ChatPanel({
           className="absolute inset-x-0 -top-12 mx-auto w-max gap-1 text-xs text-muted-foreground drop-shadow-none"
           onClick={triggerStop}
         >
-          <IconStop />
+          <StopIcon />
           Stop Generating
         </Button>
       )}

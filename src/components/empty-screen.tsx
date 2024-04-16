@@ -2,11 +2,10 @@
 
 import * as React from "react";
 import { Models, UseChatHelpers } from "@/types";
-import { IconArrowRight } from "@/components/icons/icon-arrow-right";
 import { chatCompletionExamples as examples } from "@/config/chat-examples";
 import { models } from "@/config/models";
 import ExternalLink from "@/components/external-link";
-import { ExternalLinkIcon } from "@/components/ui/icons";
+import { ExternalLinkIcon, ArrowRightIcon } from "@/components/ui/icons";
 
 interface EmptyScreenProps
   extends Pick<UseChatHelpers, "setInput" | "modelSettings"> {}
@@ -37,14 +36,14 @@ export function EmptyScreen({ setInput, modelSettings }: EmptyScreenProps) {
                 key={i}
                 onClick={() => setInput(item.value)}
               >
-                <IconArrowRight className="flex self-center" />
+                <ArrowRightIcon className="flex self-center" />
                 {item.title}
               </li>
             );
           })}
         </ul>
       </div>
-      <div className="bg-bg-ui-bg-base-pressed border-t px-6 py-4">
+      <div className="border-t bg-bg-ui-bg-base-pressed px-6 py-4">
         {selectedModels.href.map((item, i) => (
           <ExternalLink
             key={i}

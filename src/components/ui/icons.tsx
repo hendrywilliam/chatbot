@@ -167,3 +167,121 @@ export function UploadIcon(props: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+export function CopyIcon({
+  width = "1em",
+  height = "1em",
+  fill = "currentColor",
+  ...props
+}: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={width}
+      height={height}
+      viewBox="0 0 256 256"
+      {...props}
+    >
+      <path
+        fill={fill}
+        d="M216 36H88a4 4 0 0 0-4 4v44H40a4 4 0 0 0-4 4v128a4 4 0 0 0 4 4h128a4 4 0 0 0 4-4v-44h44a4 4 0 0 0 4-4V40a4 4 0 0 0-4-4Zm-52 176H44V92h120Zm48-48h-40V88a4 4 0 0 0-4-4H92V44h120Z"
+      ></path>
+    </svg>
+  );
+}
+
+export function CheckMarkIcon({
+  width = "1em",
+  height = "1em",
+  fill = "currentColor",
+  ...props
+}: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={width}
+      height={height}
+      viewBox="0 0 36 36"
+      {...props}
+    >
+      <path
+        fill={fill}
+        d="M13.72 27.69L3.29 17.27a1 1 0 0 1 1.41-1.41l9 9L31.29 7.29A1 1 0 0 1 32.7 8.7Z"
+        className="clr-i-outline clr-i-outline-path-1"
+      ></path>
+      <path fill="none" d="M0 0h36v36H0z"></path>
+    </svg>
+  );
+}
+
+export function StopIcon({
+  width = "1em",
+  height = "1em",
+  fill = "currentColor",
+  ...props
+}: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={width}
+      height={height}
+      viewBox="0 0 20 20"
+      {...props}
+    >
+      <path
+        fill={fill}
+        d="M15.5 4a.5.5 0 0 1 .5.5v11a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5h11Zm-11-1A1.5 1.5 0 0 0 3 4.5v11A1.5 1.5 0 0 0 4.5 17h11a1.5 1.5 0 0 0 1.5-1.5v-11A1.5 1.5 0 0 0 15.5 3h-11Z"
+      ></path>
+    </svg>
+  );
+}
+
+export function ResetIcon({
+  width = "1em",
+  height = "1em",
+  fill = "none",
+  ...props
+}: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={width}
+      height={height}
+      viewBox="0 0 21 21"
+      {...props}
+    >
+      <g
+        fill={fill}
+        fillRule="evenodd"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M6.5 3.5c-2.414 1.377-4 4.022-4 7a8 8 0 1 0 8-8"></path>
+        <path d="M6.5 7.5v-4h-4"></path>
+      </g>
+    </svg>
+  );
+}
+
+export function ArrowRightIcon({
+  width = "1em",
+  height = "1em",
+  fill = "currentColor",
+  ...props
+}: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path
+        fill={fill}
+        d="m12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8l-8-8z"
+      ></path>
+    </svg>
+  );
+}
