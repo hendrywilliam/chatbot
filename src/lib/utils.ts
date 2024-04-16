@@ -23,3 +23,9 @@ export function getEntriesFormData<T = Record<string, any>>(
   }
   return keyValuePair as T;
 }
+
+export function truncate(text: string, treshold: number = 10) {
+  return text.length > treshold
+    ? text.substring(0, treshold + 1) + "..."
+    : text;
+}

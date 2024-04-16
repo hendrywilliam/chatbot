@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 import { useRef, useTransition, useState, useEffect, useCallback } from "react";
 import type {
   ChatCompletionModelSettings,
@@ -218,6 +220,10 @@ export function useChat(): UseChatHelpers {
     return;
   }, [triggerRequest]);
 
+  const clearInput = useCallback(() => {
+    setInput("");
+  }, [input]);
+
   return {
     triggerRequest,
     messages,
@@ -231,5 +237,6 @@ export function useChat(): UseChatHelpers {
     regenerateResponse,
     modelSettings,
     setModelSettings,
+    clearInput,
   };
 }

@@ -1,10 +1,5 @@
-import { PdfChatViewer } from "@/components/pdf-chat/chat-viewer";
-import { PdfChatContainer } from "@/components/pdf-chat/chat-container";
+import { PdfChat } from "@/components/pdf-chat/pdf-chat";
 
 export default function ChatPdfPage() {
-  return (
-    <PdfChatContainer>
-      <PdfChatViewer />
-    </PdfChatContainer>
-  );
+  return <PdfChat />;
 }

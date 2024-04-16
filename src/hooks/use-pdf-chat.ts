@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 import { Message, UsePdfChatHelpers } from "@/types";
 import { nanoid } from "nanoid";
 import { FormEvent, useCallback, useRef, useState } from "react";
@@ -6,7 +8,9 @@ import { decode } from "@/lib/utils";
 export function usePdfChat(): UsePdfChatHelpers {
   const [file, setFile] = useState<File | null>(null);
   const [prompt, setPrompt] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   const messagesRef = useRef<Message[]>([]);
 
@@ -26,46 +30,55 @@ export function usePdfChat(): UsePdfChatHelpers {
 
     setMessages((messages) => [...messages, { ...responseMessage }]);
 
-    const response = await fetch("/api/chat-pdf", {
-      body: formData,
-      method: "POST",
-    });
+    try {
+      abortControllerRef.current = new AbortController();
 
-    const decoder = decode();
-    const body = response.body as ReadableStream;
-    const reader = body.getReader();
+      setIsLoading(true);
+      const response = await fetch("/api/chat-pdf", {
+        body: formData,
+        method: "POST",
+        signal: abortControllerRef.current.signal,
+      });
 
-    let accumulatedText = "";
+      const decoder = decode();
+      const body = response.body as ReadableStream;
+      const reader = body.getReader();
 
-    while (true) {
-      if (reader) {
-        const { value, done } = await reader.read();
-        if (done) {
-          break;
-        }
+      let accumulatedText = "";
 
-        const decodedValue = decoder(value) as string;
-        decodedValue
-          .split("\n")
-          .filter((item) => Boolean(item))
-          .map((item) => {
-            const parsedItem = JSON.parse(item);
-            return parsedItem.answer;
-          })
-          .forEach((item) => {
-            accumulatedText += item;
-          });
+      while (true) {
+        if (reader) {
+          const { value, done } = await reader.read();
+          if (done) {
+            break;
+          }
 
-        setMessages((messages) => {
-          return messages.map((message) => {
-            if (message.id === responseId) {
-              message.content = accumulatedText;
+          const decodedValue = decoder(value) as string;
+          decodedValue
+            .split("\n")
+            .filter((item) => Boolean(item))
+            .map((item) => {
+              const parsedItem = JSON.parse(item);
+              return parsedItem.answer;
+            })
+            .forEach((item) => {
+              accumulatedText += item;
+            });
+
+          setMessages((messages) => {
+            return messages.map((message) => {
+              if (message.id === responseId) {
+                message.content = accumulatedText;
+                return message;
+              }
               return message;
-            }
-            return message;
+            });
           });
-        });
+        }
       }
+    } catch (error) {
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -118,6 +131,16 @@ export function usePdfChat(): UsePdfChatHelpers {
     setPrompt("");
   };
 
+  const clearRecentChats = useCallback(() => {
+    setMessages([]);
+  }, [messages]);
+
+  const triggerStop = useCallback(() => {
+    if (isLoading) {
+      abortControllerRef.current?.abort("Request aborted by user.");
+    }
+  }, [isLoading]);
+
   return {
     setFile,
     file,
@@ -128,5 +151,8 @@ export function usePdfChat(): UsePdfChatHelpers {
     handleSubmit,
     messages,
     setMessages,
+    clearRecentChats,
+    isLoading,
+    triggerStop,
   };
 }

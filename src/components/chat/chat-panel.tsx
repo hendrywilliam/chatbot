@@ -18,6 +18,7 @@ interface ChatPanelProps
     | "clearChats"
     | "regenerateResponse"
     | "messages"
+    | "clearInput"
   > {}
 
 export default function ChatPanel({
@@ -29,6 +30,7 @@ export default function ChatPanel({
   clearChats,
   regenerateResponse,
   messages,
+  clearInput,
 }: ChatPanelProps) {
   return (
     <div className="fixed inset-x-0 bottom-0 mx-auto w-[95%] pb-2 lg:w-[35%]">
@@ -59,6 +61,7 @@ export default function ChatPanel({
         isLoading={isLoading}
         triggerStop={triggerStop}
         clearChats={clearChats}
+        clearInput={clearInput}
       />
     </div>
   );

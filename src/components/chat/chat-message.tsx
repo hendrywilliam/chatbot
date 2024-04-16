@@ -1,7 +1,6 @@
 import * as React from "react";
 import { UseChatHelpers } from "@/types";
-import { IconUser } from "@/components/icons/icon-user";
-import { OpenAIIcon } from "@/components/ui/icons";
+import { OpenAIIcon, UserIcon } from "@/components/ui/icons";
 import { ChatAction } from "@/components/chat/chat-action";
 import ReactMarkdown from "react-markdown";
 import { Code } from "@/components/code";
@@ -21,7 +20,7 @@ export function ChatMessage({ messages }: ChatMessageProps) {
             <div id="chat-role" className="w-8">
               {item.role === "user" ? (
                 <div className="inline-flex h-8 w-8 items-center justify-center rounded-md border bg-white shadow">
-                  <IconUser />
+                  <UserIcon />
                 </div>
               ) : (
                 <div className="inline-flex h-8 w-8 items-center justify-center rounded-md border bg-black shadow">

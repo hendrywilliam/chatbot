@@ -41,6 +41,7 @@ export default function Chat() {
     regenerateResponse,
     modelSettings,
     setModelSettings,
+    clearInput,
   } = useChat();
 
   useEffect(() => {
@@ -79,6 +80,7 @@ export default function Chat() {
           clearChats={clearChats}
           regenerateResponse={regenerateResponse}
           messages={messages}
+          clearInput={clearInput}
         />
       </div>
     </>

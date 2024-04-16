@@ -1,6 +1,8 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { XmarkIcon } from "@/components/ui/icons";
+import { FileInput } from "./file-input";
 import {
   Dispatch,
   FormEvent,
@@ -18,6 +20,10 @@ interface PromptForm {
   clearChats: () => void;
   triggerStop: () => void;
   isLoading: boolean;
+  clearInput: () => void;
+  interactWithFile?: boolean;
+  setFile?: Dispatch<SetStateAction<File | any>> | undefined;
+  file?: File | null | undefined;
 }
 
 export default function PromptForm({
@@ -26,13 +32,15 @@ export default function PromptForm({
   input,
   clearChats,
   isLoading,
+  interactWithFile,
+  file,
+  clearInput,
+  setFile,
 }: PromptForm) {
   const inputFormRef = useRef<React.ElementRef<"textarea">>(null);
   const promptFormRef = useRef<React.ElementRef<"form">>(null);
   const submitterButton = useRef<React.ElementRef<"button">>(null);
   const enterToSubmit = useEnterToSubmit(promptFormRef, submitterButton);
-  /** Max auto resize, add overflow if exceeds this value. */
-  const maxAutoResize = useRef(152);
 
   useEffect(() => {
     inputFormRef.current?.focus();
@@ -46,6 +54,9 @@ export default function PromptForm({
       onSubmit={handleSubmit}
       onKeyDown={enterToSubmit}
     >
+      {interactWithFile && (
+        <FileInput file={file && file} setFile={setFile && setFile} />
+      )}
       <textarea
         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
           setInput(e.target.value)
@@ -62,7 +73,16 @@ export default function PromptForm({
           );
         }}
       />
-      <div className="absolute bottom-3 right-2">
+      <div className="absolute bottom-3 right-2 flex items-center space-x-1">
+        <Button
+          type="button"
+          size="xs"
+          variant="ghost"
+          disabled={isLoading || input.length === 0}
+          onClick={clearInput}
+        >
+          <XmarkIcon />
+        </Button>
         <Button
           ref={submitterButton}
           type="submit"

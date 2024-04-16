@@ -98,6 +98,7 @@ export const experimental_compositeStream = function (
 /** @param generator is an object that applies iterator protocol. */
 export const experimental_StreamingResponse = function (
   generator: AsyncGenerator,
+  transformer?: () => void,
 ) {
   return new Response(
     new ReadableStream({

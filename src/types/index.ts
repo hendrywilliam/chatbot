@@ -66,6 +66,9 @@ export interface UseChatHelpers {
 
   /** Value for llm settings. */
   modelSettings: ChatCompletionModelSettings;
+
+  /** Clear recent input value. */
+  clearInput: () => void;
 }
 
 export interface UsePdfChatHelpers {
@@ -94,8 +97,18 @@ export interface UsePdfChatHelpers {
   /** A trigger to handle submit, this will trigger sequence functions call. */
   handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
 
-  /** Collection of message from user or assistant. */
+  /** Collection of message from user/assistant/system. */
   messages: Message[];
 
+  /** Setter function for Messages state. */
   setMessages: Dispatch<SetStateAction<Message[]>>;
+
+  /** A handler to clear recent messages. */
+  clearRecentChats: () => void;
+
+  /** A loading indicator for current process. */
+  isLoading: boolean;
+
+  /** A trigger to stop current fetching process. */
+  triggerStop: () => void;
 }
