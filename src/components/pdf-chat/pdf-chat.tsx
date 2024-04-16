@@ -1,7 +1,7 @@
 "use client";
 
 import { usePdfChat } from "@/hooks/use-pdf-chat";
-import { PdfChatViewerWindow } from "./chat-viewer";
+import { PdfChatViewerWindow } from "./pdf-chat-viewer-window";
 import { PdfViewerWindow } from "@/components/pdf-chat/pdf-viewer";
 
 export function PdfChat() {
@@ -18,7 +18,7 @@ export function PdfChat() {
     triggerStop,
   } = usePdfChat();
   return (
-    <div className="flex h-full flex-1">
+    <div className="flex flex-1 overflow-y-hidden">
       <PdfChatViewerWindow
         setFile={setFile}
         clearRecentChats={clearRecentChats}
