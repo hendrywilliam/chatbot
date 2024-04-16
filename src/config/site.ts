@@ -4,7 +4,7 @@ export const siteNavigation: {
 }[] = [
   {
     title: "Chat",
-    href: "/chat",
+    href: "/",
   },
   {
     title: "ChatPDF",
