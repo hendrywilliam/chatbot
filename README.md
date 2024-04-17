@@ -17,6 +17,8 @@ Key features:
   ```
   NODE_ENV=
   OPENAI_API_KEY=
+  NEXT_PUBLIC_SUPABASE_URL=
+  NEXT_PUBLIC_API_KEY=
   ```
 
 - Run `pnpm run dev` for development build / `pnpm run build` then `pnpm run start` for production build.

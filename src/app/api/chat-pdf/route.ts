@@ -1,16 +1,14 @@
+import { Message } from "@/types";
+import { embeddings, chatModel } from "@/lib/open-ai";
 import { PDFLoader } from "langchain/document_loaders/fs/pdf";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
-import { embeddings } from "@/lib/open-ai";
-import { chatModel } from "@/lib/open-ai";
 import { createRetrievalChain } from "langchain/chains/retrieval";
 import { generateChatHistory, getEntriesFormData } from "@/lib/utils";
 import { experimental_StreamingResponse } from "@/lib/stream";
-import { StringOutputParser } from "@langchain/core/output_parsers";
 import { createHistoryAwareRetriever } from "langchain/chains/history_aware_retriever";
 import { MessagesPlaceholder } from "@langchain/core/prompts";
-import { Message } from "@/types";
 
 export async function POST(request: Request) {
   const formData = await request.formData();
