@@ -71,7 +71,7 @@ export function PdfChatViewerWindow({
         <PdfMessageList messages={messages} />
         <div ref={anchorRef} id="chat-anchor" className="h-44 w-full"></div>
       </div>
-      <div className="sticky bottom-0 mx-auto h-36 w-full shrink-0 rounded-t border bg-background px-4 py-2">
+      <div className="sticky bottom-0 mx-auto h-36 w-full shrink-0 rounded-t bg-background px-4 py-2">
         <PromptForm
           setInput={setPrompt}
           input={prompt}

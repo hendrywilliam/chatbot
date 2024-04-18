@@ -19,7 +19,7 @@ export function PdfViewerWindow({ file }: Props) {
   }, [file]);
 
   return (
-    <div className="flex h-full w-1/2 flex-col border-l">
+    <div className="flex h-full w-1/2 flex-col">
       <div className="flex-1">
         {fileUrl ? (
           <iframe src={fileUrl} width="100%" height="100%" />

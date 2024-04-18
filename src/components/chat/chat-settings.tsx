@@ -24,7 +24,7 @@ export default function ChatSettings({
   const [openCombobox, setOpenCombobox] = useState(false);
 
   return (
-    <div className="flex h-12 w-full items-center justify-end gap-2 border-b bg-background px-6">
+    <div className="flex h-12 w-full items-center justify-end gap-2 bg-background px-6">
       <Popover>
         <PopoverTrigger asChild>
           <Button size="xs" variant="outline">

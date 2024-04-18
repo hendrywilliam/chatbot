@@ -3,7 +3,7 @@ import { chatCompletionGenerator } from "@/lib/stream";
 import { chatCompletionSnapshots } from "@/lib/snapshots/chat-completion";
 import { ChatCompletionChunk } from "openai/resources/index.mjs";
 
-describe("chatCompletionGenerator function", () => {
+describe("chatCompletionGenerator function test", () => {
   test("it should generate correct value based on the snapshot given.", async () => {
     let accumulatedText = "";
     const results = chatCompletionGenerator(chatCompletionSnapshots, 0);

@@ -18,8 +18,8 @@ export async function POST(request: Request) {
     if (error) {
       throw error;
     }
-
-    /** @todo add ingest process to vector store. */
+  
+    /** Ingest data to vector store goes here. */
 
     return NextResponse.json(
       { path: data.path },

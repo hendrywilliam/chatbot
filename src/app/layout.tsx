@@ -1,8 +1,8 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import Navbar from "@/components/navbar";
 import { Analytics } from "@vercel/analytics/react";
 import { inter } from "@/lib/fonts";
+import { ClerkProvider } from "@clerk/nextjs";
 
 export const metadata: Metadata = {
   title: "AI by hendryw",
@@ -15,14 +15,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body
-        className={`${inter.className} flex h-screen w-full flex-col text-sm antialiased`}
-      >
-        <Navbar />
-        {children}
-        <Analytics />
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body
+          className={`${inter.className} flex h-screen w-full flex-col text-sm antialiased`}
+        >
+          {children}
+          <Analytics />
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

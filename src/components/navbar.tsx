@@ -3,10 +3,11 @@ import { buttonVariants } from "@/components/ui/button";
 import { GithubIcon } from "@/components/ui/icons";
 import { siteNavigation } from "@/config/site";
 import Link from "next/link";
+import { AccountNavigation } from "./account-navigation";
 
 export default function Navbar() {
   return (
-    <nav className="h-14 w-full border-b bg-background">
+    <nav className="h-14 w-full bg-background">
       <div className="flex h-full w-full items-center justify-between px-6">
         <div className="flex items-center">
           <Link href="/" className="mr-5 text-sm font-semibold">
@@ -20,13 +21,14 @@ export default function Navbar() {
             ))}
           </ul>
         </div>
-        <div>
+        <div className="flex justify-center space-x-2">
           <ExternalLink
             className={buttonVariants({ variant: "outline", size: "xs" })}
             href="https://github.com/hendrywilliam/ai"
           >
             <GithubIcon />
           </ExternalLink>
+          <AccountNavigation />
         </div>
       </div>
     </nav>

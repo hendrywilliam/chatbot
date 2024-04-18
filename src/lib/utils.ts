@@ -26,9 +26,9 @@ export function getEntriesFormData<T = Record<string, any>>(
   return keyValuePair as T;
 }
 
-export function truncate(text: string, treshold: number = 10) {
-  return text.length > treshold
-    ? text.substring(0, treshold + 1) + "..."
+export function truncate(text: string, threshold: number = 10) {
+  return text.length > threshold
+    ? text.substring(0, threshold + 1) + "..."
     : text;
 }
 
@@ -39,9 +39,8 @@ export function generateChatHistory(messages: Message[]): BaseMessage[] {
   }
 
   return messages.map((message) => {
-    if (message.role === "user") {
-      return new HumanMessage(message.content);
-    }
-    return new AIMessage(message.content);
+    return message.role === "user"
+      ? new HumanMessage(message.content)
+      : new AIMessage(message.content);
   });
 }
