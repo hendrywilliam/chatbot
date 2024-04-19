@@ -2,6 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import { inter } from "@/lib/fonts";
+import { Toaster } from "@/components/ui/sonner";
 import { ClerkProvider } from "@clerk/nextjs";
 
 export const metadata: Metadata = {
@@ -22,6 +23,7 @@ export default function RootLayout({
         >
           {children}
           <Analytics />
+          <Toaster />
         </body>
       </html>
     </ClerkProvider>
