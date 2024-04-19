@@ -17,6 +17,7 @@ export function PdfChat() {
     clearPromptInput,
     triggerStop,
   } = usePdfChat();
+
   return (
     <div className="flex flex-1 overflow-y-hidden">
       <PdfChatViewerWindow

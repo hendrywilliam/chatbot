@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { XmarkIcon } from "@/components/ui/icons";
-import { FileInput } from "./file-input";
 import {
   Dispatch,
   FormEvent,
@@ -21,7 +20,6 @@ interface PromptForm {
   triggerStop: () => void;
   isLoading: boolean;
   clearInput: () => void;
-  interactWithFile?: boolean;
   setFile?: Dispatch<SetStateAction<File | any>> | undefined;
   file?: File | null | undefined;
 }
@@ -32,7 +30,6 @@ export default function PromptForm({
   input,
   clearChats,
   isLoading,
-  interactWithFile,
   file,
   clearInput,
   setFile,
@@ -54,9 +51,6 @@ export default function PromptForm({
       onSubmit={handleSubmit}
       onKeyDown={enterToSubmit}
     >
-      {interactWithFile && (
-        <FileInput file={file && file} setFile={setFile && setFile} />
-      )}
       <textarea
         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
           setInput(e.target.value)
