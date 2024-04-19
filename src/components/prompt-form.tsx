@@ -20,8 +20,6 @@ interface PromptForm {
   triggerStop: () => void;
   isLoading: boolean;
   clearInput: () => void;
-  setFile?: Dispatch<SetStateAction<File | any>> | undefined;
-  file?: File | null | undefined;
 }
 
 export default function PromptForm({
@@ -30,9 +28,7 @@ export default function PromptForm({
   input,
   clearChats,
   isLoading,
-  file,
   clearInput,
-  setFile,
 }: PromptForm) {
   const inputFormRef = useRef<React.ElementRef<"textarea">>(null);
   const promptFormRef = useRef<React.ElementRef<"form">>(null);
@@ -68,15 +64,17 @@ export default function PromptForm({
         }}
       />
       <div className="absolute bottom-3 right-2 flex items-center space-x-1">
-        <Button
-          type="button"
-          size="xs"
-          variant="ghost"
-          disabled={isLoading || input.length === 0}
-          onClick={clearInput}
-        >
-          <XmarkIcon />
-        </Button>
+        {input.length > 0 && (
+          <Button
+            type="button"
+            size="xs"
+            variant="ghost"
+            disabled={isLoading || input.length === 0}
+            onClick={clearInput}
+          >
+            <XmarkIcon />
+          </Button>
+        )}
         <Button
           ref={submitterButton}
           type="submit"

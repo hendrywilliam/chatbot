@@ -1,22 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { UsePdfChatHelpers } from "@/types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-interface Props extends Pick<UsePdfChatHelpers, "file"> {}
-
-export function PdfViewerWindow({ file }: Props) {
+export function PdfViewerWindow() {
   const [fileUrl, setFileUrl] = useState("");
-
-  useEffect(() => {
-    if (file) {
-      setFileUrl(URL.createObjectURL(file));
-    }
-    return () => {
-      URL.revokeObjectURL(fileUrl);
-    };
-  }, [file]);
 
   return (
     <div className="flex h-full w-1/2 flex-col">

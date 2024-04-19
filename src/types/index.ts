@@ -30,9 +30,17 @@ export interface Models {
 
 export interface UserObjectCustomized extends Omit<User, "privateMetadata"> {
   privateMetadata: {
-    images: { path: string; type: string; size: number; id: string }[];
+    images: {
+      path: string;
+      type: string;
+      size: number;
+      id: string;
+      name: string;
+    }[];
   };
 }
+
+export type FileDetails = UserObjectCustomized["privateMetadata"]["images"];
 
 export interface ChatCompletionModelSettings
   extends Omit<ChatCompletionCreateParams, "messages"> {}
@@ -79,12 +87,6 @@ export interface UseChatHelpers {
 }
 
 export interface UsePdfChatHelpers {
-  /** Setter function for pdf file input. */
-  setFile: Dispatch<SetStateAction<File | null>>;
-
-  /** Corresponding pdf file. */
-  file: File | null;
-
   /** Setter function for prompt value. */
   setPrompt: Dispatch<SetStateAction<string>>;
 

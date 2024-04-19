@@ -12,3 +12,9 @@ export const chatCompletionExamples = [
     value: "Draft an email about the following: \n",
   },
 ];
+
+export const chatPdfExamples = [
+  {
+    value: "Give me a summary of this document.",
+  },
+];

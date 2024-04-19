@@ -57,12 +57,16 @@ export async function POST(request: Request) {
       privateMetadata: {
         images: [
           ...user.privateMetadata.images,
-          { path: data.path, type: file.type, size: file.size, id: nanoid() },
+          {
+            path: data.path,
+            type: file.type,
+            size: file.size,
+            id: nanoid(),
+            name: file.name,
+          },
         ],
       },
     });
-
-    /** Ingest data to vector store goes here. */
 
     revalidatePath("/file-manager");
     return NextResponse.json(

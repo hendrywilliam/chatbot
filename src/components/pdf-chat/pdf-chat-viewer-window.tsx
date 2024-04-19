@@ -5,11 +5,11 @@ import { UsePdfChatHelpers } from "@/types";
 import { PdfMessageList } from "./pdf-message-list";
 import { useInView } from "react-intersection-observer";
 import { ElementRef, useEffect, useRef } from "react";
+import PdfEmptyScreen from "./empty-screen";
 
 interface Props
   extends Pick<
     UsePdfChatHelpers,
-    | "setFile"
     | "setPrompt"
     | "prompt"
     | "clearRecentChats"
@@ -18,7 +18,6 @@ interface Props
     | "triggerStop"
     | "clearPromptInput"
     | "messages"
-    | "file"
   > {}
 
 export function PdfChatViewerWindow({
@@ -29,8 +28,6 @@ export function PdfChatViewerWindow({
   triggerStop,
   isLoading,
   messages,
-  file,
-  setFile,
   clearPromptInput,
 }: Props) {
   const messagesContainerRef = useRef<ElementRef<"div">>(null);
@@ -68,10 +65,16 @@ export function PdfChatViewerWindow({
         ref={messagesContainerRef}
         className="relative h-full overflow-y-auto"
       >
-        <PdfMessageList messages={messages} />
-        <div ref={anchorRef} id="chat-anchor" className="h-44 w-full"></div>
+        {messages.length > 0 ? (
+          <>
+            <PdfMessageList messages={messages} />
+            <div ref={anchorRef} id="chat-anchor" className="h-44 w-full"></div>
+          </>
+        ) : (
+          <PdfEmptyScreen setPrompt={setPrompt} />
+        )}
       </div>
-      <div className="sticky bottom-0 mx-auto h-max w-full shrink-0 rounded-t bg-background px-4 py-2">
+      <div className="sticky bottom-0 mx-auto h-max w-3/4 shrink-0 rounded-t border bg-background px-4 py-4">
         <PromptForm
           setInput={setPrompt}
           input={prompt}
@@ -79,8 +82,6 @@ export function PdfChatViewerWindow({
           handleSubmit={handleSubmit}
           isLoading={isLoading}
           triggerStop={triggerStop}
-          file={file}
-          setFile={setFile}
           clearInput={clearPromptInput}
         />
       </div>

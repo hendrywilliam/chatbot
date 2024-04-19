@@ -1,8 +1,6 @@
 "use client";
 
-import { z } from "zod";
 import { toast } from "sonner";
-import { catchError } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -12,32 +10,47 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { catchError } from "@/lib/utils";
 import { useForm } from "react-hook-form";
-import { registerValidation } from "@/lib/validations/auth";
+import { Input } from "@/components/ui/input";
+import { useSignIn } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import type { LoginValue } from "@/lib/validations/auth";
 import { useState } from "react";
-import { registerAccountAction } from "@/lib/actions/register";
-import { LoadingIcon } from "./ui/icons";
+import { LoadingIcon } from "../ui/icons";
 
-export default function RegisterForm() {
+export default function LoginForm() {
+  const { isLoaded, signIn, setActive } = useSignIn();
   const [isLoading, setIsLoading] = useState(false);
+  const { push } = useRouter();
 
-  const form = useForm<z.infer<typeof registerValidation>>({
-    resolver: zodResolver(registerValidation),
+  const form = useForm<LoginValue>({
     defaultValues: {
       email: "",
       password: "",
-      confirmPassword: "",
     },
   });
 
-  async function onSubmit(data: z.infer<typeof registerValidation>) {
+  async function onSubmit(data: LoginValue) {
+    if (!isLoaded) {
+      return;
+    }
+
     try {
       setIsLoading(true);
-      await registerAccountAction(data);
-      toast.success("Register success.");
-    } catch (error) {
+      const result = await signIn.create({
+        identifier: data.email,
+        password: data.password,
+      });
+
+      if (result.status === "complete") {
+        await setActive({ session: result.createdSessionId });
+        toast.success("Login succeeded.");
+        push("/");
+      } else {
+        toast.error("Login has failed.");
+      }
+    } catch (error: unknown) {
       catchError(error);
     } finally {
       setIsLoading(false);
@@ -70,19 +83,6 @@ export default function RegisterForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input type="password" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="confirmPassword"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Confirm Password</FormLabel>
               <FormControl>
                 <Input type="password" {...field} />
               </FormControl>

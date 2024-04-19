@@ -8,11 +8,9 @@ export function PdfChat() {
   const {
     handleSubmit,
     setPrompt,
-    setFile,
     prompt,
     messages,
     isLoading,
-    file,
     clearRecentChats,
     clearPromptInput,
     triggerStop,
@@ -21,7 +19,6 @@ export function PdfChat() {
   return (
     <div className="flex flex-1 overflow-y-hidden">
       <PdfChatViewerWindow
-        setFile={setFile}
         clearRecentChats={clearRecentChats}
         handleSubmit={handleSubmit}
         prompt={prompt}
@@ -29,10 +26,9 @@ export function PdfChat() {
         messages={messages}
         setPrompt={setPrompt}
         triggerStop={triggerStop}
-        file={file}
         clearPromptInput={clearPromptInput}
       />
-      <PdfViewerWindow file={file} />
+      <PdfViewerWindow />
     </div>
   );
 }

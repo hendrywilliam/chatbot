@@ -31,7 +31,7 @@ export function AccountNavigation() {
             <DropdownMenuSeparator />
             {userMenuNavigation.map((menuNavigation, index) => (
               <DropdownMenuItem key={index}>
-                {menuNavigation.title}
+                <Link href={menuNavigation.href}>{menuNavigation.title}</Link>
               </DropdownMenuItem>
             ))}
             <DropdownMenuItem>Logout</DropdownMenuItem>

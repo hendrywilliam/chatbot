@@ -3,7 +3,7 @@
 import { UseChatHelpers } from "@/types";
 import * as React from "react";
 import { ChatMessage } from "@/components/chat/chat-message";
-import { EmptyScreen } from "@/components/empty-screen";
+import { EmptyScreen } from "@/components/chat/empty-screen";
 
 interface ChatListProps
   extends Pick<UseChatHelpers, "messages" | "setInput" | "modelSettings">,

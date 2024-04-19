@@ -21,7 +21,7 @@ export const registerValidation = z
     path: ["confirmPassword"],
   });
 
-export type loginValue = Omit<
+export type LoginValue = Omit<
   z.output<typeof registerValidation>,
   "confirmPassword"
 >;

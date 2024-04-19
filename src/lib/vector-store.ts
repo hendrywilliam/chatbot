@@ -1,7 +1,7 @@
-import { PrismaVectorStore } from "@langchain/community/vectorstores/prisma";
+import { prisma } from "./prisma";
 import { embeddings } from "./open-ai";
 import { Prisma, Document } from "@prisma/client";
-import { prisma } from "./prisma";
+import { PrismaVectorStore } from "@langchain/community/vectorstores/prisma";
 
 export const vectorStore = PrismaVectorStore.withModel<Document>(prisma).create(
   embeddings,

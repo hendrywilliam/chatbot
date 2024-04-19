@@ -6,7 +6,6 @@ import { FormEvent, useCallback, useRef, useState, useEffect } from "react";
 import { decode } from "@/lib/utils";
 
 export function usePdfChat(): UsePdfChatHelpers {
-  const [file, setFile] = useState<File | null>(null);
   const [prompt, setPrompt] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -90,10 +89,6 @@ export function usePdfChat(): UsePdfChatHelpers {
 
   const constructFormData = useCallback(() => {
     const formData = new FormData();
-    if (!file) {
-      throw new Error("Pdf file is not provided.");
-    }
-    formData.append("file", file);
 
     if (!prompt) {
       throw new Error("Prompt is not provided.");
@@ -102,7 +97,7 @@ export function usePdfChat(): UsePdfChatHelpers {
     formData.append("messages", JSON.stringify(messagesRef.current ?? []));
 
     return formData;
-  }, [prompt, file]);
+  }, [prompt]);
 
   const appendMessage = function (requestMessage: Message) {
     if (!requestMessage.id) {
@@ -150,8 +145,6 @@ export function usePdfChat(): UsePdfChatHelpers {
   }, [isLoading]);
 
   return {
-    setFile,
-    file,
     setPrompt,
     triggerRequest,
     prompt,
