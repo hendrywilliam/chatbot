@@ -11,3 +11,13 @@ export const siteNavigation: {
     href: "/chat-pdf",
   },
 ];
+
+export const userMenuNavigation: {
+  title: string;
+  href: string;
+}[] = [
+  {
+    title: "File Manager",
+    href: "/file-manager",
+  },
+];

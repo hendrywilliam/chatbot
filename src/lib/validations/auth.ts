@@ -25,3 +25,5 @@ export type loginValue = Omit<
   z.output<typeof registerValidation>,
   "confirmPassword"
 >;
+
+export type RegisterInputValue = z.input<typeof registerValidation>;

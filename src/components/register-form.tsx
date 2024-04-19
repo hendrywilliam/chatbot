@@ -2,7 +2,6 @@
 
 import { z } from "zod";
 import { toast } from "sonner";
-import { useSignUp } from "@clerk/nextjs";
 import { catchError } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,10 +17,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { registerValidation } from "@/lib/validations/auth";
 import { useState } from "react";
+import { registerAccountAction } from "@/lib/actions/register";
 import { LoadingIcon } from "./ui/icons";
 
 export default function RegisterForm() {
-  const { isLoaded, signUp } = useSignUp();
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof registerValidation>>({
@@ -34,15 +33,9 @@ export default function RegisterForm() {
   });
 
   async function onSubmit(data: z.infer<typeof registerValidation>) {
-    if (!isLoaded) return;
-
     try {
       setIsLoading(true);
-      const result = await signUp.create({
-        emailAddress: data.email,
-        password: data.password,
-      });
-      console.log(result);
+      await registerAccountAction(data);
       toast.success("Register success.");
     } catch (error) {
       catchError(error);

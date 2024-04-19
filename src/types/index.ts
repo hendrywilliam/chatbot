@@ -1,3 +1,4 @@
+import { User } from "@clerk/nextjs/server";
 import type { ChatCompletionCreateParams } from "openai/resources/index.mjs";
 import type { Dispatch, FormEvent, SVGProps, SetStateAction } from "react";
 
@@ -25,6 +26,12 @@ export interface Models {
   description: string;
   href: string[];
   icon: (props: SVGProps<SVGSVGElement>) => JSX.Element;
+}
+
+export interface UserObjectCustomized extends Omit<User, "privateMetadata"> {
+  privateMetadata: {
+    images: { path: string; type: string; size: number; id: string }[];
+  };
 }
 
 export interface ChatCompletionModelSettings

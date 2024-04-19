@@ -9,19 +9,31 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useUser } from "@clerk/nextjs";
+import { userMenuNavigation } from "@/config/site";
 
 export function AccountNavigation() {
+  const { user, isSignedIn } = useUser();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar className="h-8 w-8">
-          <AvatarImage src="https://upload.wikimedia.org/wikipedia/en/2/23/Lofi_girl_logo.jpg" />
+          {isSignedIn ? (
+            <AvatarImage src={user.imageUrl} />
+          ) : (
+            <AvatarImage src="https://upload.wikimedia.org/wikipedia/en/2/23/Lofi_girl_logo.jpg" />
+          )}
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuLabel>Account</DropdownMenuLabel>
+        <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>File Manager</DropdownMenuItem>
+        {userMenuNavigation.map((menuNavigation, index) => (
+          <DropdownMenuItem key={index}>
+            {menuNavigation.title}
+          </DropdownMenuItem>
+        ))}
         <DropdownMenuItem>Logout</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
