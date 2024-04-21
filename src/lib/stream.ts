@@ -6,21 +6,18 @@ export function createFakeStream(
   signal: AbortSignal,
 ): ReadableStream {
   return new ReadableStream({
-    async start(controller) {},
+    async start(controller) {
+      signal.addEventListener("abort", () => {
+        console.log("Request aborted.");
+      });
+    },
     async pull(controller) {
-      while (true) {
-        /** Server should respect aborts from client. It changes signal.aborted state to true. */
-        signal.addEventListener("abort", () => {
-          console.log("Request aborted.");
-        });
-
-        const { value, done } = await generator.next();
-        if (done || signal.aborted) {
-          controller.close();
-          break;
-        } else {
-          controller.enqueue(value);
-        }
+      const { value, done } = await generator.next();
+      if (done || signal.aborted) {
+        controller.close();
+        return;
+      } else {
+        controller.enqueue(value);
       }
     },
     async cancel(reason) {},
@@ -68,13 +65,12 @@ export const experimental_compositeStream = function (
         console.log("ReadableStream initialized.");
       },
       async pull(controller) {
-        while (true) {
-          const { value, done } = await generator.next();
-          if (done) {
-            controller.close();
-          }
-          controller.enqueue(value);
+        const { value, done } = await generator.next();
+        if (done) {
+          controller.close();
+          return;
         }
+        controller.enqueue(value);
       },
       cancel(reason) {
         console.log("Stream canceled. Reason: ", reason);
@@ -98,27 +94,29 @@ export const experimental_compositeStream = function (
 /** @param generator is an object that applies iterator protocol. */
 export const experimental_StreamingResponse = function (
   generator: AsyncGenerator,
+  signal: AbortSignal,
   transformer?: () => void,
 ) {
   return new Response(
     new ReadableStream({
-      async start() {},
+      async start() {
+        signal.addEventListener("abort", () => {
+          console.log("User has aborted the current request.");
+        });
+      },
       async pull(controller) {
-        while (true) {
-          const { value, done } = await generator.next();
-
-          if (done) {
-            controller.close();
-            break;
-          }
-          /**
-           * @todo We should get the answer only, not including the context and history.
-           * In this workaround we are accessing answer property, which only exist in answer response.
-           * Accessing "answer" property in an object that has no corresponding property will return undefined.
-           */
-          const answer = (value as any).answer ?? "";
-          controller.enqueue(`{ "answer":${JSON.stringify(answer)} }\n`);
+        const { value, done } = await generator.next();
+        if (done || signal.aborted) {
+          controller.close();
+          return;
         }
+        /**
+         * @todo We should get the answer only, not including the context and history.
+         * In this workaround we are accessing answer property, which only exist in answer response.
+         * Accessing "answer" property in an object that has no corresponding property will return undefined.
+         */
+        const answer = (value as any).answer ?? "";
+        controller.enqueue(`{ "answer":${JSON.stringify(answer)} }\n`);
       },
     }),
     {

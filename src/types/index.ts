@@ -1,6 +1,12 @@
 import { User } from "@clerk/nextjs/server";
 import type { ChatCompletionCreateParams } from "openai/resources/index.mjs";
-import type { Dispatch, FormEvent, SVGProps, SetStateAction } from "react";
+import type {
+  Dispatch,
+  FormEvent,
+  MouseEvent,
+  SVGProps,
+  SetStateAction,
+} from "react";
 
 export type Message = {
   id: string;
@@ -68,10 +74,10 @@ export interface UseChatHelpers {
   setInput: Dispatch<SetStateAction<string>>;
 
   /** Handler to stop asynchronous process (fetching data from network and stop the stream). */
-  triggerStop: () => void;
+  triggerStop: (e: MouseEvent<HTMLButtonElement, any>) => void;
 
   /** Clear recent chats. */
-  clearChats: () => void;
+  clearChats: (e: MouseEvent<HTMLButtonElement, any>) => void;
 
   /** Re-generate last response, including the request message. */
   regenerateResponse: () => void;
@@ -119,5 +125,5 @@ export interface UsePdfChatHelpers {
   isLoading: boolean;
 
   /** A trigger to stop current fetching process. */
-  triggerStop: () => void;
+  triggerStop: (e: MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }

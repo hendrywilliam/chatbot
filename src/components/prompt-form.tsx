@@ -9,6 +9,7 @@ import {
   useRef,
   useState,
   useEffect,
+  MouseEvent,
 } from "react";
 import { useEnterToSubmit } from "@/hooks/use-enter-to-submit";
 
@@ -16,8 +17,8 @@ interface PromptForm {
   setInput: Dispatch<SetStateAction<string>>;
   handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
   input: string;
-  clearChats: () => void;
-  triggerStop: () => void;
+  clearChats: (e: MouseEvent<HTMLButtonElement, any>) => void;
+  triggerStop: (e: MouseEvent<HTMLButtonElement, any>) => void;
   isLoading: boolean;
   clearInput: () => void;
 }
@@ -29,6 +30,7 @@ export default function PromptForm({
   clearChats,
   isLoading,
   clearInput,
+  triggerStop,
 }: PromptForm) {
   const inputFormRef = useRef<React.ElementRef<"textarea">>(null);
   const promptFormRef = useRef<React.ElementRef<"form">>(null);
@@ -75,14 +77,15 @@ export default function PromptForm({
             <XmarkIcon />
           </Button>
         )}
-        <Button
-          ref={submitterButton}
-          type="submit"
-          size="sm"
-          disabled={isLoading || input.length === 0}
-        >
-          Send
-        </Button>
+        {isLoading ? (
+          <Button onClick={(e) => triggerStop(e)} type="button" size="sm">
+            Stop
+          </Button>
+        ) : (
+          <Button ref={submitterButton} type="submit" size="sm">
+            Send
+          </Button>
+        )}
       </div>
     </form>
   );

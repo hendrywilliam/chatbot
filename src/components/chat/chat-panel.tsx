@@ -47,7 +47,7 @@ export default function ChatPanel({
         <Button
           variant="outline"
           className="absolute inset-x-0 -top-12 mx-auto w-max gap-1 text-xs text-muted-foreground drop-shadow-none"
-          onClick={triggerStop}
+          onClick={(e) => triggerStop(e)}
         >
           <StopIcon />
           Stop Generating

@@ -2,7 +2,14 @@
 
 import { Message, UsePdfChatHelpers } from "@/types";
 import { nanoid } from "nanoid";
-import { FormEvent, useCallback, useRef, useState, useEffect } from "react";
+import {
+  FormEvent,
+  useCallback,
+  useRef,
+  useState,
+  useEffect,
+  MouseEvent,
+} from "react";
 import { decode } from "@/lib/utils";
 
 export function usePdfChat(): UsePdfChatHelpers {
@@ -55,6 +62,7 @@ export function usePdfChat(): UsePdfChatHelpers {
         if (reader) {
           const { value, done } = await reader.read();
           if (done) {
+            reader.releaseLock();
             break;
           }
 
@@ -81,6 +89,7 @@ export function usePdfChat(): UsePdfChatHelpers {
           });
         }
       }
+      reader.releaseLock();
     } catch (error) {
     } finally {
       setIsLoading(false);
@@ -91,7 +100,7 @@ export function usePdfChat(): UsePdfChatHelpers {
     const formData = new FormData();
 
     if (!prompt) {
-      throw new Error("Prompt is not provided.");
+      return;
     }
     formData.append("prompt", prompt);
     formData.append("messages", JSON.stringify(messagesRef.current ?? []));
@@ -138,11 +147,16 @@ export function usePdfChat(): UsePdfChatHelpers {
     setMessages([]);
   }, [messages]);
 
-  const triggerStop = useCallback(() => {
-    if (isLoading) {
-      abortControllerRef.current?.abort("Request aborted by user.");
-    }
-  }, [isLoading]);
+  const triggerStop = useCallback(
+    (e: MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      e.preventDefault();
+      if (isLoading) {
+        abortControllerRef.current?.abort("Request aborted by user.");
+      }
+      return;
+    },
+    [isLoading],
+  );
 
   return {
     setPrompt,

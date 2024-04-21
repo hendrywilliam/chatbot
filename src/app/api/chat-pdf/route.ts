@@ -9,15 +9,19 @@ import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
 import { createRetrievalChain } from "langchain/chains/retrieval";
 import { generateChatHistory, getEntriesFormData } from "@/lib/utils";
 import { experimental_StreamingResponse } from "@/lib/stream";
+import { RunnableSequence } from "@langchain/core/runnables";
 import { createHistoryAwareRetriever } from "langchain/chains/history_aware_retriever";
+import { StringOutputParser } from "@langchain/core/output_parsers";
 
 export async function POST(request: Request) {
+  const signal = request.signal;
   const formData = await request.formData();
   const { prompt: userPrompt, messages } = getEntriesFormData<{
     prompt: string;
     messages: string;
   }>(formData);
 
+  chatModel.bind({ signal });
   const retriever = vectorStore.asRetriever();
 
   const historyAwarePrompt = ChatPromptTemplate.fromMessages([
@@ -60,5 +64,5 @@ export async function POST(request: Request) {
     chat_history: generateChatHistory(parsedHistory),
   });
 
-  return experimental_StreamingResponse(result);
+  return experimental_StreamingResponse(result, signal);
 }

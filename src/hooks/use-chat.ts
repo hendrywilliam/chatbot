@@ -1,6 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import { useRef, useTransition, useState, useEffect, useCallback } from "react";
+import {
+  useRef,
+  useTransition,
+  useState,
+  useEffect,
+  useCallback,
+  MouseEvent,
+} from "react";
 import type {
   ChatCompletionModelSettings,
   Message,
@@ -101,7 +108,7 @@ export function useChat(): UseChatHelpers {
             if (reader) {
               const { done, value } = await reader.read();
               if (done) {
-                setIsLoading(false);
+                reader.releaseLock();
                 break;
               }
 
@@ -137,6 +144,8 @@ export function useChat(): UseChatHelpers {
             default:
               setIsLoading(false);
           }
+        } finally {
+          setIsLoading(false);
         }
       });
     },
@@ -160,6 +169,9 @@ export function useChat(): UseChatHelpers {
   const handleSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
+
+      if (input.length === 0) return;
+
       const id = nanoid();
       const now = new Date();
       const requestMessage = {
@@ -178,20 +190,27 @@ export function useChat(): UseChatHelpers {
   );
 
   /** A trigger to stop stream. It will gives a signal to server, then stop streaming. */
-  const triggerStop = useCallback(() => {
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort("Stream request aborted by user.");
-    }
-    return;
-  }, []);
+  const triggerStop = useCallback(
+    (e: MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      e.preventDefault();
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort("Stream request aborted by user.");
+      }
+      return;
+    },
+    [],
+  );
 
-  const clearChats = useCallback(() => {
-    if (isLoading) {
-      triggerStop();
-    }
-    setMessages([]);
-    return;
-  }, [isLoading, triggerStop]);
+  const clearChats = useCallback(
+    (e: MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      if (isLoading) {
+        triggerStop(e);
+      }
+      setMessages([]);
+      return;
+    },
+    [isLoading, triggerStop],
+  );
 
   const regenerateResponse = useCallback(() => {
     if (messagesRef.current.length === 0) return;
