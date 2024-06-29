@@ -1,7 +1,7 @@
 import * as React from "react";
 import { UseChatHelpers } from "@/types";
 import { OpenAIIcon, UserIcon } from "@/components/ui/icons";
-import { ChatAction } from "@/components/chat/chat-action";
+import { ChatAction } from "@/components/chat-action";
 import ReactMarkdown from "react-markdown";
 import { Code } from "@/components/code";
 

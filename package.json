@@ -1,5 +1,5 @@
 {
-  "name": "ai",
+  "name": "chat-ai",
   "version": "0.1.0",
   "private": true,
   "author": {
@@ -15,12 +15,7 @@
     "generate": "prisma generate"
   },
   "dependencies": {
-    "@clerk/nextjs": "^4.29.12",
     "@hookform/resolvers": "^3.3.4",
-    "@langchain/community": "^0.0.49",
-    "@langchain/core": "^0.1.57",
-    "@langchain/openai": "^0.0.28",
-    "@prisma/client": "5.12.1",
     "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
@@ -29,7 +24,6 @@
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-slider": "^1.1.2",
     "@radix-ui/react-slot": "^1.0.2",
-    "@supabase/supabase-js": "^2.42.4",
     "@types/node": "20.5.8",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
@@ -43,13 +37,11 @@
     "dlx": "^0.2.1",
     "eslint": "8.48.0",
     "eslint-config-next": "13.4.19",
-    "langchain": "^0.1.33",
     "lucide-react": "^0.274.0",
     "nanoid": "^4.0.2",
     "next": "^14.2.1",
     "next-themes": "^0.3.0",
     "openai": "^4.29.2",
-    "pdf-parse": "^1.1.1",
     "postcss": "8.4.29",
     "prisma": "^5.12.1",
     "react": "18.2.0",
