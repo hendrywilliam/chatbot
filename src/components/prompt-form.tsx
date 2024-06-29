@@ -1,92 +1,79 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { XmarkIcon } from "@/components/ui/icons";
+import { EnterIcon, StopIcon } from "./ui/icons";
 import {
-  Dispatch,
-  FormEvent,
-  SetStateAction,
-  useRef,
-  useState,
-  useEffect,
-  MouseEvent,
+    Dispatch,
+    FormEvent,
+    SetStateAction,
+    useRef,
+    useEffect,
+    MouseEvent,
 } from "react";
 import { useEnterToSubmit } from "@/hooks/use-enter-to-submit";
 
 interface PromptForm {
-  setInput: Dispatch<SetStateAction<string>>;
-  handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
-  input: string;
-  clearChats: (e: MouseEvent<HTMLButtonElement, any>) => void;
-  triggerStop: (e: MouseEvent<HTMLButtonElement, any>) => void;
-  isLoading: boolean;
-  clearInput: () => void;
+    setInput: Dispatch<SetStateAction<string>>;
+    handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
+    input: string;
+    clearChats: (e: MouseEvent<HTMLButtonElement, any>) => void;
+    triggerStop: (e: MouseEvent<HTMLButtonElement, any>) => void;
+    isLoading: boolean;
+    clearInput: () => void;
 }
 
 export default function PromptForm({
-  setInput,
-  handleSubmit,
-  input,
-  clearChats,
-  isLoading,
-  clearInput,
-  triggerStop,
+    setInput,
+    handleSubmit,
+    input,
+    isLoading,
+    triggerStop,
 }: PromptForm) {
-  const inputFormRef = useRef<React.ElementRef<"textarea">>(null);
-  const promptFormRef = useRef<React.ElementRef<"form">>(null);
-  const submitterButton = useRef<React.ElementRef<"button">>(null);
-  const enterToSubmit = useEnterToSubmit(promptFormRef, submitterButton);
+    const inputFormRef = useRef<React.ElementRef<"textarea">>(null);
+    const promptFormRef = useRef<React.ElementRef<"form">>(null);
+    const submitterButton = useRef<React.ElementRef<"button">>(null);
+    const enterToSubmit = useEnterToSubmit(promptFormRef, submitterButton);
 
-  useEffect(() => {
-    inputFormRef.current?.focus();
-    return () => {};
-  }, []);
+    useEffect(() => {
+        inputFormRef.current?.focus();
+        return () => {};
+    }, []);
 
-  return (
-    <form
-      className="relative h-max"
-      ref={promptFormRef}
-      onSubmit={handleSubmit}
-      onKeyDown={enterToSubmit}
-    >
-      <textarea
-        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-          setInput(e.target.value)
-        }
-        rows={1}
-        cols={1}
-        className="w-full resize-none rounded-md border p-2 pb-12 focus:outline-none"
-        value={input}
-        ref={inputFormRef}
-        onInput={(event) => {
-          event.currentTarget.setAttribute(
-            "style",
-            `height: ${event.currentTarget.scrollHeight}px !important;overflow-y:hidden`,
-          );
-        }}
-      />
-      <div className="absolute bottom-3 right-2 flex items-center space-x-1">
-        {input.length > 0 && (
-          <Button
-            type="button"
-            size="xs"
-            variant="ghost"
-            disabled={isLoading || input.length === 0}
-            onClick={clearInput}
-          >
-            <XmarkIcon />
-          </Button>
-        )}
-        {isLoading ? (
-          <Button onClick={(e) => triggerStop(e)} type="button" size="sm">
-            Stop
-          </Button>
-        ) : (
-          <Button ref={submitterButton} type="submit" size="sm">
-            Send
-          </Button>
-        )}
-      </div>
-    </form>
-  );
+    return (
+        <div className="rounded border bg-background p-2">
+            <form
+                className="relative flex h-max w-full space-x-4 bg-background"
+                ref={promptFormRef}
+                onSubmit={handleSubmit}
+                onKeyDown={enterToSubmit}
+            >
+                <textarea
+                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                        setInput(e.target.value)
+                    }
+                    rows={1}
+                    cols={1}
+                    className="w-full resize-none rounded-md pb-8 text-sm focus:outline-none"
+                    value={input}
+                    ref={inputFormRef}
+                    placeholder="Is Millie Bobby Brown going to play Eleven in the next season?"
+                />
+                <div className="flex items-center">
+                    {isLoading ? (
+                        <Button
+                            onClick={(e) => triggerStop(e)}
+                            type="button"
+                            size="sm"
+                        >
+                            <StopIcon />
+                        </Button>
+                    ) : (
+                        <Button ref={submitterButton} type="submit" size="icon">
+                            <EnterIcon />
+                        </Button>
+                    )}
+                </div>
+            </form>
+        </div>
+    );
 }

@@ -4,21 +4,43 @@ import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { CopyIcon, CheckMarkIcon } from "@/components/ui/icons";
 import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
+import { Message, UseChatHelpers } from "@/types";
+import { ReloadIcon } from "@/components/ui/icons";
+import { toast } from "sonner";
 
-interface ChatActionProps {
-  message: string;
+interface ChatActionProps extends Pick<UseChatHelpers, "regenerateResponse"> {
+    message: Message;
 }
 
-export function ChatAction({ message }: ChatActionProps) {
-  const [isCopy, copy] = useCopyToClipboard();
+export function ChatAction({ message, regenerateResponse }: ChatActionProps) {
+    const [isCopied, copy] = useCopyToClipboard();
 
-  return (
-    <div id="chat-action" className="absolute right-0 w-8">
-      <div className="inline-flex items-center justify-center rounded-md border bg-white shadow">
-        <Button onClick={() => copy(message)} size={"xs"} variant={"ghost"}>
-          {isCopy ? <CheckMarkIcon /> : <CopyIcon />}
-        </Button>
-      </div>
-    </div>
-  );
+    return (
+        <div
+            id="chat-action"
+            className="absolute bottom-0 hidden group-hover:flex"
+        >
+            <div className="flex h-max items-center justify-center space-x-1 rounded-md border bg-white p-1 shadow">
+                <Button
+                    onClick={() => {
+                        copy(message.content);
+                        toast.success("Copied to clipboard.");
+                    }}
+                    className="h-4 w-4 p-0"
+                    variant="ghost"
+                >
+                    {isCopied ? <CheckMarkIcon /> : <CopyIcon />}
+                </Button>
+                {message.role.toLowerCase() === "user" && (
+                    <Button
+                        onClick={() => regenerateResponse(message.content)}
+                        className="h-4 w-4 p-0"
+                        variant="ghost"
+                    >
+                        <ReloadIcon />
+                    </Button>
+                )}
+            </div>
+        </div>
+    );
 }

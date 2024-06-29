@@ -5,8 +5,8 @@ import { inter } from "@/lib/fonts";
 import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
-    title: "AI by hendryw",
-    description: "A simple application powered by OpenAI.",
+    title: "Chat AI",
+    description: "Simple Chat AI apps.",
 };
 
 export default function RootLayout({
