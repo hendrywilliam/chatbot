@@ -77,38 +77,23 @@ export interface UseChatHelpers {
     clearInput: () => void;
 }
 
-export interface UsePdfChatHelpers {
-    /** Setter function for prompt value. */
-    setPrompt: Dispatch<SetStateAction<string>>;
+export interface SpeechRequestBody {
+    content: string;
+}
 
-    /** Value for prompt form. */
-    prompt: string;
+export interface UseTextToSpeechHelper {
+    /** Method to start speaking. */
+    speak: (content: string) => Promise<void>;
 
-    /** Submit form data handler. */
-    triggerRequest: ({
-        requestMessage,
-    }: {
-        requestMessage: Message;
-    }) => Promise<void>;
+    /** Stop current audio. */
+    stopAudio: () => void;
 
-    /** A setter function to clear prompt input value. */
-    clearPromptInput: () => void;
+    /** Stop fetching data. */
+    stopFetchAudio: () => void;
 
-    /** A trigger to handle submit, this will trigger sequence functions call. */
-    handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
-
-    /** Collection of message from user/assistant/system. */
-    messages: Message[];
-
-    /** Setter function for Messages state. */
-    setMessages: Dispatch<SetStateAction<Message[]>>;
-
-    /** A handler to clear recent messages. */
-    clearRecentChats: () => void;
-
-    /** A loading indicator for current process. */
+    /** This is an indicator to check whether the current browser/environment supports Web Speech API */
     isLoading: boolean;
 
-    /** A trigger to stop current fetching process. */
-    triggerStop: (e: MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    /** This indicates whether the speaking is on going or not. */
+    isSpeaking: boolean;
 }

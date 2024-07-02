@@ -68,7 +68,7 @@ export default function PromptForm({
                             <StopIcon />
                         </Button>
                     ) : (
-                        <Button ref={submitterButton} type="submit" size="icon">
+                        <Button ref={submitterButton} type="submit" size="sm">
                             <EnterIcon />
                         </Button>
                     )}

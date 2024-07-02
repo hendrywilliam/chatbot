@@ -2,11 +2,19 @@
 
 import * as React from "react";
 import { Button } from "@/components/ui/button";
-import { CopyIcon, CheckMarkIcon } from "@/components/ui/icons";
+import {
+    CopyIcon,
+    CheckMarkIcon,
+    SpeechIcon,
+    LoadingIcon,
+    StopIcon,
+} from "@/components/ui/icons";
 import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 import { Message, UseChatHelpers } from "@/types";
 import { ReloadIcon } from "@/components/ui/icons";
 import { toast } from "sonner";
+import { useTextToSpeech } from "@/hooks/use-text-to-speech";
+import { Speech } from "openai/resources/audio/speech.mjs";
 
 interface ChatActionProps extends Pick<UseChatHelpers, "regenerateResponse"> {
     message: Message;
@@ -14,6 +22,8 @@ interface ChatActionProps extends Pick<UseChatHelpers, "regenerateResponse"> {
 
 export function ChatAction({ message, regenerateResponse }: ChatActionProps) {
     const [isCopied, copy] = useCopyToClipboard();
+    const { speak, stopAudio, isLoading, isSpeaking, stopFetchAudio } =
+        useTextToSpeech();
 
     return (
         <div
@@ -38,6 +48,31 @@ export function ChatAction({ message, regenerateResponse }: ChatActionProps) {
                         variant="ghost"
                     >
                         <ReloadIcon />
+                    </Button>
+                )}
+                {isLoading ? (
+                    <Button
+                        className="h-4 w-4 p-0"
+                        variant="ghost"
+                        onClick={() => stopFetchAudio()}
+                    >
+                        <LoadingIcon />
+                    </Button>
+                ) : isSpeaking ? (
+                    <Button
+                        className="h-4 w-4 p-0"
+                        variant="ghost"
+                        onClick={() => stop()}
+                    >
+                        <StopIcon />
+                    </Button>
+                ) : (
+                    <Button
+                        className="h-4 w-4 p-0"
+                        variant="ghost"
+                        onClick={() => speak(message.content)}
+                    >
+                        <SpeechIcon />
                     </Button>
                 )}
             </div>
