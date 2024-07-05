@@ -62,7 +62,7 @@ export function ChatAction({ message, regenerateResponse }: ChatActionProps) {
                     <Button
                         className="h-4 w-4 p-0"
                         variant="ghost"
-                        onClick={() => stop()}
+                        onClick={() => stopAudio()}
                     >
                         <StopIcon />
                     </Button>

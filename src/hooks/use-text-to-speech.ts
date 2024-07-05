@@ -1,6 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import { ElementRef, RefObject, useEffect, useRef, useState } from "react";
+import {
+    ElementRef,
+    RefObject,
+    useCallback,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
 import type { UseTextToSpeechHelper } from "@/types";
 
 export const useTextToSpeech = function (): UseTextToSpeechHelper {
@@ -74,22 +81,29 @@ export const useTextToSpeech = function (): UseTextToSpeechHelper {
         }
     };
 
-    const stopAudio = function () {
-        if (
-            isSpeaking &&
-            audioElementRef.current &&
-            audioElementRef.current.currentTime
-        ) {
-            audioElementRef.current.pause();
-            audioElementRef.current.currentTime = 0;
-        }
-    };
+    const stopAudio = useCallback(
+        function () {
+            if (
+                isSpeaking &&
+                audioElementRef.current &&
+                audioElementRef.current.currentTime
+            ) {
+                audioElementRef.current.pause();
+                audioElementRef.current.currentTime = 0;
+            }
+        },
+        [isSpeaking],
+    );
 
-    const stopFetchAudio = function () {
-        if (signalRef.current) {
-            signalRef.current.abort("user aborted current fetch.");
-        }
-    };
+    const stopFetchAudio = useCallback(
+        function () {
+            if (signalRef.current && isLoading) {
+                signalRef.current.abort();
+            }
+            setIsLoading((isLoading) => !isLoading);
+        },
+        [isLoading],
+    );
 
     useEffect(() => {
         return () => {
