@@ -8,10 +8,26 @@ export const useTextToSpeech = function (): UseTextToSpeechHelper {
     const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
     const sourceFileRef = useRef("");
     const audioElementRef = useRef<ElementRef<"audio"> | null>(null);
+    const audioDurationRef = useRef<number>(0);
     const signalRef = useRef<AbortController | null>(null);
 
     const speak = async function (content: string): Promise<void> {
         try {
+            /** No duplicate request for the same audio. */
+            if (
+                audioElementRef.current &&
+                sourceFileRef.current &&
+                sourceFileRef.current.length > 0 &&
+                audioDurationRef.current > 0
+            ) {
+                setIsSpeaking((isSpeaking) => !isSpeaking);
+                audioElementRef.current.play();
+                setTimeout(() => {
+                    setIsSpeaking((isSpeaking) => !isSpeaking);
+                }, audioDurationRef.current);
+                return;
+            }
+
             setIsLoading((isLoading) => !isLoading);
             signalRef.current = new AbortController();
             const response = await fetch("/api/speech", {
@@ -39,18 +55,18 @@ export const useTextToSpeech = function (): UseTextToSpeechHelper {
                 /** Check for the metadata/data for duration. */
                 audioElement.addEventListener("loadeddata", () => {
                     /** Milli to second. */
-                    const duration = audioElement.duration * 1000 + 5;
+                    audioDurationRef.current = audioElement.duration * 1000 + 5;
+                    setIsSpeaking((isSpeaking) => !isSpeaking);
+                    audioElement.play();
                     setTimeout(() => {
                         setIsSpeaking((isSpeaking) => !isSpeaking);
-                    }, duration);
+                    }, audioDurationRef.current);
                 });
-                setIsSpeaking((isSpeaking) => !isSpeaking);
-                audioElement.play();
             }
         } catch (error) {
             if (
                 error instanceof Error &&
-                error.name.toLocaleLowerCase() === "aborterror"
+                error.name.toLowerCase() === "aborterror"
             ) {
                 return;
             }
