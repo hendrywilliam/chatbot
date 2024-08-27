@@ -31,7 +31,6 @@ export function useChat(): UseChatHelpers {
         });
 
     const [messages, setMessages] = useState<Message[]>([]);
-
     /** Contains messages that are persist between render snapshots. */
     const messagesRef = useRef<Message[]>([]);
 
@@ -99,6 +98,7 @@ export function useChat(): UseChatHelpers {
 
                     if (!response.ok) {
                         setIsLoading(false);
+                        return;
                     }
 
                     const body = response.body as ReadableStream;
@@ -112,21 +112,25 @@ export function useChat(): UseChatHelpers {
                                 reader.releaseLock();
                                 break;
                             }
-
                             const decodedValue = decoder(value) as string;
-
-                            decodedValue
-                                .split("\n")
-                                /** There is an empty string appended after splitting. Need to get rid of it.*/
-                                .filter((value) => Boolean(value))
-                                .map((item) => JSON.parse(item))
-                                .forEach((item: OpenAIStreamOutput) => {
-                                    if ("content" in item.choices[0].delta) {
+                            decodedValue.split("\n").forEach((item) => {
+                                if (item.length === 0) {
+                                    return;
+                                }
+                                try {
+                                    const parsed = JSON.parse(
+                                        item,
+                                    ) as OpenAIStreamOutput;
+                                    if ("content" in parsed.choices[0].delta) {
                                         responseText +=
-                                            item.choices[0].delta.content;
+                                            parsed.choices[0].delta.content ??
+                                            "";
                                     }
                                     return;
-                                });
+                                } catch (error) {
+                                    return;
+                                }
+                            });
                             setMessages(
                                 messagesRef.current.map((item) => {
                                     if (item.id == responseId) {
@@ -136,17 +140,18 @@ export function useChat(): UseChatHelpers {
                                     return item;
                                 }),
                             );
+                        } else {
+                            return;
                         }
                     }
                 } catch (error) {
-                    switch (true) {
-                        case error instanceof DOMException &&
-                            error.name === "AbortError":
-                            setIsLoading(false);
-                            break;
-                        default:
-                            setIsLoading(false);
+                    if (
+                        error instanceof DOMException &&
+                        error.name.toLowerCase() === "aborterror"
+                    ) {
+                        setIsLoading(false);
                     }
+                    return;
                 } finally {
                     setIsLoading(false);
                 }
