@@ -1,0 +1,30 @@
+{
+	"name": "backend",
+	"version": "1.0.0",
+	"main": "index.js",
+	"scripts": {
+		"build": "tsc --build tsconfig.json",
+		"start": "node ./build/index.js",
+		"dev": "tsx watch ./index.ts",
+		"cleanup": "rm -rf build"
+	},
+	"type": "commonjs",
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"description": "",
+	"dependencies": {
+		"@types/express": "^5.0.0",
+		"dotenv": "^16.4.7",
+		"express": "^4.21.2",
+		"openai": "^4.77.3",
+		"pino": "^9.6.0",
+		"pino-http": "^10.3.0",
+		"zod": "^3.24.1"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"tsx": "^4.19.2",
+		"typescript": "^5.7.2"
+	}
+}
