@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { openai } from "@/lib/open-ai";
+import { openai } from "@/utils/open-ai";
 import { SpeechRequestBody } from "@/types";
 
 export async function POST(request: Request) {

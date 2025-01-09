@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { EnterIcon, StopIcon } from "./ui/icons";
+import { SubmitIcon, StopIcon } from "./ui/icons";
 import {
     Dispatch,
     FormEvent,
@@ -33,16 +33,41 @@ export default function PromptForm({
     const promptFormRef = useRef<React.ElementRef<"form">>(null);
     const submitterButton = useRef<React.ElementRef<"button">>(null);
     const enterToSubmit = useEnterToSubmit(promptFormRef, submitterButton);
+    const observer = useRef<ResizeObserver | null>(null);
+
+    function submitForm() {
+        if (promptFormRef.current) {
+            promptFormRef.current.requestSubmit();
+        }
+        return;
+    }
 
     useEffect(() => {
-        inputFormRef.current?.focus();
-        return () => {};
+        if (inputFormRef.current) {
+            inputFormRef.current?.focus();
+            observer.current = new ResizeObserver((entries) => {
+                if (inputFormRef.current) {
+                    if (
+                        inputFormRef.current.scrollHeight >
+                        inputFormRef.current.clientHeight
+                    ) {
+                        inputFormRef.current.style.height = `${inputFormRef.current.scrollHeight}px`;
+                    }
+                }
+            });
+            observer.current.observe(inputFormRef.current);
+        }
+        return () => {
+            if (observer.current) {
+                observer.current.disconnect();
+            }
+        };
     }, []);
 
     return (
-        <div className="rounded border bg-background p-2">
+        <div className="h-fit w-full rounded-xl border bg-background p-3">
             <form
-                className="relative flex h-max w-full space-x-4 bg-background"
+                className="relative flex w-full space-x-4 bg-background"
                 ref={promptFormRef}
                 onSubmit={handleSubmit}
                 onKeyDown={enterToSubmit}
@@ -51,29 +76,37 @@ export default function PromptForm({
                     onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
                         setInput(e.target.value)
                     }
-                    rows={1}
-                    cols={1}
-                    className="w-full resize-none rounded-md pb-8 text-sm focus:outline-none"
+                    className="w-full resize-none rounded-md text-sm focus:outline-none"
+                    style={{
+                        height: "42px",
+                        minHeight: "42px",
+                        maxHeight: "384px",
+                    }}
                     value={input}
                     ref={inputFormRef}
-                    placeholder="Is Millie Bobby Brown going to play Eleven in the next season?"
+                    placeholder="Ask something..."
                 />
-                <div className="flex items-center">
-                    {isLoading ? (
-                        <Button
-                            onClick={(e) => triggerStop(e)}
-                            type="button"
-                            size="sm"
-                        >
-                            <StopIcon />
-                        </Button>
-                    ) : (
-                        <Button ref={submitterButton} type="submit" size="sm">
-                            <EnterIcon />
-                        </Button>
-                    )}
-                </div>
             </form>
+            <div className="flex justify-end">
+                {isLoading ? (
+                    <Button
+                        onClick={(e) => triggerStop(e)}
+                        type="button"
+                        size="xs"
+                    >
+                        <StopIcon />
+                    </Button>
+                ) : (
+                    <Button
+                        ref={submitterButton}
+                        type="button"
+                        onClick={submitForm}
+                        size="xs"
+                    >
+                        <SubmitIcon />
+                    </Button>
+                )}
+            </div>
         </div>
     );
 }

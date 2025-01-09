@@ -14,7 +14,6 @@ import { Message, UseChatHelpers } from "@/types";
 import { ReloadIcon } from "@/components/ui/icons";
 import { toast } from "sonner";
 import { useTextToSpeech } from "@/hooks/use-text-to-speech";
-import { Speech } from "openai/resources/audio/speech.mjs";
 
 interface ChatActionProps extends Pick<UseChatHelpers, "regenerateResponse"> {
     message: Message;

@@ -317,7 +317,7 @@ export function LoadingIcon(props: SVGProps<SVGSVGElement>) {
     );
 }
 
-export function EnterIcon(props: SVGProps<SVGSVGElement>) {
+export function SubmitIcon(props: SVGProps<SVGSVGElement>) {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -328,7 +328,7 @@ export function EnterIcon(props: SVGProps<SVGSVGElement>) {
         >
             <path
                 fill="currentColor"
-                d="m10 21l-6-6l6.025-6.025l1.4 1.425l-3.6 3.6H17V4h2v12H7.825l3.6 3.575z"
+                d="M11.5 19V6.921l-5.792 5.793L5 12l7-7l7 7l-.708.714L12.5 6.92V19z"
             ></path>
         </svg>
     );

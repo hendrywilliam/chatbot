@@ -14,7 +14,7 @@ import type {
     UseChatHelpers,
 } from "@/types";
 import { nanoid } from "nanoid";
-import { decode } from "@/lib/utils";
+import { decode } from "@/utils/text-decoder";
 import { OpenAIStreamOutput } from "@/types/open-ai";
 
 export function useChat(): UseChatHelpers {
@@ -31,7 +31,7 @@ export function useChat(): UseChatHelpers {
         });
 
     const [messages, setMessages] = useState<Message[]>([]);
-    /** Contains messages that are persist between render snapshots. */
+
     const messagesRef = useRef<Message[]>([]);
 
     useEffect(() => {
@@ -44,15 +44,11 @@ export function useChat(): UseChatHelpers {
 
     const triggerRequest = useCallback(
         async (requestMessage: Message) => {
-            /** Append new messages into message[]. */
             setMessages([...messages, { ...requestMessage }]);
 
-            /** Response identifier for mutation. */
             const responseId = nanoid();
 
             const now = new Date();
-
-            /** Construct response message object. */
             const responseMessage = {
                 id: responseId,
                 role: "assistant",
@@ -61,12 +57,8 @@ export function useChat(): UseChatHelpers {
             } satisfies Message;
 
             messagesRef.current = [...messagesRef.current, requestMessage];
-
             setMessages((messages) => [...messages, { ...responseMessage }]);
-
             setIsLoading(true);
-
-            /** Attach controller to control the fetching process. */
             abortControllerRef.current = new AbortController();
 
             startTransition(async () => {
@@ -93,14 +85,11 @@ export function useChat(): UseChatHelpers {
                         },
                         signal: abortControllerRef.current?.signal,
                     });
-
                     const decoder = decode();
-
                     if (!response.ok) {
                         setIsLoading(false);
                         return;
                     }
-
                     const body = response.body as ReadableStream;
                     const reader = body.getReader();
                     let responseText = "";
@@ -117,6 +106,7 @@ export function useChat(): UseChatHelpers {
                                 if (item.length === 0) {
                                     return;
                                 }
+                                item = item.replaceAll(/^data: /g, "");
                                 try {
                                     const parsed = JSON.parse(
                                         item,
@@ -145,12 +135,6 @@ export function useChat(): UseChatHelpers {
                         }
                     }
                 } catch (error) {
-                    if (
-                        error instanceof DOMException &&
-                        error.name.toLowerCase() === "aborterror"
-                    ) {
-                        setIsLoading(false);
-                    }
                     return;
                 } finally {
                     setIsLoading(false);
@@ -197,7 +181,6 @@ export function useChat(): UseChatHelpers {
         [input, setInput, append],
     );
 
-    /** A trigger to stop stream. It will gives a signal to server, then stop streaming. */
     const triggerStop = useCallback(
         (e: MouseEvent<HTMLButtonElement, MouseEvent>) => {
             e.preventDefault();

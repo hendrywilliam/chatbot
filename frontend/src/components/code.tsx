@@ -4,7 +4,7 @@ import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { CopyIcon, CheckMarkIcon } from "@/components/ui/icons";
 import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
-import { fira_code } from "@/lib/fonts";
+import { fira_code } from "@/utils/fonts";
 
 interface CodeProps
     extends React.DetailedHTMLProps<

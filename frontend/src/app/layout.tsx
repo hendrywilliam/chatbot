@@ -1,7 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
-import { inter } from "@/lib/fonts";
+import { inter } from "@/utils/fonts";
 import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
