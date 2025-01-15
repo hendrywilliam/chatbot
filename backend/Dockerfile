@@ -6,6 +6,7 @@ FROM node:23-alpine${NODE_ALPINE_VERSION} AS builder
 WORKDIR /build-stage
 COPY package*.json ./
 COPY . ./
+RUN npm install
 RUN npm run build
 
 # Run stage.
@@ -15,7 +16,6 @@ RUN apk add --no-cache libstdc++ tini \
   && addgroup -g 1000 node && adduser -u 1000 -G node -s /bin/sh -D node \
   && chown node:node ./
 
-COPY .env .
 COPY --from=builder /usr/local/bin/node /usr/local/bin/
 COPY --from=builder /usr/local/bin/docker-entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["docker-entrypoint.sh"]
