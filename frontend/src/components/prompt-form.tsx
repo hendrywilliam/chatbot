@@ -33,7 +33,6 @@ export default function PromptForm({
     const promptFormRef = useRef<React.ElementRef<"form">>(null);
     const submitterButton = useRef<React.ElementRef<"button">>(null);
     const enterToSubmit = useEnterToSubmit(promptFormRef, submitterButton);
-    const observer = useRef<ResizeObserver | null>(null);
 
     function submitForm() {
         if (promptFormRef.current) {
@@ -44,24 +43,9 @@ export default function PromptForm({
 
     useEffect(() => {
         if (inputFormRef.current) {
-            inputFormRef.current?.focus();
-            observer.current = new ResizeObserver((entries) => {
-                if (inputFormRef.current) {
-                    if (
-                        inputFormRef.current.scrollHeight >
-                        inputFormRef.current.clientHeight
-                    ) {
-                        inputFormRef.current.style.height = `${inputFormRef.current.scrollHeight}px`;
-                    }
-                }
-            });
-            observer.current.observe(inputFormRef.current);
+            inputFormRef.current.focus();
         }
-        return () => {
-            if (observer.current) {
-                observer.current.disconnect();
-            }
-        };
+        return () => {};
     }, []);
 
     return (
@@ -76,6 +60,10 @@ export default function PromptForm({
                     onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
                         setInput(e.target.value)
                     }
+                    onInput={(event) => {
+                        event.currentTarget.style.height = "auto";
+                        event.currentTarget.style.height = `${event.currentTarget.scrollHeight}px`;
+                    }}
                     className="w-full resize-none rounded-md text-sm focus:outline-none"
                     style={{
                         height: "42px",

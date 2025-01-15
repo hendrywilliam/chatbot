@@ -1,0 +1,17 @@
+name: chatbot_api
+
+services:
+    chatbot_api:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.chatbot_api.rule=Host(`bahanbakarnasi.cloud`)"
+            - "traefik.http.routers.chatbot_api.entrypoints=websecure"
+            - "traefik.http.routers.chatbot_api.tls.certresolver=myresolver"
+        networks:
+            - traefik_default
+networks:
+    traefik_default:
+        external: true
