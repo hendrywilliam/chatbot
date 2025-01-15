@@ -1,4 +1,4 @@
-import express from "express";
+import express, { type Request, Response } from "express";
 import { log } from "./utils/log";
 import pinohttp from "pino-http";
 import { completion } from "./controllers/completion";
@@ -11,6 +11,10 @@ app.use(express.json());
 app.use(pinohttp());
 app.use(cors());
 
+app.get("/", (req: Request, res: Response) => {
+    res.send("hehe hii :D");
+});
+
 app.post("/completion", completion);
 
 const server = app.listen(PORT, async () => {
@@ -21,9 +25,6 @@ async function gracefulShutdown(signal: NodeJS.Signals) {
     console.log(`signal: ${signal} accepted.`);
     server.close(() => {
         console.log("http server closed.");
-        setTimeout(() => {
-            console.log("hi mom");
-        }, 5000);
         process.exit(0);
     });
 }
