@@ -3,6 +3,7 @@ import { log } from "./utils/log";
 import pinohttp from "pino-http";
 import { completion } from "./controllers/completion";
 import cors from "cors";
+import { thouShallVerifyHMAC } from "./middleware/verify-hmac";
 
 const PORT = 3000;
 const app = express();
@@ -15,6 +16,7 @@ app.get("/", (req: Request, res: Response) => {
     res.send("hehe hii :D");
 });
 
+app.use(thouShallVerifyHMAC);
 app.post("/completion", completion);
 
 const server = app.listen(PORT, async () => {

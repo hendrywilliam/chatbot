@@ -1,6 +1,6 @@
 import "dotenv/config";
-import { openai } from "@/utils/open-ai";
 import { ChatRequestBody } from "@/types/open-ai";
+import { createHmac } from "@/utils/hmac";
 
 export const runtime = "nodejs";
 
@@ -8,12 +8,15 @@ export async function POST(request: Request) {
     try {
         const body = (await request.json()) as ChatRequestBody;
         const signal = request.signal;
+        const mac = createHmac(`POST|/completion`);
         const response = await fetch(
             "https://bahanbakarnasi.cloud/completion",
             {
                 method: "POST",
                 headers: {
                     "content-type": "application/json",
+                    "x-auth": mac,
+                    accept: "text/event-stream;application/alto-error+json",
                 },
                 body: JSON.stringify({
                     messages: body.messages,
