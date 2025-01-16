@@ -1,6 +1,7 @@
 import "dotenv/config";
 import { ChatRequestBody } from "@/types/open-ai";
 import { createHmac } from "@/utils/hmac";
+import "dotenv/config";
 
 export const runtime = "nodejs";
 
@@ -10,13 +11,13 @@ export async function POST(request: Request) {
         const signal = request.signal;
         const mac = createHmac(`POST|/completion`);
         const response = await fetch(
-            "https://bahanbakarnasi.cloud/completion",
+            `${process.env.BACKEND_BASE_URL}/completion`,
             {
                 method: "POST",
                 headers: {
                     "content-type": "application/json",
                     "x-auth": mac,
-                    accept: "text/event-stream;application/alto-error+json",
+                    accept: "text/event-stream",
                 },
                 body: JSON.stringify({
                     messages: body.messages,
@@ -34,7 +35,7 @@ export async function POST(request: Request) {
         });
     } catch (error) {
         return Response.json(
-            { message: (error as Error).message || "Internal Server Error" },
+            { message: "internal server error" },
             { status: 500 },
         );
     }

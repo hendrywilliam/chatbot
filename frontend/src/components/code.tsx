@@ -33,7 +33,7 @@ export const Code = React.memo(function Code({
                 </Button>
             </div>
             <code
-                className={`${fira_code.className} box-border inline-block w-full overflow-x-auto whitespace-pre-wrap rounded-b bg-code-preview p-4 text-left text-white`}
+                className={`${fira_code.className} w-full overflow-x-auto whitespace-pre-wrap rounded-b bg-code-preview p-4 text-left text-white`}
                 {...props}
             >
                 {children}

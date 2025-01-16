@@ -28,7 +28,7 @@ export default function ChatPanel({
     clearInput,
 }: ChatPanelProps) {
     return (
-        <div className="fixed inset-x-0 bottom-0 mx-auto flex w-[95%] flex-col items-center gap-2 rounded-t p-4 xl:w-[35%]">
+        <div className="fixed inset-x-0 bottom-0 mx-auto flex w-full flex-col items-center gap-2 rounded-t p-4 lg:w-[40%]">
             <PromptForm
                 setInput={setInput}
                 input={input}

@@ -34,13 +34,6 @@ export default function PromptForm({
     const submitterButton = useRef<React.ElementRef<"button">>(null);
     const enterToSubmit = useEnterToSubmit(promptFormRef, submitterButton);
 
-    function submitForm() {
-        if (promptFormRef.current) {
-            promptFormRef.current.requestSubmit();
-        }
-        return;
-    }
-
     useEffect(() => {
         if (inputFormRef.current) {
             inputFormRef.current.focus();
@@ -49,9 +42,9 @@ export default function PromptForm({
     }, []);
 
     return (
-        <div className="h-fit w-full rounded-xl border bg-background p-3">
+        <div className="h-fit w-full rounded-xl border bg-gray-50 p-3 shadow-lg">
             <form
-                className="relative flex w-full space-x-4 bg-background"
+                className="relative flex w-full flex-col space-x-4"
                 ref={promptFormRef}
                 onSubmit={handleSubmit}
                 onKeyDown={enterToSubmit}
@@ -64,7 +57,7 @@ export default function PromptForm({
                         event.currentTarget.style.height = "auto";
                         event.currentTarget.style.height = `${event.currentTarget.scrollHeight}px`;
                     }}
-                    className="w-full resize-none rounded-md text-sm focus:outline-none"
+                    className="w-full resize-none rounded-md bg-gray-50 text-sm focus:outline-none"
                     style={{
                         height: "42px",
                         minHeight: "42px",
@@ -74,27 +67,22 @@ export default function PromptForm({
                     ref={inputFormRef}
                     placeholder="Ask something..."
                 />
+                <div className="flex justify-end">
+                    {isLoading ? (
+                        <Button
+                            onClick={(e) => triggerStop(e)}
+                            type="button"
+                            size="xs"
+                        >
+                            <StopIcon />
+                        </Button>
+                    ) : (
+                        <Button ref={submitterButton} type="submit" size="xs">
+                            <SubmitIcon />
+                        </Button>
+                    )}
+                </div>
             </form>
-            <div className="flex justify-end">
-                {isLoading ? (
-                    <Button
-                        onClick={(e) => triggerStop(e)}
-                        type="button"
-                        size="xs"
-                    >
-                        <StopIcon />
-                    </Button>
-                ) : (
-                    <Button
-                        ref={submitterButton}
-                        type="button"
-                        onClick={submitForm}
-                        size="xs"
-                    >
-                        <SubmitIcon />
-                    </Button>
-                )}
-            </div>
         </div>
     );
 }

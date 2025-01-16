@@ -39,40 +39,24 @@ export interface ChatCompletionModelSettings
 export interface UseChatHelpers {
     /** Is basically a fetch. */
     triggerRequest: (requestMessage: Message) => Promise<void>;
-
     /** Array of objects, each message contain role, content, date, and its id. */
     messages: Message[];
-
     /** Setter function for isLoading. */
     setIsLoading: Dispatch<React.SetStateAction<boolean>>;
-
     /** This is indicates whether the fetching/streaming is processing or not. */
     isLoading: boolean;
-
     /** Handler for trigger fetching from network. */
     handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
-
     /** Value from prompt form. */
     input: string;
-
     /** Setter function for form input. */
     setInput: Dispatch<SetStateAction<string>>;
-
     /** Handler to stop asynchronous process (fetching data from network and stop the stream). */
     triggerStop: (e: MouseEvent<HTMLButtonElement, any>) => void;
-
     /** Clear recent chats. */
     clearChats: (e: MouseEvent<HTMLButtonElement, any>) => void;
-
     /** Re-generate last response, including the request message. */
     regenerateResponse: (content: string) => void;
-
-    /** Setter function for llm settings. */
-    setModelSettings: Dispatch<SetStateAction<ChatCompletionModelSettings>>;
-
-    /** Value for llm settings. */
-    modelSettings: ChatCompletionModelSettings;
-
     /** Clear recent input value. */
     clearInput: () => void;
 }

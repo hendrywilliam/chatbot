@@ -3,7 +3,7 @@ import { log } from "./utils/log";
 import pinohttp from "pino-http";
 import { completion } from "./controllers/completion";
 import cors from "cors";
-import { thouShallVerifyHMAC } from "./middleware/verify-hmac";
+import { thouShallVerifyHMAC } from "./middlewares/verify-hmac";
 
 const PORT = 3000;
 const app = express();

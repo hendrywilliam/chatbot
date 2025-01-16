@@ -20,7 +20,6 @@ export default function Chat() {
         triggerStop,
         clearChats,
         regenerateResponse,
-        modelSettings,
         clearInput,
     } = useChat();
 
@@ -55,12 +54,11 @@ export default function Chat() {
         <>
             <div
                 ref={chatListRef}
-                className="relative mx-auto w-full flex-1 overflow-y-auto bg-bg-ui-bg-component pt-16"
+                className="relative mx-auto w-full flex-1 overflow-y-auto pt-16"
             >
                 <ChatList
                     messages={messages}
                     setInput={setInput}
-                    modelSettings={modelSettings}
                     regenerateResponse={regenerateResponse}
                 />
                 <ChatAnchor ref={chatAnchorRef} className="h-32" />

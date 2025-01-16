@@ -5,8 +5,8 @@ import { inter } from "@/utils/fonts";
 import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
-    title: "Chat AI",
-    description: "Simple Chat AI apps.",
+    title: "Chatbot",
+    description: "A chat bot, built on top of OpenAI model.",
 };
 
 export default function RootLayout({

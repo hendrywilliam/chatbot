@@ -328,7 +328,7 @@ export function SubmitIcon(props: SVGProps<SVGSVGElement>) {
         >
             <path
                 fill="currentColor"
-                d="M11.5 19V6.921l-5.792 5.793L5 12l7-7l7 7l-.708.714L12.5 6.92V19z"
+                d="m4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8z"
             ></path>
         </svg>
     );

@@ -1,5 +1,9 @@
-import Chat from "@/components/chat"
+import Chat from "@/components/chat";
 
 export default function IndexPage() {
-  return <Chat />;
+    return (
+        <main>
+            <Chat />
+        </main>
+    );
 }

@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-
 import {
     useRef,
     useTransition,
@@ -8,11 +6,7 @@ import {
     useCallback,
     MouseEvent,
 } from "react";
-import type {
-    ChatCompletionModelSettings,
-    Message,
-    UseChatHelpers,
-} from "@/types";
+import type { Message, UseChatHelpers } from "@/types";
 import { nanoid } from "nanoid";
 import { decode } from "@/utils/text-decoder";
 import { OpenAIStreamOutput } from "@/types/open-ai";
@@ -20,28 +14,14 @@ import { OpenAIStreamOutput } from "@/types/open-ai";
 export function useChat(): UseChatHelpers {
     const abortControllerRef = useRef<AbortController | null>(null);
     const [isPending, startTransition] = useTransition();
-
-    const [modelSettings, setModelSettings] =
-        useState<ChatCompletionModelSettings>({
-            model: "gpt-3.5-turbo",
-            temperature: 1,
-            max_tokens: 500,
-            top_p: 1,
-            presence_penalty: 0,
-        });
-
     const [messages, setMessages] = useState<Message[]>([]);
-
     const messagesRef = useRef<Message[]>([]);
-
     useEffect(() => {
         messagesRef.current = messages;
     }, [messages]);
 
     const [input, setInput] = useState("");
-
     const [isLoading, setIsLoading] = useState(false);
-
     const triggerRequest = useCallback(
         async (requestMessage: Message) => {
             setMessages([...messages, { ...requestMessage }]);
@@ -66,19 +46,12 @@ export function useChat(): UseChatHelpers {
                     const response = await fetch("/api/chat", {
                         method: "POST",
                         body: JSON.stringify({
-                            model: modelSettings.model ?? "gpt-3.5-turbo",
                             messages: messagesRef.current.map((item) => {
                                 return {
                                     role: item.role,
                                     content: item.content,
                                 };
                             }),
-                            temperature: modelSettings.temperature ?? 1,
-                            stream: true,
-                            max_tokens: modelSettings.max_tokens ?? 500,
-                            top_p: modelSettings.top_p ?? 1,
-                            presence_penaly:
-                                modelSettings.presence_penalty ?? 0,
                         }),
                         headers: {
                             "Content-Type": "application/json",
@@ -141,7 +114,6 @@ export function useChat(): UseChatHelpers {
                 }
             });
         },
-        //eslint-disable-next-line
         [input, messages],
     );
 
@@ -154,7 +126,6 @@ export function useChat(): UseChatHelpers {
 
             triggerRequest(requestMessage);
         },
-        // eslint-disable-next-line
         [messages, triggerRequest],
     );
 
@@ -177,7 +148,6 @@ export function useChat(): UseChatHelpers {
 
             setInput("");
         },
-        //eslint-disable-next-line
         [input, setInput, append],
     );
 
@@ -246,8 +216,6 @@ export function useChat(): UseChatHelpers {
         triggerStop,
         clearChats,
         regenerateResponse,
-        modelSettings,
-        setModelSettings,
         clearInput,
     };
 }
