@@ -21,4 +21,4 @@ jobs:
                       cd chatbot/backend/
                       docker compose down
                       git pull origin main
-                      docker compose up -d chatbot_api
+                      docker compose up --build --detach chatbot_api

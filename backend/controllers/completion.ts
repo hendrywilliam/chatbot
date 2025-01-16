@@ -3,19 +3,28 @@ import { openai } from "../utils/openai";
 import { CompletionRequest } from "../types/completion";
 
 export const completion = async function (req: Request, res: Response) {
+    const ac = new AbortController();
+    function close() {
+        ac.abort();
+        req.log.info("connection aborted");
+    }
     try {
         const body = req.body as CompletionRequest;
-        req.socket.addListener("close", () => {
-            req.log.info("connection closed.");
-        });
-        const completion = await openai.chat.completions.create({
-            model: "gpt-4o-mini",
-            messages: [
-                { role: "developer", content: "You are a helpful assistant." },
-                ...body.messages,
-            ],
-            stream: true,
-        });
+        req.socket.addListener("close", close);
+        const completion = await openai.chat.completions.create(
+            {
+                model: "gpt-4o-mini",
+                messages: [
+                    {
+                        role: "developer",
+                        content: "You are a helpful assistant.",
+                    },
+                    ...body.messages,
+                ],
+                stream: true,
+            },
+            { signal: ac.signal }
+        );
         res.writeHead(200, {
             "content-type": "text/event-stream",
             connection: "keep-alive",
@@ -42,6 +51,6 @@ export const completion = async function (req: Request, res: Response) {
         }
         res.end();
     } finally {
-        req.socket.removeAllListeners();
+        req.socket.removeListener("close", close);
     }
 };
