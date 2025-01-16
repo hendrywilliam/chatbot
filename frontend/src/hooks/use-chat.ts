@@ -126,7 +126,7 @@ export function useChat(): UseChatHelpers {
 
             triggerRequest(requestMessage);
         },
-        [messages, triggerRequest],
+        [triggerRequest],
     );
 
     const handleSubmit = useCallback(
@@ -148,7 +148,7 @@ export function useChat(): UseChatHelpers {
 
             setInput("");
         },
-        [input, setInput, append],
+        [setInput, append],
     );
 
     const triggerStop = useCallback(
@@ -172,7 +172,7 @@ export function useChat(): UseChatHelpers {
             setMessages([]);
             return;
         },
-        [isLoading, triggerStop],
+        [triggerStop],
     );
 
     const regenerateResponse = useCallback(

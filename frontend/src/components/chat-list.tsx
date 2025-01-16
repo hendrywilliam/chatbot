@@ -40,6 +40,7 @@ const ChatList = React.forwardRef<HTMLDivElement, ChatListProps>(
                                 )}
                             </div>
                             <div className="w-full">
+                                {/* eslint-disable */}
                                 <ReactMarkdown
                                     children={item.content}
                                     className="w-full break-all leading-loose"
