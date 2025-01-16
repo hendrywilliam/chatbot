@@ -8,23 +8,20 @@ export async function POST(request: Request) {
     try {
         const body = (await request.json()) as ChatRequestBody;
         const signal = request.signal;
-        const chatCompletion = await openai.chat.completions.create(
+        const response = await fetch(
+            "https://bahanbakarnasi.cloud/completion",
             {
-                messages: [
-                    { role: "system", content: "You are a helpful assistant" },
-                    ...(body.messages ?? []),
-                ],
-                model: body.model,
-                stream: true,
-                temperature: body.temperature,
-                max_tokens: body.max_tokens,
-                top_p: body.top_p,
-                presence_penalty: body.presence_penalty,
+                method: "POST",
+                headers: {
+                    "content-type": "application/json",
+                },
+                body: JSON.stringify({
+                    messages: body.messages,
+                }),
+                signal: signal,
             },
-            { signal: signal },
         );
-
-        return new Response(chatCompletion.toReadableStream(), {
+        return new Response(response.body, {
             headers: {
                 "Content-Type": "text/event-stream",
                 Connection: "keep-alive",
