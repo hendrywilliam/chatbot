@@ -13,7 +13,9 @@ export const thouShallVerifyHMAC = function (
             throw new Error("No auth provided");
         }
         const mac = createHmac(
-            `${req.method.toUpperCase()}|${req.originalUrl}`
+            `${req.method.toUpperCase()}|${req.originalUrl}|${JSON.stringify(
+                req.body
+            )}`
         );
         const equal = crypto.timingSafeEqual(
             Buffer.from(mac),
@@ -22,6 +24,7 @@ export const thouShallVerifyHMAC = function (
         if (!equal) {
             throw new Error("Mac is not equal.");
         }
+        console.log("is equal");
         next();
     } catch (error: unknown) {
         req.log.error((error as Error).message ?? "Something went wrong.");

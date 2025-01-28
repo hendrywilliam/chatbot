@@ -9,7 +9,7 @@ export async function POST(request: Request) {
     try {
         const body = (await request.json()) as ChatRequestBody;
         const signal = request.signal;
-        const mac = createHmac(`POST|/completion`);
+        const mac = createHmac(`POST|/completion|${JSON.stringify(body)}`);
         const response = await fetch(
             `${process.env.BACKEND_BASE_URL}/completion`,
             {
