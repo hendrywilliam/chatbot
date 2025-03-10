@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Button } from "@/components/ui/button";
-import { CopyIcon, CheckMarkIcon } from "@/components/ui/icons";
+import { Icons } from "./ui/icons";
 import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 import { fira_code } from "@/utils/fonts";
 
@@ -28,8 +28,8 @@ export const Code = React.memo(function Code({
                 className="flex w-full items-center justify-between rounded-t-md bg-code px-4 py-2 outline-none"
             >
                 <p className="text-xs text-white">{language}</p>
-                <Button size={"xs"} onClick={() => copy(children as string)}>
-                    {isCopy ? <CheckMarkIcon /> : <CopyIcon />}
+                <Button size="icon" onClick={() => copy(children as string)}>
+                    {isCopy ? <Icons.checkmark /> : <Icons.copy />}
                 </Button>
             </div>
             <code

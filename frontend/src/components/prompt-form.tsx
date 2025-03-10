@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { SubmitIcon, StopIcon } from "./ui/icons";
+import { Icons } from "./ui/icons";
 import {
     Dispatch,
     FormEvent,
@@ -42,47 +42,45 @@ export default function PromptForm({
     }, []);
 
     return (
-        <div className="h-fit w-full rounded-xl border bg-gray-50 p-3 shadow-lg">
-            <form
-                className="relative flex w-full flex-col space-x-4"
-                ref={promptFormRef}
-                onSubmit={handleSubmit}
-                onKeyDown={enterToSubmit}
-            >
-                <textarea
-                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                        setInput(e.target.value)
-                    }
-                    onInput={(event) => {
-                        event.currentTarget.style.height = "auto";
-                        event.currentTarget.style.height = `${event.currentTarget.scrollHeight}px`;
-                    }}
-                    className="w-full resize-none rounded-md bg-gray-50 text-sm focus:outline-none"
-                    style={{
-                        height: "42px",
-                        minHeight: "42px",
-                        maxHeight: "384px",
-                    }}
-                    value={input}
-                    ref={inputFormRef}
-                    placeholder="Ask something..."
-                />
-                <div className="flex justify-end">
-                    {isLoading ? (
-                        <Button
-                            onClick={(e) => triggerStop(e)}
-                            type="button"
-                            size="xs"
-                        >
-                            <StopIcon />
-                        </Button>
-                    ) : (
-                        <Button ref={submitterButton} type="submit" size="xs">
-                            <SubmitIcon />
-                        </Button>
-                    )}
-                </div>
-            </form>
-        </div>
+        <form
+            className="flex flex-col space-x-4 border p-base rounded-md w-full md:max-w-3xl"
+            ref={promptFormRef}
+            onSubmit={handleSubmit}
+            onKeyDown={enterToSubmit}
+        >
+            <textarea
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                    setInput(e.target.value)
+                }
+                onInput={(event) => {
+                    event.currentTarget.style.height = "auto";
+                    event.currentTarget.style.height = `${event.currentTarget.scrollHeight}px`;
+                }}
+                className="w-full resize-none rounded-md focus:outline-none"
+                style={{
+                    height: "48px",
+                    minHeight: "48px",
+                    maxHeight: "264px",
+                }}
+                value={input}
+                ref={inputFormRef}
+                placeholder="Send a message..."
+            />
+            <div className="flex justify-end">
+                {isLoading ? (
+                    <Button
+                        onClick={(e) => triggerStop(e)}
+                        type="button"
+                        size="sm"
+                    >
+                        <Icons.stop />
+                    </Button>
+                ) : (
+                    <Button ref={submitterButton} type="submit" size="sm">
+                        <Icons.submit />
+                    </Button>
+                )}
+            </div>
+        </form>
     );
 }

@@ -1,105 +1,64 @@
 "use client";
 
 import { UseChatHelpers } from "@/types";
-import * as React from "react";
-import { EmptyScreen } from "@/components/empty-screen";
-import { OpenAIIcon, UserIcon } from "@/components/ui/icons";
-import { ChatAction } from "@/components/chat-action";
-import ReactMarkdown from "react-markdown";
-import { Code } from "@/components/code";
+import { inter } from "@/utils/fonts";
+import { ElementRef, useRef, useEffect } from "react";
+import { AIChatMessage, UserChatMessage } from "./chat-message";
 
 interface ChatListProps
     extends Pick<
             UseChatHelpers,
-            "messages" | "setInput" | "regenerateResponse"
+            "messages" | "setInput" | "regenerateResponse" | "isLoading"
         >,
         React.HTMLAttributes<HTMLDivElement> {}
 
-const ChatList = React.forwardRef<HTMLDivElement, ChatListProps>(
-    ({ messages, setInput, regenerateResponse, ...props }, ref) => {
-        return (
-            <div
-                ref={ref}
-                className="mx-auto mb-36 flex w-full flex-1 flex-col overflow-x-hidden p-4 lg:w-[40%]"
-            >
-                {messages.length > 0 ? (
-                    messages.map((item) => (
-                        <div
-                            className="group relative flex h-max w-full gap-6 py-6 xl:gap-6"
-                            key={item.id}
-                        >
-                            <div>
-                                {item.role === "user" ? (
-                                    <div className="inline-flex h-8 w-8 items-center justify-center rounded-md border bg-white shadow">
-                                        <UserIcon />
-                                    </div>
-                                ) : (
-                                    <div className="inline-flex h-8 w-8 items-center justify-center rounded-md border bg-black shadow">
-                                        <OpenAIIcon fill="white" />
-                                    </div>
-                                )}
-                            </div>
-                            <div className="w-full">
-                                {/* eslint-disable */}
-                                <ReactMarkdown
-                                    children={item.content}
-                                    className="w-full break-all leading-loose"
-                                    components={{
-                                        p({ children }) {
-                                            return (
-                                                <p className="mb-4 w-full">
-                                                    {children}
-                                                </p>
-                                            );
-                                        },
-                                        li({ children }) {
-                                            return (
-                                                <li className="mb-1">
-                                                    {children}
-                                                </li>
-                                            );
-                                        },
-                                        code({
-                                            node,
-                                            inline,
-                                            className,
-                                            children,
-                                            ...props
-                                        }) {
-                                            const match = /language-(\w+)/.exec(
-                                                className || "",
-                                            );
-                                            return !inline && match ? (
-                                                <Code
-                                                    language={
-                                                        match[0].split("-")[1]
-                                                    }
-                                                    {...props}
-                                                >
-                                                    {children}
-                                                </Code>
-                                            ) : (
-                                                <code className="rounded-full border border-border p-1 px-2 font-inter">
-                                                    {children}
-                                                </code>
-                                            );
-                                        },
-                                    }}
-                                />
-                                <ChatAction
-                                    message={item}
-                                    regenerateResponse={regenerateResponse}
-                                />
-                            </div>
-                        </div>
-                    ))
-                ) : (
-                    <EmptyScreen setInput={setInput} />
-                )}
-            </div>
-        );
-    },
-);
+export default function ChatList({
+    messages,
+    setInput,
+    regenerateResponse,
+    isLoading,
+    ...props
+}: ChatListProps) {
+    const chatlistRef = useRef<ElementRef<"div">>(null);
 
-ChatList.displayName = "ChatList";
-export default ChatList;
+    useEffect(() => {
+        const chatList = chatlistRef.current;
+        if (!chatList) return;
+        const isAtBottom =
+            chatList.scrollTop + chatList.clientHeight >=
+            chatList.scrollHeight - 10;
+        if (!isAtBottom) {
+            chatList.scrollTo({
+                top: chatList.scrollHeight,
+                behavior: "smooth",
+            });
+        }
+        return () => {};
+    }, [messages, isLoading]);
+
+    return (
+        <div
+            ref={chatlistRef}
+            className={`h-full flex-1 overflow-y-auto justify-center flex ${inter.className} py-24`}
+        >
+            <div className="flex flex-col md:max-w-3xl w-full">
+                {messages.length > 0 &&
+                    messages.map((item) =>
+                        item.role === "user" ? (
+                            <UserChatMessage
+                                content={item.content}
+                                id={item.id}
+                                key={item.id}
+                            />
+                        ) : item.role === "assistant" ? (
+                            <AIChatMessage
+                                content={item.content}
+                                key={item.id}
+                                id={item.id}
+                            />
+                        ) : null
+                    )}
+            </div>
+        </div>
+    );
+}

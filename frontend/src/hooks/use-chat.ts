@@ -9,7 +9,7 @@ import {
 import type { Message, UseChatHelpers } from "@/types";
 import { nanoid } from "nanoid";
 import { decode } from "@/utils/text-decoder";
-import { GenerateContentResponse, GenerateContentStreamResult } from "@google/generative-ai";
+import { GenerateContentResponse } from "@google/generative-ai";
 
 export function useChat(): UseChatHelpers {
     const abortControllerRef = useRef<AbortController | null>(null);
@@ -52,7 +52,7 @@ export function useChat(): UseChatHelpers {
                                     parts: [
                                         {
                                             text: item.content,
-                                        }
+                                        },
                                     ],
                                 };
                             }),
@@ -86,10 +86,12 @@ export function useChat(): UseChatHelpers {
                                 item = item.replaceAll(/^data: /g, "");
                                 try {
                                     const parsed = JSON.parse(
-                                        item,
+                                        item
                                     ) as GenerateContentResponse;
                                     if (parsed.candidates) {
-                                        responseText += parsed.candidates[0].content.parts[0].text || ""
+                                        responseText +=
+                                            parsed.candidates[0].content
+                                                .parts[0].text || "";
                                     }
                                     return;
                                 } catch (error) {
@@ -103,7 +105,7 @@ export function useChat(): UseChatHelpers {
                                         return item;
                                     }
                                     return item;
-                                }),
+                                })
                             );
                         } else {
                             return;
@@ -116,7 +118,7 @@ export function useChat(): UseChatHelpers {
                 }
             });
         },
-        [input, messages],
+        [input, messages]
     );
 
     /** Trigger Fetch and append a message to Message[] */
@@ -128,7 +130,7 @@ export function useChat(): UseChatHelpers {
 
             triggerRequest(requestMessage);
         },
-        [triggerRequest],
+        [triggerRequest]
     );
 
     const handleSubmit = useCallback(
@@ -150,7 +152,7 @@ export function useChat(): UseChatHelpers {
 
             setInput("");
         },
-        [setInput, append],
+        [setInput, append]
     );
 
     const triggerStop = useCallback(
@@ -158,12 +160,12 @@ export function useChat(): UseChatHelpers {
             e.preventDefault();
             if (abortControllerRef.current) {
                 abortControllerRef.current.abort(
-                    "Stream request aborted by user.",
+                    "Stream request aborted by user."
                 );
             }
             return;
         },
-        [],
+        []
     );
 
     const clearChats = useCallback(
@@ -174,7 +176,7 @@ export function useChat(): UseChatHelpers {
             setMessages([]);
             return;
         },
-        [triggerStop],
+        [triggerStop]
     );
 
     const regenerateResponse = useCallback(
@@ -200,7 +202,7 @@ export function useChat(): UseChatHelpers {
             triggerRequest(requestMessage);
             return;
         },
-        [triggerRequest],
+        [triggerRequest]
     );
 
     const clearInput = useCallback(() => {

@@ -1,8 +1,10 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
-import { inter } from "@/utils/fonts";
 import { Toaster } from "@/components/ui/sonner";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { GeistMono } from "geist/font/mono";
+import AppSidebar from "@/components/layouts/sidebar";
 
 export const metadata: Metadata = {
     title: "Chatbot",
@@ -16,10 +18,11 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-            <body
-                className={`${inter.className} flex h-screen w-full flex-col text-sm antialiased`}
-            >
-                {children}
+            <body className={`${GeistMono.className} flex antialiased`}>
+                <SidebarProvider defaultOpen={false}>
+                    <AppSidebar />
+                    {children}
+                </SidebarProvider>
                 <Analytics />
                 <Toaster />
             </body>
