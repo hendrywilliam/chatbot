@@ -24,7 +24,6 @@ export const thouShallVerifyHMAC = function (
         if (!equal) {
             throw new Error("Mac is not equal.");
         }
-        console.log("is equal");
         next();
     } catch (error: unknown) {
         req.log.error((error as Error).message ?? "Something went wrong.");

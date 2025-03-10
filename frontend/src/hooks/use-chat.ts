@@ -9,7 +9,7 @@ import {
 import type { Message, UseChatHelpers } from "@/types";
 import { nanoid } from "nanoid";
 import { decode } from "@/utils/text-decoder";
-import { OpenAIStreamOutput } from "@/types/open-ai";
+import { GenerateContentResponse, GenerateContentStreamResult } from "@google/generative-ai";
 
 export function useChat(): UseChatHelpers {
     const abortControllerRef = useRef<AbortController | null>(null);
@@ -46,10 +46,14 @@ export function useChat(): UseChatHelpers {
                     const response = await fetch("/api/chat", {
                         method: "POST",
                         body: JSON.stringify({
-                            messages: messagesRef.current.map((item) => {
+                            contents: messagesRef.current.map((item) => {
                                 return {
                                     role: item.role,
-                                    content: item.content,
+                                    parts: [
+                                        {
+                                            text: item.content,
+                                        }
+                                    ],
                                 };
                             }),
                         }),
@@ -75,7 +79,7 @@ export function useChat(): UseChatHelpers {
                                 break;
                             }
                             const decodedValue = decoder(value) as string;
-                            decodedValue.split("\n").forEach((item) => {
+                            decodedValue.split("\n\n").forEach((item) => {
                                 if (item.length === 0) {
                                     return;
                                 }
@@ -83,11 +87,9 @@ export function useChat(): UseChatHelpers {
                                 try {
                                     const parsed = JSON.parse(
                                         item,
-                                    ) as OpenAIStreamOutput;
-                                    if ("content" in parsed.choices[0].delta) {
-                                        responseText +=
-                                            parsed.choices[0].delta.content ??
-                                            "";
+                                    ) as GenerateContentResponse;
+                                    if (parsed.candidates) {
+                                        responseText += parsed.candidates[0].content.parts[0].text || ""
                                     }
                                     return;
                                 } catch (error) {

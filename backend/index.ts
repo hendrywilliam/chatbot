@@ -13,7 +13,7 @@ app.use(pinohttp());
 app.use(cors());
 
 app.get("/", (req: Request, res: Response) => {
-    res.send("hehe hii :D");
+    res.send("");
 });
 
 app.use(thouShallVerifyHMAC);

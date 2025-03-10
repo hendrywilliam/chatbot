@@ -1,15 +1,15 @@
 import "dotenv/config";
-import { ChatRequestBody } from "@/types/open-ai";
 import { createHmac } from "@/utils/hmac";
 import "dotenv/config";
+import { CompletionMessage } from "@/types/google-ai";
 
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
     try {
-        const body = (await request.json()) as ChatRequestBody;
+        const body = (await request.json()) as CompletionMessage;
         const signal = request.signal;
-        const mac = createHmac(`POST|/completion|${JSON.stringify(body)}`);
+        const mac = createHmac(`POST|/completion|${JSON.stringify(body)}`)
         const response = await fetch(
             `${process.env.BACKEND_BASE_URL}/completion`,
             {
@@ -19,9 +19,7 @@ export async function POST(request: Request) {
                     "x-auth": mac,
                     accept: "text/event-stream",
                 },
-                body: JSON.stringify({
-                    messages: body.messages,
-                }),
+                body: JSON.stringify(body),
                 signal: signal,
             },
         );

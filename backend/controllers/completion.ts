@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { openai } from "../utils/openai";
+import { genAI } from "../utils/gemini-ai";
 import { CompletionRequest } from "../types/completion";
 
 export const completion = async function (req: Request, res: Response) {
@@ -11,26 +11,17 @@ export const completion = async function (req: Request, res: Response) {
     try {
         const body = req.body as CompletionRequest;
         req.socket.addListener("close", close);
-        const completion = await openai.chat.completions.create(
-            {
-                model: "gpt-4o-mini",
-                messages: [
-                    {
-                        role: "developer",
-                        content: "You are a helpful assistant.",
-                    },
-                    ...body.messages,
-                ],
-                stream: true,
-            },
-            { signal: ac.signal }
-        );
+        const completion = await genAI
+            .getGenerativeModel({ model: "gemini-1.5-flash" })
+            .generateContentStream({
+                contents: body.contents,
+            });
         res.writeHead(200, {
             "content-type": "text/event-stream",
             connection: "keep-alive",
             "cache-control": "no-cache",
         });
-        for await (const chunk of completion) {
+        for await (const chunk of completion.stream) {
             res.write(`data: ${JSON.stringify(chunk)}\n\n`);
         }
         res.end();

@@ -1,5 +1,5 @@
-import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
+import type { Content } from "@google/generative-ai";
 
 export type CompletionRequest = {
-    messages: Array<ChatCompletionMessageParam>;
+    contents: Content[];
 };
