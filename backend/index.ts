@@ -1,11 +1,11 @@
-import express, { type Request, Response } from "express";
+import cors from "cors";
 import { log } from "./utils/log";
 import pinohttp from "pino-http";
-import { completion } from "./controllers/completion";
-import cors from "cors";
-import { thouShallVerifyHMAC } from "./middlewares/verify-hmac";
-import { redisClient } from "./utils/redis";
 import cookieParser from "cookie-parser";
+import { redisClient } from "./utils/redis";
+import { completion } from "./controllers/completion";
+import express, { type Request, Response } from "express";
+import { thouShallVerifyHMAC } from "./middlewares/verify-hmac";
 
 const PORT = 3000;
 const app = express();

@@ -1,6 +1,8 @@
 import "dotenv/config";
 import url from "node:url";
 import { User } from "../db/schema";
+import { sign } from "../utils/jwt";
+import { addSearchParams } from "../utils/url";
 import type { Request, Response } from "express";
 import { insertUser, getUserBySubID } from "../db/queries/users";
 import { oauth2Client, OAuthScopes, generateRandomState } from "../utils/oauth";
@@ -33,18 +35,24 @@ export const oauthCallback = async function (req: Request, res: Response) {
         const q = url.parse(req.url, true).query;
         const _url = new URL(`${process.env.FRONTEND_BASE_URL!}`);
         if (q.error) {
+            res.clearCookie("state");
             req.log.error("oauth error:", q.error);
             // Redirect back to login with error state.
-            _url.searchParams.set("error", "true");
-            _url.searchParams.set("error_description", "access_denied");
+            addSearchParams(_url, {
+                error: "true",
+                error_description: "access_denied",
+            });
             return res.redirect(_url.toString());
         }
         // Check state
         const state = req.cookies.state;
         if (!q.state || !state || state !== q.state) {
+            res.clearCookie("state");
             req.log.error("oauth error: invalid state.");
-            _url.searchParams.set("error", "true");
-            _url.searchParams.set("error_description", "internal_error");
+            addSearchParams(_url, {
+                error: "true",
+                error_description: "internal_error",
+            });
             return res.redirect(_url.toString());
         }
         const { tokens } = await oauth2Client.getToken(q.code as string);
@@ -56,15 +64,21 @@ export const oauthCallback = async function (req: Request, res: Response) {
         });
         if (!ticket) {
             req.log.error("oauth error: no ticket.");
-            _url.searchParams.set("error", "true");
-            _url.searchParams.set("error_description", "internal_error");
+            res.clearCookie("state");
+            addSearchParams(_url, {
+                error: "true",
+                error_description: "internal_error",
+            });
             return res.redirect(_url.toString());
         }
         const payload = ticket.getPayload();
         if (!payload) {
             req.log.error("oauth error: no payload.");
-            _url.searchParams.set("error", "true");
-            _url.searchParams.set("error_description", "internal_error");
+            res.clearCookie("state");
+            addSearchParams(_url, {
+                error: "true",
+                error_description: "internal_error",
+            });
             return res.redirect(_url.toString());
         }
         let user: User | null;
@@ -80,7 +94,17 @@ export const oauthCallback = async function (req: Request, res: Response) {
         }
         // Clear "cookie" state after verification.
         res.clearCookie("state");
-        req.log.info(payload);
+        // Sign jwt token with some claims including sub claim that refer to end-user.
+        const token = await sign({
+            sub: user.id.toString(),
+            email: user.email,
+            fullname: user.fullname,
+        });
+        res.cookie("token", token, {
+            secure: false,
+            httpOnly: true,
+            maxAge: 1000 * 60 * 60 * 24, // 24 hours.
+        });
         return res.redirect(_url.toString());
     } catch (error) {
         req.log.error(error);
