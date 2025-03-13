@@ -43,7 +43,7 @@ export default function PromptForm({
 
     return (
         <form
-            className="flex flex-col space-x-4 border p-base rounded-md w-full md:max-w-3xl"
+            className="bg-primary flex flex-col space-x-4 border border-border p-base rounded-md w-full md:max-w-3xl"
             ref={promptFormRef}
             onSubmit={handleSubmit}
             onKeyDown={enterToSubmit}
@@ -56,7 +56,7 @@ export default function PromptForm({
                     event.currentTarget.style.height = "auto";
                     event.currentTarget.style.height = `${event.currentTarget.scrollHeight}px`;
                 }}
-                className="w-full resize-none rounded-md focus:outline-none"
+                className="w-full resize-none rounded-md text-base focus:outline-none bg-transparent text-white"
                 style={{
                     height: "48px",
                     minHeight: "48px",
@@ -71,12 +71,18 @@ export default function PromptForm({
                     <Button
                         onClick={(e) => triggerStop(e)}
                         type="button"
-                        size="sm"
+                        size="xs"
+                        className="border"
                     >
                         <Icons.stop />
                     </Button>
                 ) : (
-                    <Button ref={submitterButton} type="submit" size="sm">
+                    <Button
+                        ref={submitterButton}
+                        type="submit"
+                        size="xs"
+                        className="border"
+                    >
                         <Icons.submit />
                     </Button>
                 )}

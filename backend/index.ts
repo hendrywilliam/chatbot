@@ -5,7 +5,10 @@ import cookieParser from "cookie-parser";
 import { redisClient } from "./utils/redis";
 import { completion } from "./controllers/completion";
 import express, { type Request, Response } from "express";
-import { thouShallVerifyHMAC } from "./middlewares/verify-hmac";
+// import { thouShallVerifyHMAC } from "./middlewares/verify-hmac";
+import { oauthCallback, oauthLogin } from "./controllers/auth";
+import { verifyJWTTokenMiddleware } from "./middlewares/verify-jwt-token";
+import { getUserProfile } from "./controllers/user";
 
 const PORT = 3000;
 const app = express();
@@ -18,7 +21,11 @@ app.use(
         },
     })
 );
-app.use(cors());
+app.use(
+    cors({
+        origin: ["http://localhost:3001/"],
+    })
+);
 app.use(cookieParser());
 
 // Routes
@@ -26,12 +33,13 @@ app.get("/", (req: Request, res: Response) => {
     res.send("chatbot.");
 });
 
-import { oauthCallback, oauthLogin } from "./controllers/auth";
+// app.use(thouShallVerifyHMAC);
+app.post("/completion", completion);
 app.get("/oauth-login", oauthLogin);
 app.get("/oauth-callback", oauthCallback);
 
-app.use(thouShallVerifyHMAC);
-app.post("/completion", completion);
+app.use(verifyJWTTokenMiddleware);
+app.get("/user", getUserProfile);
 
 const server = app.listen(PORT, async () => {
     log.info(`Listening on ${PORT}`);
@@ -49,6 +57,12 @@ async function gracefulShutdown(signal: NodeJS.Signals) {
     process.exit(0);
 }
 
+// Register events to main process.
+
+// This will occur when we forget to add .catch while consuming a Promise.
+process.on("unhandledRejection", (error, promise) => {
+    log.error(`an unhandled rejection occured: ${error}`);
+});
 process.on("SIGTERM", (signal: NodeJS.Signals) => gracefulShutdown(signal));
 process.on("SIGINT", (signal: NodeJS.Signals) => gracefulShutdown(signal));
 // For testing.

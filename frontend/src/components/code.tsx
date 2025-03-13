@@ -28,7 +28,7 @@ export const Code = React.memo(function Code({
                 className="flex w-full items-center justify-between rounded-t-md bg-code px-4 py-2 outline-none"
             >
                 <p className="text-xs text-white">{language}</p>
-                <Button size="icon" onClick={() => copy(children as string)}>
+                <Button size="xs" onClick={() => copy(children as string)}>
                     {isCopy ? <Icons.checkmark /> : <Icons.copy />}
                 </Button>
             </div>

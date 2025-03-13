@@ -8,11 +8,13 @@ export default function Navbar() {
     const { toggleSidebar } = useSidebar();
 
     return (
-        <nav className="flex p-base border-b justify-between">
-            <Button onClick={toggleSidebar} size="sm" variant="outline">
+        <nav className="flex p-base border-b justify-between items-center">
+            <Button onClick={toggleSidebar} size="xs">
                 <Icons.sidebar />
             </Button>
             <Button
+                size="xs"
+                className="border"
                 onClick={() =>
                     window.location.replace(
                         `${process.env
@@ -20,7 +22,7 @@ export default function Navbar() {
                     )
                 }
             >
-                Login with Google
+                Sign In
             </Button>
         </nav>
     );

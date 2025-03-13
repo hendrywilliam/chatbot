@@ -1,10 +1,19 @@
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import "dotenv/config";
+import { publicKey, privateKey } from "./env";
 
-const PUBLIC_KEY = process.env.PUBLIC_KEY!.replace(/\\n/g, "\n");
-const PRIVATE_KEY = process.env.PRIVATE_KEY!.replace(/\\n/g, "\n");
+const PUBLIC_KEY = publicKey.replace(/\\n/g, "\n");
+const PRIVATE_KEY = privateKey.replace(/\\n/g, "\n");
 
-export const sign = function (payload: Record<string, string>) {
+// Extending default jwt claims.
+export interface ChatbotJWTClaims extends JwtPayload {
+    email: string;
+    fullname: string;
+    image_url: string;
+    sub: string;
+}
+
+export const sign = async function (payload: Record<string, string>) {
     return new Promise(function (resolve, reject) {
         jwt.sign(
             payload,
@@ -21,7 +30,7 @@ export const sign = function (payload: Record<string, string>) {
     });
 };
 
-export const verify = function (signedToken: string) {
+export const verify = async function (signedToken: string) {
     return new Promise(function (resolve, reject) {
         jwt.verify(
             signedToken,

@@ -4,8 +4,10 @@ import { User } from "../db/schema";
 import { sign } from "../utils/jwt";
 import { addSearchParams } from "../utils/url";
 import type { Request, Response } from "express";
-import { insertUser, getUserBySubID } from "../db/queries/users";
+import { insertUser, getUserById, getUserBySub } from "../db/queries/users";
+import { frontendBaseURL, googleOAuthClientID } from "../utils/env";
 import { oauth2Client, OAuthScopes, generateRandomState } from "../utils/oauth";
+import { verify } from "../utils/jwt";
 
 export const oauthLogin = async function (req: Request, res: Response) {
     try {
@@ -30,10 +32,34 @@ export const oauthLogin = async function (req: Request, res: Response) {
     }
 };
 
+export const validateAuth = async function (req: Request, res: Response) {
+    try {
+        const signedToken = req.cookies.token;
+        if (!signedToken) {
+            throw new Error("invalid auth: no token provided");
+        }
+        await verify(signedToken);
+        res.cookie("isLoggedIn", 1, {
+            secure: false,
+            httpOnly: true,
+        });
+    } catch (error) {
+        req.log.error(error);
+        res.cookie("isLoggedIn", 0, {
+            secure: false,
+            httpOnly: true,
+        });
+        res.status(401).json({
+            code: 401,
+            message: "Not authorized.",
+        });
+    }
+};
+
 export const oauthCallback = async function (req: Request, res: Response) {
     try {
         const q = url.parse(req.url, true).query;
-        const _url = new URL(`${process.env.FRONTEND_BASE_URL!}`);
+        const _url = new URL(`${frontendBaseURL}`);
         if (q.error) {
             res.clearCookie("state");
             req.log.error("oauth error:", q.error);
@@ -60,7 +86,7 @@ export const oauthCallback = async function (req: Request, res: Response) {
         // Verify id token.
         const ticket = await oauth2Client.verifyIdToken({
             idToken: tokens.id_token!,
-            audience: process.env.GOOGLE_OAUTH_CLIENT_ID,
+            audience: googleOAuthClientID,
         });
         if (!ticket) {
             req.log.error("oauth error: no ticket.");
@@ -83,7 +109,7 @@ export const oauthCallback = async function (req: Request, res: Response) {
         }
         let user: User | null;
         // Check user with sub as it is unique for a user.
-        user = await getUserBySubID(payload.sub);
+        user = await getUserBySub(payload.sub);
         if (!user) {
             user = await insertUser({
                 email: payload.email || "",
@@ -92,13 +118,17 @@ export const oauthCallback = async function (req: Request, res: Response) {
                 sub: payload.sub,
             });
         }
-        // Clear "cookie" state after verification.
+        // Clear "state" cookie after verification.
         res.clearCookie("state");
         // Sign jwt token with some claims including sub claim that refer to end-user.
         const token = await sign({
             sub: user.id.toString(),
             email: user.email,
             fullname: user.fullname,
+        });
+        res.cookie("isLoggedIn", 1, {
+            secure: false,
+            httpOnly: true,
         });
         res.cookie("token", token, {
             secure: false,

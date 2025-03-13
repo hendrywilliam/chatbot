@@ -9,7 +9,7 @@ import {
 export default function AppSidebar() {
     return (
         <Sidebar>
-            <SidebarContent>
+            <SidebarContent className="bg-black">
                 <SidebarGroup />
                 <SidebarGroup />
             </SidebarContent>

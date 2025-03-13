@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "@/components/ui/sonner";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { GeistMono } from "geist/font/mono";
+import AuthProvider from "@/contexts/auth-context";
 import AppSidebar from "@/components/layouts/sidebar";
 
 export const metadata: Metadata = {
@@ -18,10 +19,14 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-            <body className={`${GeistMono.className} flex antialiased`}>
+            <body
+                className={`${GeistMono.className} flex antialiased text-sm bg-primary text-white`}
+            >
                 <SidebarProvider defaultOpen={false}>
-                    <AppSidebar />
-                    {children}
+                    <AuthProvider>
+                        <AppSidebar />
+                        {children}
+                    </AuthProvider>
                 </SidebarProvider>
                 <Analytics />
                 <Toaster />

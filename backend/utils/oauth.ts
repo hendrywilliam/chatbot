@@ -1,6 +1,11 @@
 import { google } from "googleapis";
 import crypto from "node:crypto";
 import "dotenv/config";
+import {
+    googleOAuthClientID,
+    googleOAuthClientRedirectURI,
+    googleOAuthClientSecret,
+} from "./env";
 
 // Mitigating cross-site request forgery using random state.
 export const generateRandomState = function (): string {
@@ -8,9 +13,9 @@ export const generateRandomState = function (): string {
 };
 
 export const oauth2Client = new google.auth.OAuth2(
-    process.env.GOOGLE_OAUTH_CLIENT_ID!,
-    process.env.GOOGLE_OAUTH_CLIENT_SECRET!,
-    process.env.GOOGLE_OAUTH_CLIENT_REDIRECT_URI!
+    googleOAuthClientID,
+    googleOAuthClientSecret,
+    googleOAuthClientRedirectURI
 );
 
 export const OAuthScopes = ["email", "openid", "profile"];

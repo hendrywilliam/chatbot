@@ -17,7 +17,7 @@ export function useChat(): UseChatHelpers {
     const [messages, setMessages] = useState<Message[]>([]);
     const messagesRef = useRef<Message[]>([]);
     useEffect(() => {
-        messagesRef.current = messages;
+        messagesRef.current = [...messages];
     }, [messages]);
 
     const [input, setInput] = useState("");
@@ -25,9 +25,7 @@ export function useChat(): UseChatHelpers {
     const triggerRequest = useCallback(
         async (requestMessage: Message) => {
             setMessages([...messages, { ...requestMessage }]);
-
             const responseId = nanoid();
-
             const now = new Date();
             const responseMessage = {
                 id: responseId,
@@ -64,7 +62,6 @@ export function useChat(): UseChatHelpers {
                     });
                     const decoder = decode();
                     if (!response.ok) {
-                        setIsLoading(false);
                         return;
                     }
                     const body = response.body as ReadableStream;
@@ -127,7 +124,6 @@ export function useChat(): UseChatHelpers {
             if (!requestMessage.id) {
                 requestMessage.id = nanoid();
             }
-
             triggerRequest(requestMessage);
         },
         [triggerRequest]
@@ -136,9 +132,7 @@ export function useChat(): UseChatHelpers {
     const handleSubmit = useCallback(
         (e: React.FormEvent<HTMLFormElement>) => {
             e.preventDefault();
-
             if (input.length === 0) return;
-
             const id = nanoid();
             const now = new Date();
             const requestMessage = {
@@ -147,9 +141,7 @@ export function useChat(): UseChatHelpers {
                 role: "user",
                 createdAt: now,
             } satisfies Message;
-
             append(requestMessage);
-
             setInput("");
         },
         [setInput, append]
@@ -183,22 +175,16 @@ export function useChat(): UseChatHelpers {
         (content: string) => {
             const now = new Date();
             const id = nanoid();
-
-            if (content.length === 0) {
-                return;
-            }
-
+            if (content.length === 0) return;
             if (isLoading && abortControllerRef.current) {
                 abortControllerRef.current.abort();
             }
-
             const requestMessage = {
                 id,
                 role: "user",
                 content: content,
                 createdAt: now,
             } satisfies Message;
-
             triggerRequest(requestMessage);
             return;
         },

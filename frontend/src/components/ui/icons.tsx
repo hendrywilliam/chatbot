@@ -51,24 +51,19 @@ export const Icons = {
             </svg>
         );
     },
-    user: ({
-        height = "1em",
-        width = "1em",
-        fill = "currentColor",
-        ...props
-    }: SVGProps<SVGSVGElement>) => {
+    user: (props: SVGProps<SVGSVGElement>) => {
         return (
             <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width={width}
-                height={height}
-                viewBox="0 0 256 256"
+                width="1em"
+                height="1em"
+                viewBox="0 0 16 16"
                 {...props}
             >
-                <path
-                    fill={fill}
-                    d="M227.46 214c-16.52-28.56-43-48.06-73.68-55.09a68 68 0 1 0-51.56 0c-30.64 7-57.16 26.53-73.68 55.09a4 4 0 0 0 6.92 4C55 184.19 89.62 164 128 164s73 20.19 92.54 54a4 4 0 0 0 3.46 2a3.93 3.93 0 0 0 2-.54a4 4 0 0 0 1.46-5.46ZM68 96a60 60 0 1 1 60 60a60.07 60.07 0 0 1-60-60Z"
-                ></path>
+                <g fill="black">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"></path>
+                    <path d="M4.285 9.567a.5.5 0 0 1 .683.183A3.5 3.5 0 0 0 8 11.5a3.5 3.5 0 0 0 3.032-1.75a.5.5 0 1 1 .866.5A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1-3.898-2.25a.5.5 0 0 1 .183-.683M7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5m4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5"></path>
+                </g>
             </svg>
         );
     },
@@ -88,23 +83,20 @@ export const Icons = {
             </svg>
         );
     },
-    stop: ({
-        width = "1em",
-        height = "1em",
-        fill = "currentColor",
-        ...props
-    }: SVGProps<SVGSVGElement>) => {
+    stop: (props: SVGProps<SVGSVGElement>) => {
         return (
             <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width={width}
-                height={height}
-                viewBox="0 0 20 20"
+                width="1em"
+                height="1em"
+                viewBox="0 0 16 16"
                 {...props}
             >
                 <path
-                    fill={fill}
-                    d="M15.5 4a.5.5 0 0 1 .5.5v11a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5h11Zm-11-1A1.5 1.5 0 0 0 3 4.5v11A1.5 1.5 0 0 0 4.5 17h11a1.5 1.5 0 0 0 1.5-1.5v-11A1.5 1.5 0 0 0 15.5 3h-11Z"
+                    fill="currentColor"
+                    fillRule="evenodd"
+                    d="M11.5 3h-7A1.5 1.5 0 0 0 3 4.5v7A1.5 1.5 0 0 0 4.5 13h7a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 11.5 3m-7-1.5a3 3 0 0 0-3 3v7a3 3 0 0 0 3 3h7a3 3 0 0 0 3-3v-7a3 3 0 0 0-3-3z"
+                    clipRule="evenodd"
                 ></path>
             </svg>
         );
