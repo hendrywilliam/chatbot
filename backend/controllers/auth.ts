@@ -4,7 +4,7 @@ import { User } from "../db/schema";
 import { sign } from "../utils/jwt";
 import { addSearchParams } from "../utils/url";
 import type { Request, Response } from "express";
-import { insertUser, getUserById, getUserBySub } from "../db/queries/users";
+import { insertUser, getUserBySub } from "../db/queries/users";
 import { frontendBaseURL, googleOAuthClientID } from "../utils/env";
 import { oauth2Client, OAuthScopes, generateRandomState } from "../utils/oauth";
 import { verify } from "../utils/jwt";

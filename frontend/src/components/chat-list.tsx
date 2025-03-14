@@ -50,7 +50,7 @@ export default function ChatList({
                             key={item.id}
                         >
                             <div>
-                                <div className="inline-flex h-7 w-7 items-center justify-center rounded-md border bg-white shadow">
+                                <div className="inline-flex h-8 w-8 items-center justify-center rounded-md border bg-white shadow">
                                     <Icons.user />
                                 </div>
                             </div>
@@ -58,7 +58,7 @@ export default function ChatList({
                         </div>
                     ) : item.role === "assistant" ? (
                         <div
-                            className="group relative flex h-max w-full gap-6 py-6 xl:gap-6"
+                            className="group relative flex h-max w-full gap-2 py-6 xl:gap-6"
                             key={item.id}
                         >
                             <div>

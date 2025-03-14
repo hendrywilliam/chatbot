@@ -32,7 +32,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
         try {
             const response = await fetch(
                 `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/user`,
-                { credentials: "include" }
+                { method: "GET", credentials: "include" }
             );
             if (!response.ok) {
                 return;

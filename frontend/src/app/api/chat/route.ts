@@ -7,14 +7,14 @@ export async function POST(request: Request) {
     try {
         const body = (await request.json()) as CompletionMessage;
         const signal = request.signal;
-        const mac = createHmac(`POST|/completion|${JSON.stringify(body)}`);
+        // const mac = createHmac(`POST|/completion|${JSON.stringify(body)}`);
         const response = await fetch(
             `${process.env.BACKEND_BASE_URL}/completion`,
             {
                 method: "POST",
                 headers: {
                     "content-type": "application/json",
-                    "x-auth": mac,
+                    // "x-auth": mac,
                     accept: "text/event-stream",
                 },
                 body: JSON.stringify(body),

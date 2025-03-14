@@ -1,11 +1,10 @@
-import cors from "cors";
 import { log } from "./utils/log";
 import pinohttp from "pino-http";
 import cookieParser from "cookie-parser";
+import { cors } from "./middlewares/cors";
 import { redisClient } from "./utils/redis";
 import { completion } from "./controllers/completion";
 import express, { type Request, Response } from "express";
-// import { thouShallVerifyHMAC } from "./middlewares/verify-hmac";
 import { oauthCallback, oauthLogin } from "./controllers/auth";
 import { verifyJWTTokenMiddleware } from "./middlewares/verify-jwt-token";
 import { getUserProfile } from "./controllers/user";
@@ -21,11 +20,7 @@ app.use(
         },
     })
 );
-app.use(
-    cors({
-        origin: ["http://localhost:3001/"],
-    })
-);
+app.use(cors());
 app.use(cookieParser());
 
 // Routes
