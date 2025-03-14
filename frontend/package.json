@@ -12,7 +12,8 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest --coverage",
-    "generate": "prisma generate"
+    "generate": "prisma generate",
+    "prune:build": "rm -rf .next"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.0",

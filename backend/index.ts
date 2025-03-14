@@ -20,7 +20,12 @@ app.use(
         },
     })
 );
-app.use(cors());
+app.use(
+    cors({
+        origins: "http://localhost:3001",
+        allowCredentials: true,
+    })
+);
 app.use(cookieParser());
 
 // Routes

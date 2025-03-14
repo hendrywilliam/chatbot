@@ -3,12 +3,12 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { User } from "@/types/user";
 
-type AuthContextType = {
+export type AuthContextType = {
+    isLoggedIn: boolean;
     user: User | null;
     signIn: () => void;
     getUserProfile: () => Promise<void>;
     isLoaded: boolean;
-    isLoggedIn: boolean;
 };
 
 type UserProfileResult = {
@@ -32,7 +32,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
         try {
             const response = await fetch(
                 `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/user`,
-                { method: "GET", credentials: "include" }
+                { method: "GET", credentials: "include", mode: "cors" }
             );
             if (!response.ok) {
                 return;
@@ -41,11 +41,19 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
             setUser(data.data);
             setIsLoggedIn(true);
             return;
-        } catch (error: unknown) {}
+        } catch (error: unknown) {
+            // Nothing to do.
+        }
     };
+
+    useEffect(() => {
+        setIsLoaded(true);
+        return () => {};
+    }, []);
+
     useEffect(() => {
         getUserProfile();
-    }, [isLoaded]);
+    }, [isLoggedIn]);
 
     return (
         <AuthContext.Provider

@@ -1,12 +1,21 @@
-import { AuthContext } from "@/contexts/auth-context";
+import { AuthContext, type AuthContextType } from "@/contexts/auth-context";
 import { useContext } from "react";
 
-type UseAuthReturn = {};
+type UseAuthReturn = Pick<
+    AuthContextType,
+    "isLoaded" | "isLoggedIn" | "user" | "signIn"
+>;
 
-export function useAuth() {
+export function useAuth(): UseAuthReturn {
     const authContext = useContext(AuthContext);
     if (!authContext) {
         throw new Error("useAuth should be used within AuthContext.Provider");
     }
-    return {};
+    const { isLoaded, signIn, isLoggedIn, user } = authContext;
+    return {
+        isLoaded,
+        isLoggedIn,
+        signIn,
+        user,
+    };
 }
